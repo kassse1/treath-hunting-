@@ -1,0 +1,8 @@
+timestamp,host,event,object,details
+2026-10-07T09:00:00Z,DEMO-PC-01,email,recruitment.xls,external sender; attachment delivered
+2026-10-07T09:02:00Z,DEMO-PC-01,file_open,recruitment.xls,Excel opened the attachment
+2026-10-07T09:03:00Z,DEMO-PC-01,process,unknown.exe,parent=EXCEL.EXE
+2026-10-07T09:04:00Z,DEMO-PC-01,network,198.51.100.23,process=unknown.exe; outbound connection
+2026-10-07T09:00:00Z,DEMO-PC-02,email,budget.xlsx,internal sender; attachment delivered
+2026-10-07T09:02:00Z,DEMO-PC-02,file_open,budget.xlsx,Excel opened the attachment
+2026-10-07T09:04:00Z,DEMO-PC-02,network,192.0.2.10,process=browser; outbound connection

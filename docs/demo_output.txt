@@ -1,0 +1,3 @@
+REVIEW: DEMO-PC-01 | external attachment -> file open -> Excel child -> outbound connection
+Hosts requiring review: 1
+Synthetic demonstration only. This output does not confirm malware or an exploit.
