@@ -1,0 +1,22 @@
+{
+  "LAB-01": {
+    "label": "suspicious simulation",
+    "context": "Synthetic unapproved Office to encoded PowerShell chain. Investigate; no real malware was run."
+  },
+  "LAB-02": {
+    "label": "benign control",
+    "context": "Inventory script launched from Explorer, not an Office application."
+  },
+  "LAB-03": {
+    "label": "benign matching control",
+    "context": "Synthetic approved Excel reporting automation. Matches the rule and requires context to resolve."
+  },
+  "LAB-04": {
+    "label": "correlation control",
+    "context": "Office PowerShell exists, but the network event belongs to another process."
+  },
+  "LAB-05": {
+    "label": "benign control",
+    "context": "Office automation without an encoded command argument."
+  }
+}

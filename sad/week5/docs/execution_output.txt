@@ -1,0 +1,46 @@
+{
+  "engine": "Splunk Enterprise",
+  "version": "9.4.2",
+  "dataset": "synthetic",
+  "events": 10,
+  "queries": [
+    {
+      "query": "q1_powershell",
+      "matches": 5,
+      "hosts": [
+        "LAB-01",
+        "LAB-02",
+        "LAB-03",
+        "LAB-04",
+        "LAB-05"
+      ]
+    },
+    {
+      "query": "q2_office_parent",
+      "matches": 4,
+      "hosts": [
+        "LAB-01",
+        "LAB-03",
+        "LAB-04",
+        "LAB-05"
+      ]
+    },
+    {
+      "query": "q3_encoded_office",
+      "matches": 3,
+      "hosts": [
+        "LAB-01",
+        "LAB-03",
+        "LAB-04"
+      ]
+    },
+    {
+      "query": "q4_correlated_sequence",
+      "matches": 2,
+      "hosts": [
+        "LAB-01",
+        "LAB-03"
+      ]
+    }
+  ]
+}

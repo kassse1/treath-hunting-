@@ -1,0 +1,4 @@
+{
+  "query": "process where process.name : (\"powershell.exe\", \"pwsh.exe\")",
+  "size": 100
+}

@@ -1,0 +1,7 @@
+index=week5_hunt sourcetype=week5_json earliest=0 latest=now
+| spath
+| rename "host.id" AS host_id "event.category" AS category "process.entity_id" AS entity_id "process.name" AS process_name "process.parent.name" AS parent_name "process.command_line" AS command_line "network.direction" AS direction
+| eval host_id=mvindex(host_id,0), category=mvindex(category,0), entity_id=mvindex(entity_id,0), process_name=mvindex(process_name,0), parent_name=mvindex(parent_name,0), command_line=mvindex(command_line,0), direction=mvindex(direction,0), event_time=strptime(mvindex('@timestamp',0), "%Y-%m-%dT%H:%M:%SZ")
+| eval is_ps=if(in(lower(process_name), "powershell.exe", "pwsh.exe"),1,0), is_office=if(in(lower(parent_name), "winword.exe", "excel.exe"),1,0), is_encoded=if(match(lower(command_line), " -enc(odedcommand)? "),1,0)
+| where category="process" AND is_ps=1
+| table host_id entity_id parent_name command_line

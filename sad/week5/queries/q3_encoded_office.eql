@@ -1,0 +1,1 @@
+process where process.name : ("powershell.exe", "pwsh.exe") and process.parent.name : ("winword.exe", "excel.exe") and process.command_line : ("* -encodedcommand *", "* -enc *")

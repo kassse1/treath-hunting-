@@ -1,0 +1,2 @@
+{"preview":false,"offset":0,"result":{"host_id":"LAB-01","entity_id":"proc-a","delay_seconds":"120.000000"}}
+{"preview":false,"offset":1,"lastrow":true,"result":{"host_id":"LAB-03","entity_id":"proc-c","delay_seconds":"120.000000"}}

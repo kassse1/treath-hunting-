@@ -1,0 +1,5 @@
+{"preview":false,"offset":0,"result":{"host_id":"LAB-05","entity_id":"proc-e","parent_name":"WINWORD.EXE","command_line":"powershell.exe -File approved_report.ps1"}}
+{"preview":false,"offset":1,"result":{"host_id":"LAB-04","entity_id":"proc-d","parent_name":"WINWORD.EXE","command_line":"powershell.exe -EncodedCommand DEMO_PLACEHOLDER"}}
+{"preview":false,"offset":2,"result":{"host_id":"LAB-03","entity_id":"proc-c","parent_name":"EXCEL.EXE","command_line":"powershell.exe -EncodedCommand DEMO_PLACEHOLDER"}}
+{"preview":false,"offset":3,"result":{"host_id":"LAB-02","entity_id":"proc-b","parent_name":"explorer.exe","command_line":"powershell.exe -File inventory.ps1"}}
+{"preview":false,"offset":4,"lastrow":true,"result":{"host_id":"LAB-01","entity_id":"proc-a","parent_name":"WINWORD.EXE","command_line":"powershell.exe -EncodedCommand DEMO_PLACEHOLDER"}}

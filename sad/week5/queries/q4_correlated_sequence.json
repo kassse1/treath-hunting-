@@ -1,0 +1,4 @@
+{
+  "query": "sequence by host.id, process.entity_id with maxspan=10m\n  [process where process.name : (\"powershell.exe\", \"pwsh.exe\") and process.parent.name : (\"winword.exe\", \"excel.exe\") and process.command_line : (\"* -encodedcommand *\", \"* -enc *\")]\n  [network where network.direction == \"egress\"]",
+  "size": 100
+}
