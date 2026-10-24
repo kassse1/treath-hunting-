@@ -1,0 +1,2 @@
+index=win_sysmon source="WinEventLog:Microsoft-Windows-Sysmon/Operational" EventCode=1
+| search EventID=1 Image="*\\cmd.exe" ParentImage IN ("*\\WINWORD.EXE", "*\\EXCEL.EXE", "*\\POWERPNT.EXE", "*\\OUTLOOK.EXE", "*\\Acrobat.exe", "*\\AcroRd32.exe")

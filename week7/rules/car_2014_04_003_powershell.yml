@@ -1,0 +1,29 @@
+title: Non-Interactive PowerShell Execution (CAR-2014-04-003)
+id: 821a4d11-870b-4453-856c-513d376d3e38
+status: experimental
+description: >
+  Week 7 implementation of MITRE CAR-2014-04-003 "Powershell Execution".
+  Raw analytic: PowerShell started by a parent other than explorer.exe.
+  This reproduces the CAR pseudocode exactly and is intentionally noisy; the
+  tuned variant narrows it to the hunt's phishing scenario.
+references:
+  - https://car.mitre.org/analytics/CAR-2014-04-003/
+  - https://attack.mitre.org/techniques/T1059/001/
+author: Week 7 group project (Detecting Spearphishing Attacks)
+date: 2026/10/24
+logsource:
+  product: windows
+  category: process_creation
+detection:
+  selection:
+    Image|endswith: '\powershell.exe'
+  filter_interactive:
+    ParentImage|endswith: '\explorer.exe'
+  condition: selection and not filter_interactive
+falsepositives:
+  - Logon scripts, scheduled tasks and admin tooling that launch PowerShell non-interactively
+level: low
+tags:
+  - attack.execution
+  - attack.t1059.001
+  - car.2014-04-003

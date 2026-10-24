@@ -1,0 +1,54 @@
+{
+  "FIN-WS01": {
+    "host": "FIN-WS01",
+    "signals": [
+      "inbound mail failed SPF/DMARC from accounts@vendor-billing.example, attachment Invoice_Oct2026.docm",
+      "Office wrote invoice_oct2026.docm to a user path",
+      "winword.exe spawned powershell.exe (pid 7120)",
+      "  -> encoded command argument present",
+      "  -> same process 7120 connected out to cdn-update.staticassets.example (203.0.113.200:443)"
+    ],
+    "techniques": [
+      "T1027.010",
+      "T1059.001",
+      "T1071.001",
+      "T1204.002",
+      "T1566.001"
+    ],
+    "disposition": "SUSPICIOUS - full delivery-to-C2 chain, investigate",
+    "notes": ""
+  },
+  "FIN-WS02": {
+    "host": "FIN-WS02",
+    "signals": [],
+    "techniques": [],
+    "disposition": "BENIGN - no Office->interpreter execution chain",
+    "notes": ""
+  },
+  "FIN-WS03": {
+    "host": "FIN-WS03",
+    "signals": [
+      "excel.exe spawned powershell.exe (pid 5190)"
+    ],
+    "techniques": [
+      "T1059.001",
+      "T1204.002"
+    ],
+    "disposition": "BENIGN MATCH - Office spawned PowerShell, no encoding, internal destination",
+    "notes": "approved reporting automation; would be a false positive if alerted blindly"
+  },
+  "FIN-WS04": {
+    "host": "FIN-WS04",
+    "signals": [
+      "winword.exe spawned powershell.exe (pid 8300)",
+      "  -> encoded command argument present"
+    ],
+    "techniques": [
+      "T1027.010",
+      "T1059.001",
+      "T1204.002"
+    ],
+    "disposition": "PARTIAL - encoded Office PowerShell but no correlated egress (control)",
+    "notes": "outbound traffic belongs to a different process; host-only joins would over-match"
+  }
+}

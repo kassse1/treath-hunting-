@@ -1,0 +1,2449 @@
+{
+  "source": "https://github.com/mitre-attack/attack-stix-data (enterprise-attack.json)",
+  "attack_version": "20.0",
+  "tactics": [
+    {
+      "id": "TA0043",
+      "name": "Reconnaissance",
+      "shortname": "reconnaissance"
+    },
+    {
+      "id": "TA0042",
+      "name": "Resource Development",
+      "shortname": "resource-development"
+    },
+    {
+      "id": "TA0001",
+      "name": "Initial Access",
+      "shortname": "initial-access"
+    },
+    {
+      "id": "TA0002",
+      "name": "Execution",
+      "shortname": "execution"
+    },
+    {
+      "id": "TA0003",
+      "name": "Persistence",
+      "shortname": "persistence"
+    },
+    {
+      "id": "TA0004",
+      "name": "Privilege Escalation",
+      "shortname": "privilege-escalation"
+    },
+    {
+      "id": "TA0005",
+      "name": "Stealth",
+      "shortname": "stealth"
+    },
+    {
+      "id": "TA0112",
+      "name": "Defense Impairment",
+      "shortname": "defense-impairment"
+    },
+    {
+      "id": "TA0006",
+      "name": "Credential Access",
+      "shortname": "credential-access"
+    },
+    {
+      "id": "TA0007",
+      "name": "Discovery",
+      "shortname": "discovery"
+    },
+    {
+      "id": "TA0008",
+      "name": "Lateral Movement",
+      "shortname": "lateral-movement"
+    },
+    {
+      "id": "TA0009",
+      "name": "Collection",
+      "shortname": "collection"
+    },
+    {
+      "id": "TA0011",
+      "name": "Command and Control",
+      "shortname": "command-and-control"
+    },
+    {
+      "id": "TA0010",
+      "name": "Exfiltration",
+      "shortname": "exfiltration"
+    },
+    {
+      "id": "TA0040",
+      "name": "Impact",
+      "shortname": "impact"
+    }
+  ],
+  "techniques": {
+    "T1566": {
+      "name": "Phishing",
+      "tactics": [
+        "initial-access"
+      ],
+      "platforms": [
+        "Identity Provider",
+        "Linux",
+        "macOS",
+        "Office Suite",
+        "SaaS",
+        "Windows"
+      ],
+      "version": "2.8",
+      "url": "https://attack.mitre.org/techniques/T1566/",
+      "description_first_paragraph": "Adversaries may send phishing messages to gain access to victim systems. All forms of phishing are electronically delivered social engineering. Phishing can be targeted, known as spearphishing. In spearphishing, a specific individual, company, or industry will be targeted by the adversary. More generally, adversaries can conduct non-targeted phishing, such as in mass malware spam campaigns.",
+      "groups": [
+        "AppleJeus",
+        "Axiom",
+        "GOLD SOUTHFIELD",
+        "INC Ransom",
+        "Kimsuky",
+        "MuddyWater",
+        "Sea Turtle",
+        "VOID MANTICORE"
+      ],
+      "software_count": 3,
+      "mitigations": [
+        "M1017 User Training",
+        "M1021 Restrict Web-Based Content",
+        "M1031 Network Intrusion Prevention",
+        "M1047 Audit",
+        "M1049 Antivirus/Antimalware",
+        "M1054 Software Configuration"
+      ],
+      "detection_strategies": [
+        {
+          "id": "DET0070",
+          "name": "Detection Strategy for Phishing across platforms.",
+          "analytics": [
+            {
+              "id": "AN0188",
+              "platforms": [
+                "Windows"
+              ],
+              "description": "Unusual inbound email activity where attachments or embedded URLs are delivered to users followed by execution of new processes or suspicious document behavior. Detection involves correlating email metadata, file creation, and network activity after a phishing message is received.",
+              "log_sources": [
+                {
+                  "data_component": "Application Log Content",
+                  "log_source": "m365:unified",
+                  "channel": "Send/Receive: Emails with suspicious sender domains, spoofed headers, or anomalous attachment types"
+                },
+                {
+                  "data_component": "File Creation",
+                  "log_source": "WinEventLog:Sysmon",
+                  "channel": "EventCode=11"
+                },
+                {
+                  "data_component": "Process Creation",
+                  "log_source": "WinEventLog:Sysmon",
+                  "channel": "EventCode=1"
+                }
+              ]
+            },
+            {
+              "id": "AN0189",
+              "platforms": [
+                "Linux"
+              ],
+              "description": "Monitor for malicious payload delivery through phishing where attachments or URLs in email clients (e.g., Thunderbird, mutt) result in unusual file creation or outbound network connections. Focus on correlation between mail logs, file writes, and execution activity.",
+              "log_sources": [
+                {
+                  "data_component": "Application Log Content",
+                  "log_source": "Application:Mail",
+                  "channel": "Inbound messages with anomalous headers, spoofed SPF/DKIM failures"
+                },
+                {
+                  "data_component": "Process Creation",
+                  "log_source": "auditd:SYSCALL",
+                  "channel": "execve: Execution of scripts or binaries sourced from mail directories (/var/mail, ~/Maildir)"
+                }
+              ]
+            },
+            {
+              "id": "AN0190",
+              "platforms": [
+                "macOS"
+              ],
+              "description": "Detection of phishing through anomalous Mail app activity, such as attachments saved to disk and immediately executed, or Safari/Preview launching URLs and files linked from email messages. Correlate UnifiedLogs events with subsequent process execution.",
+              "log_sources": [
+                {
+                  "data_component": "Application Log Content",
+                  "log_source": "macos:unifiedlog",
+                  "channel": "Inbound email activity with suspicious domains or mismatched sender information"
+                },
+                {
+                  "data_component": "Process Creation",
+                  "log_source": "macos:unifiedlog",
+                  "channel": "Preview.app, Safari.app, or Mail.app spawning new processes outside normal patterns"
+                }
+              ]
+            },
+            {
+              "id": "AN0191",
+              "platforms": [
+                "Office Suite"
+              ],
+              "description": "Phishing via Office documents containing embedded macros or links that spawn processes. Detection relies on correlating Office application logs with suspicious child process execution and outbound network connections.",
+              "log_sources": [
+                {
+                  "data_component": "Application Log Content",
+                  "log_source": "m365:unified",
+                  "channel": "FileAccessed: Access of email attachments by Office applications"
+                },
+                {
+                  "data_component": "Process Creation",
+                  "log_source": "WinEventLog:Sysmon",
+                  "channel": "EventCode=1"
+                }
+              ]
+            },
+            {
+              "id": "AN0192",
+              "platforms": [
+                "Identity Provider"
+              ],
+              "description": "Phishing attempts targeting IdPs often manifest as anomalous login attempts from suspicious email invitations or fake SSO prompts. Detection correlates login flows, MFA bypass attempts, and anomalous geographic patterns following phishing email delivery.",
+              "log_sources": [
+                {
+                  "data_component": "Logon Session Creation",
+                  "log_source": "azure:signinlogs",
+                  "channel": "Failed MFA attempts, unusual conditional access triggers, login attempts from unexpected IP ranges"
+                }
+              ]
+            },
+            {
+              "id": "AN0193",
+              "platforms": [
+                "SaaS"
+              ],
+              "description": "Phishing delivered via SaaS services (chat, collaboration platforms) where messages contain malicious URLs or attachments. Detect anomalous link clicks, suspicious file uploads, or token misuse after SaaS-based phishing attempts.",
+              "log_sources": [
+                {
+                  "data_component": "Application Log Content",
+                  "log_source": "saas:collaboration",
+                  "channel": "MessagePosted: Suspicious links or attachment delivery via collaboration tools (Slack, Teams, Zoom)"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "T1566.001": {
+      "name": "Spearphishing Attachment",
+      "tactics": [
+        "initial-access"
+      ],
+      "platforms": [
+        "Linux",
+        "macOS",
+        "Windows"
+      ],
+      "version": "2.2",
+      "url": "https://attack.mitre.org/techniques/T1566/001/",
+      "description_first_paragraph": "Adversaries may send spearphishing emails with a malicious attachment in an attempt to gain access to victim systems. Spearphishing attachment is a specific variant of spearphishing. Spearphishing attachment is different from other forms of spearphishing in that it employs the use of malware attached to an email. All forms of spearphishing are electronically delivered social engineering targeted at a specific individual, company, or industry. In this scenario, adversaries attach a file to the spearphishing email and usually rely upon [User Execution](https://attack.mitre.org/techniques/T1204) to gain execution.(Citation: Unit 42 DarkHydrus July 2018) Spearphishing may also involve social engineering techniques, such as posing as a trusted source.",
+      "groups": [
+        "APT-C-36",
+        "APT1",
+        "APT12",
+        "APT19",
+        "APT28",
+        "APT29",
+        "APT30",
+        "APT32",
+        "APT33",
+        "APT37",
+        "APT38",
+        "APT39",
+        "APT41",
+        "Ajax Security Team",
+        "Andariel",
+        "BITTER",
+        "BRONZE BUTLER",
+        "BlackTech",
+        "CURIUM",
+        "Cobalt Group",
+        "Confucius",
+        "DarkHydrus",
+        "Darkhotel",
+        "Dragonfly",
+        "EXOTIC LILY",
+        "Elderwood",
+        "FIN4",
+        "FIN6",
+        "FIN7",
+        "FIN8",
+        "Ferocious Kitten",
+        "Gallmaker",
+        "Gamaredon Group",
+        "Gorgon Group",
+        "Higaisa",
+        "Inception",
+        "IndigoZebra",
+        "Kimsuky",
+        "Lazarus Group",
+        "LazyScripter",
+        "Leviathan",
+        "Machete",
+        "Malteiro",
+        "MirrorFace",
+        "Mofang",
+        "Molerats",
+        "Moonstone Sleet",
+        "MuddyWater",
+        "Mustang Panda",
+        "NIMBUS MANTICORE",
+        "Naikon",
+        "Nomadic Octopus",
+        "OilRig",
+        "PLATINUM",
+        "Patchwork",
+        "RTM",
+        "Rancor",
+        "RedCurl",
+        "Saint Bear",
+        "Sandworm Team",
+        "SideCopy",
+        "Sidewinder",
+        "Silence",
+        "Star Blizzard",
+        "TA2541",
+        "TA459",
+        "TA505",
+        "TA551",
+        "The White Company",
+        "Threat Group-3390",
+        "Tonto Team",
+        "Transparent Tribe",
+        "Tropic Trooper",
+        "WIRTE",
+        "Windshift",
+        "Winter Vivern",
+        "Wizard Spider",
+        "admin@338",
+        "menuPass"
+      ],
+      "software_count": 62,
+      "mitigations": [
+        "M1017 User Training",
+        "M1018 User Account Management",
+        "M1021 Restrict Web-Based Content",
+        "M1031 Network Intrusion Prevention",
+        "M1047 Audit",
+        "M1049 Antivirus/Antimalware",
+        "M1054 Software Configuration"
+      ],
+      "detection_strategies": [
+        {
+          "id": "DET0236",
+          "name": "Detection Strategy for Spearphishing Attachment across OS Platforms",
+          "analytics": [
+            {
+              "id": "AN0655",
+              "platforms": [
+                "Windows"
+              ],
+              "description": "Detection of spearphishing attachments by correlating suspicious email delivery with subsequent file creation and abnormal process execution (e.g., Office spawning PowerShell or CMD). Behavior chain includes inbound email metadata → attachment stored on disk → process execution → outbound network activity.",
+              "log_sources": [
+                {
+                  "data_component": "Application Log Content",
+                  "log_source": "m365:unified",
+                  "channel": "Send/Receive: Inbound emails with attachments from suspicious or spoofed senders"
+                },
+                {
+                  "data_component": "File Creation",
+                  "log_source": "WinEventLog:Sysmon",
+                  "channel": "EventCode=11"
+                },
+                {
+                  "data_component": "Process Creation",
+                  "log_source": "WinEventLog:Sysmon",
+                  "channel": "EventCode=1"
+                },
+                {
+                  "data_component": "Network Connection Creation",
+                  "log_source": "WinEventLog:Sysmon",
+                  "channel": "EventCode=3, 22"
+                }
+              ]
+            },
+            {
+              "id": "AN0656",
+              "platforms": [
+                "Linux"
+              ],
+              "description": "Phishing attachments executed on Linux systems are detected by linking email logs to file creation in mail directories and subsequent suspicious process execution. Look for unexpected binaries or scripts spawned from user mail directories and anomalous outbound network activity.",
+              "log_sources": [
+                {
+                  "data_component": "Application Log Content",
+                  "log_source": "Application:Mail",
+                  "channel": "Inbound email attachments logged from MTAs with suspicious metadata"
+                },
+                {
+                  "data_component": "Process Creation",
+                  "log_source": "auditd:SYSCALL",
+                  "channel": "execve: Execution of files saved in mail or download directories"
+                },
+                {
+                  "data_component": "Network Traffic Flow",
+                  "log_source": "NSM:Flow",
+                  "channel": "Outbound traffic from suspicious new processes post-attachment execution"
+                }
+              ]
+            },
+            {
+              "id": "AN0657",
+              "platforms": [
+                "macOS"
+              ],
+              "description": "Phishing attachment detection on macOS through correlation of Mail app logs, file creation in user directories, and abnormal process execution (e.g., Preview.app or Mail.app spawning Terminal or scripting binaries). Network traffic after attachment interaction is also monitored.",
+              "log_sources": [
+                {
+                  "data_component": "Application Log Content",
+                  "log_source": "macos:unifiedlog",
+                  "channel": "Inbound messages with attachments from suspicious domains"
+                },
+                {
+                  "data_component": "Process Creation",
+                  "log_source": "macos:unifiedlog",
+                  "channel": "Execution of Terminal, osascript, or other interpreters originating from Mail or Preview"
+                },
+                {
+                  "data_component": "File Creation",
+                  "log_source": "macos:unifiedlog",
+                  "channel": "Attachment files written to ~/Downloads or temporary folders"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "T1204": {
+      "name": "User Execution",
+      "tactics": [
+        "execution"
+      ],
+      "platforms": [
+        "Linux",
+        "Windows",
+        "macOS",
+        "IaaS",
+        "Containers"
+      ],
+      "version": "1.8",
+      "url": "https://attack.mitre.org/techniques/T1204/",
+      "description_first_paragraph": "An adversary may rely upon specific actions by a user in order to gain execution. Users may be subjected to social engineering to get them to execute malicious code by, for example, opening a malicious document file or link. These user actions will typically be observed as follow-on behavior from forms of [Phishing](https://attack.mitre.org/techniques/T1566).",
+      "groups": [
+        "LAPSUS$",
+        "Scattered Spider"
+      ],
+      "software_count": 2,
+      "mitigations": [
+        "M1017 User Training",
+        "M1021 Restrict Web-Based Content",
+        "M1031 Network Intrusion Prevention",
+        "M1033 Limit Software Installation",
+        "M1038 Execution Prevention",
+        "M1040 Behavior Prevention on Endpoint"
+      ],
+      "detection_strategies": [
+        {
+          "id": "DET0478",
+          "name": "User Execution – multi-surface behavior chain (documents/links → helper/unpacker → LOLBIN/child → egress)",
+          "analytics": [
+            {
+              "id": "AN1314",
+              "platforms": [
+                "Windows"
+              ],
+              "description": "Cause→effect chain: (1) User-facing app (Office/PDF/archiver/browser) records an open/click or abnormal event, then (2) a downloaded file is created in a user-writable path and/or decompressed, (3) the parent user app spawns a living-off-the-land binary (e.g., powershell/cmd/mshta/rundll32/msiexec/wscript/expand/zip) or installer, and (4) immediate outbound HTTP(S)/DNS/SMB from the same lineage.",
+              "log_sources": [
+                {
+                  "data_component": "Application Log Content",
+                  "log_source": "WinEventLog:Application",
+                  "channel": "EventCode=1000"
+                },
+                {
+                  "data_component": "File Creation",
+                  "log_source": "WinEventLog:Sysmon",
+                  "channel": "EventCode=11"
+                },
+                {
+                  "data_component": "Process Creation",
+                  "log_source": "WinEventLog:Security",
+                  "channel": "EventCode=4688"
+                },
+                {
+                  "data_component": "Network Connection Creation",
+                  "log_source": "WinEventLog:Sysmon",
+                  "channel": "EventCode=3, 22"
+                }
+              ]
+            },
+            {
+              "id": "AN1315",
+              "platforms": [
+                "Linux"
+              ],
+              "description": "Cause→effect chain: (1) User app/browser/archiver logs an open/click or abnormal exit, (2) new executable/script/archive extracted into $HOME/Downloads, /tmp, or ~/.cache, (3) parent app spawns shell/interpreter (bash/sh/python/node/curl/wget) or desktop file, and (4) new outbound connection(s) from the child lineage.",
+              "log_sources": [
+                {
+                  "data_component": "Application Log Content",
+                  "log_source": "linux:syslog",
+                  "channel": "opened document|clicked link|segfault|abnormal termination|sandbox"
+                },
+                {
+                  "data_component": "File Access",
+                  "log_source": "auditd:SYSCALL",
+                  "channel": "open"
+                },
+                {
+                  "data_component": "File Creation",
+                  "log_source": "auditd:SYSCALL",
+                  "channel": "creat"
+                },
+                {
+                  "data_component": "File Modification",
+                  "log_source": "auditd:SYSCALL",
+                  "channel": "rename,chmod"
+                },
+                {
+                  "data_component": "Process Creation",
+                  "log_source": "auditd:SYSCALL",
+                  "channel": "execve"
+                },
+                {
+                  "data_component": "Network Connection Creation",
+                  "log_source": "NSM:Flow",
+                  "channel": "new outbound connection from browser/office lineage"
+                }
+              ]
+            },
+            {
+              "id": "AN1316",
+              "platforms": [
+                "macOS"
+              ],
+              "description": "Cause→effect chain: (1) unified logs show application open/click or crash for Safari/Chrome/Office/Preview/archiver, (2) file write/extraction into ~/Downloads, /private/var/folders/* or ~/Library, (3) parent app spawns osascript/bash/zsh/curl/python or opens a quarantined app with Gatekeeper prompts, (4) network egress from child.",
+              "log_sources": [
+                {
+                  "data_component": "Application Log Content",
+                  "log_source": "macos:unifiedlog",
+                  "channel": "opened document|clicked link|EXC_BAD_ACCESS|abort|LSQuarantine"
+                },
+                {
+                  "data_component": "File Creation",
+                  "log_source": "fs:fileevents",
+                  "channel": "create/write/rename in user-writable paths"
+                },
+                {
+                  "data_component": "Process Creation",
+                  "log_source": "macos:osquery",
+                  "channel": "exec"
+                },
+                {
+                  "data_component": "Network Connection Creation",
+                  "log_source": "NSM:Flow",
+                  "channel": "new outbound connection from exploited lineage"
+                }
+              ]
+            },
+            {
+              "id": "AN1317",
+              "platforms": [
+                "Containers"
+              ],
+              "description": "Cause→effect chain in CI/dev desktops: (1) user triggers container run/pull after opening a doc/link/script, (2) newly created image/container uses unexpected external registry or entrypoint, (3) container starts and immediately egresses to suspicious destinations.",
+              "log_sources": [
+                {
+                  "data_component": "Container Creation",
+                  "log_source": "docker:events",
+                  "channel": "created,started: new container from untrusted registry or unexpected entrypoint"
+                },
+                {
+                  "data_component": "Container Start",
+                  "log_source": "docker:events",
+                  "channel": "start"
+                },
+                {
+                  "data_component": "Network Traffic Content",
+                  "log_source": "NSM:Flow",
+                  "channel": "container egress to unknown IPs/domains"
+                }
+              ]
+            },
+            {
+              "id": "AN1318",
+              "platforms": [
+                "IaaS"
+              ],
+              "description": "Cause→effect chain in cloud consoles: (1) user clicks link then invokes instance/image creation via API, (2) instance/image originates from external AMI or unknown image, (3) instance immediately egresses or retrieves payloads.",
+              "log_sources": [
+                {
+                  "data_component": "Instance Creation",
+                  "log_source": "AWS:CloudTrail",
+                  "channel": "RunInstances,CreateImage"
+                },
+                {
+                  "data_component": "Instance Start",
+                  "log_source": "AWS:CloudTrail",
+                  "channel": "StartInstances"
+                },
+                {
+                  "data_component": "Network Traffic Content",
+                  "log_source": "gcp:vpcflow",
+                  "channel": "first 5m egress to unknown ASNs"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "T1204.002": {
+      "name": "Malicious File",
+      "tactics": [
+        "execution"
+      ],
+      "platforms": [
+        "Linux",
+        "macOS",
+        "Windows"
+      ],
+      "version": "1.6",
+      "url": "https://attack.mitre.org/techniques/T1204/002/",
+      "description_first_paragraph": "An adversary may rely upon a user opening a malicious file in order to gain execution. Users may be subjected to social engineering to get them to open a file that will lead to code execution. This user action will typically be observed as follow-on behavior from [Spearphishing Attachment](https://attack.mitre.org/techniques/T1566/001). Adversaries may use several types of files that require a user to execute them, including .doc, .pdf, .xls, .rtf, .scr, .exe, .lnk, .pif, .cpl, .reg, and .iso.(Citation: Mandiant Trojanized Windows 10)",
+      "groups": [
+        "APT-C-36",
+        "APT12",
+        "APT19",
+        "APT28",
+        "APT29",
+        "APT30",
+        "APT32",
+        "APT33",
+        "APT37",
+        "APT38",
+        "APT39",
+        "Ajax Security Team",
+        "Andariel",
+        "Aoqin Dragon",
+        "BITTER",
+        "BRONZE BUTLER",
+        "BlackTech",
+        "CURIUM",
+        "Cobalt Group",
+        "Confucius",
+        "Contagious Interview",
+        "Dark Caracal",
+        "DarkHydrus",
+        "Darkhotel",
+        "Dragonfly",
+        "EXOTIC LILY",
+        "Earth Lusca",
+        "Elderwood",
+        "FIN4",
+        "FIN6",
+        "FIN7",
+        "FIN8",
+        "Ferocious Kitten",
+        "Gallmaker",
+        "Gamaredon Group",
+        "Gorgon Group",
+        "HEXANE",
+        "Higaisa",
+        "Inception",
+        "IndigoZebra",
+        "Indrik Spider",
+        "Kimsuky",
+        "Lazarus Group",
+        "LazyScripter",
+        "Leviathan",
+        "Machete",
+        "Magic Hound",
+        "Malteiro",
+        "MirrorFace",
+        "Mofang",
+        "Molerats",
+        "Moonstone Sleet",
+        "MuddyWater",
+        "Mustang Panda",
+        "NIMBUS MANTICORE",
+        "Naikon",
+        "Nomadic Octopus",
+        "OilRig",
+        "PLATINUM",
+        "PROMETHIUM",
+        "Patchwork",
+        "RTM",
+        "Rancor",
+        "RedCurl",
+        "Saint Bear",
+        "Sandworm Team",
+        "SideCopy",
+        "Sidewinder",
+        "Silence",
+        "Star Blizzard",
+        "Storm-1811",
+        "TA2541",
+        "TA459",
+        "TA505",
+        "TA551",
+        "The White Company",
+        "Threat Group-3390",
+        "Tonto Team",
+        "Transparent Tribe",
+        "Tropic Trooper",
+        "VOID MANTICORE",
+        "WIRTE",
+        "Whitefly",
+        "Windshift",
+        "Wizard Spider",
+        "admin@338",
+        "menuPass"
+      ],
+      "software_count": 98,
+      "mitigations": [
+        "M1017 User Training",
+        "M1038 Execution Prevention",
+        "M1040 Behavior Prevention on Endpoint"
+      ],
+      "detection_strategies": [
+        {
+          "id": "DET0294",
+          "name": "User Execution – Malicious File via download/open → spawn chain (T1204.002)",
+          "analytics": [
+            {
+              "id": "AN0819",
+              "platforms": [
+                "Windows"
+              ],
+              "description": "User opens a file delivered by email, web, chat, or share. The handler application (Word/PDF reader/archiver) creates a file in user-controlled paths (Downloads, Temp, Desktop) and then spawns a new or unusual child process (e.g., powershell.exe, wscript.exe, cmd.exe, regsvr32.exe, rundll32.exe, msiexec.exe). Optional precursors include FileStreamCreated (URL/UNC) and Office → system32 batch writes.",
+              "log_sources": [
+                {
+                  "data_component": "File Creation",
+                  "log_source": "WinEventLog:Sysmon",
+                  "channel": "EventCode=11"
+                },
+                {
+                  "data_component": "Process Creation",
+                  "log_source": "WinEventLog:Sysmon",
+                  "channel": "EventCode=1"
+                },
+                {
+                  "data_component": "File Metadata",
+                  "log_source": "WinEventLog:Sysmon",
+                  "channel": "EventCode=15"
+                }
+              ]
+            },
+            {
+              "id": "AN0820",
+              "platforms": [
+                "macOS"
+              ],
+              "description": "User opens a downloaded document/installer leading to EndpointSecurity file create in ~/Downloads or ~/Library paths then an exec of a suspicious utility (osascript, bash/zsh, curl, chmod, open with -a Terminal). Correlates File Creation with subsequent process exec and, optionally, quarantine/LSQuarantine events.",
+              "log_sources": [
+                {
+                  "data_component": "Process Creation",
+                  "log_source": "macos:unifiedlog",
+                  "channel": "process_exec: image in {/bin/bash,/bin/zsh,/usr/bin/osascript,/usr/bin/python*,/usr/bin/curl,/usr/bin/ssh,/usr/bin/open} AND parent in {Preview, TextEdit, Microsoft Word, Microsoft Excel, AdobeReader, Archive Utility, Finder}"
+                },
+                {
+                  "data_component": "File Creation",
+                  "log_source": "macos:endpointsecurity",
+                  "channel": "ES_EVENT_TYPE_NOTIFY_CREATE: path under /Users/*/(Downloads|Desktop|Library/*/Containers|Library/Group Containers) AND extension in SuspiciousExtensions"
+                }
+              ]
+            },
+            {
+              "id": "AN0821",
+              "platforms": [
+                "Linux"
+              ],
+              "description": "User or desktop application writes a new file to ~/Downloads, /tmp, or mounted removable media followed by execve of a risky interpreter/loader (bash, sh, python, perl, php, node, curl|wget piping to sh, ld.so, rdesktop, xdg-open - with unusual args). Uses auditd PATH+SYSCALL (open/creat/write/rename) with execve event linking.",
+              "log_sources": [
+                {
+                  "data_component": "File Creation",
+                  "log_source": "auditd:SYSCALL",
+                  "channel": "open/create/rename: name in (/home/*/Downloads/*|/tmp/*|/run/user/*|/media/*) AND ext in SuspiciousExtensions"
+                },
+                {
+                  "data_component": "Process Creation",
+                  "log_source": "auditd:SYSCALL",
+                  "channel": "execve: exe in {/bin/bash,/bin/sh,/usr/bin/python*,/usr/bin/perl,/usr/bin/php,/usr/bin/node,/usr/bin/curl,/usr/bin/wget,/usr/bin/xdg-open,/usr/bin/ssh,/usr/bin/rundll32 (wine)} AND ppid process is a document viewer/browser"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "T1059": {
+      "name": "Command and Scripting Interpreter",
+      "tactics": [
+        "execution"
+      ],
+      "platforms": [
+        "Containers",
+        "ESXi",
+        "IaaS",
+        "Identity Provider",
+        "Linux",
+        "macOS",
+        "Network Devices",
+        "Office Suite",
+        "SaaS",
+        "Windows"
+      ],
+      "version": "2.7",
+      "url": "https://attack.mitre.org/techniques/T1059/",
+      "description_first_paragraph": "Adversaries may abuse command and script interpreters to execute commands, scripts, or binaries. These interfaces and languages provide ways of interacting with computer systems and are a common feature across many different platforms. Most systems come with some built-in command-line interface and scripting capabilities, for example, macOS and Linux distributions include some flavor of [Unix Shell](https://attack.mitre.org/techniques/T1059/004) while Windows installations include the [Windows Command Shell](https://attack.mitre.org/techniques/T1059/003) and [PowerShell](https://attack.mitre.org/techniques/T1059/001).",
+      "groups": [
+        "APT19",
+        "APT32",
+        "APT37",
+        "APT39",
+        "Dragonfly",
+        "FIN5",
+        "FIN6",
+        "FIN7",
+        "Fox Kitten",
+        "Ke3chang",
+        "Mustang Panda",
+        "OilRig",
+        "Saint Bear",
+        "Stealth Falcon",
+        "Whitefly",
+        "Windigo",
+        "Winter Vivern"
+      ],
+      "software_count": 23,
+      "mitigations": [
+        "M1021 Restrict Web-Based Content",
+        "M1026 Privileged Account Management",
+        "M1033 Limit Software Installation",
+        "M1038 Execution Prevention",
+        "M1040 Behavior Prevention on Endpoint",
+        "M1042 Disable or Remove Feature or Program",
+        "M1045 Code Signing",
+        "M1047 Audit",
+        "M1049 Antivirus/Antimalware"
+      ],
+      "detection_strategies": [
+        {
+          "id": "DET0516",
+          "name": "Behavioral Detection of Command and Scripting Interpreter Abuse",
+          "analytics": [
+            {
+              "id": "AN1428",
+              "platforms": [
+                "Windows"
+              ],
+              "description": "Detects the execution of scripting or command interpreters (e.g., powershell.exe, cmd.exe, wscript.exe) outside expected administrative time windows or from abnormal user contexts, often followed by encoded/obfuscated arguments or secondary execution events.",
+              "log_sources": [
+                {
+                  "data_component": "Process Creation",
+                  "log_source": "WinEventLog:Sysmon",
+                  "channel": "EventCode=1"
+                }
+              ]
+            },
+            {
+              "id": "AN1429",
+              "platforms": [
+                "Linux"
+              ],
+              "description": "Detects use of shell interpreters (e.g., bash, sh, python, perl) initiated by users or processes not normally executing them, especially when chaining suspicious utilities like netcat, curl, or ssh.",
+              "log_sources": [
+                {
+                  "data_component": "Process Creation",
+                  "log_source": "auditd:SYSCALL",
+                  "channel": "execve"
+                }
+              ]
+            },
+            {
+              "id": "AN1430",
+              "platforms": [
+                "macOS"
+              ],
+              "description": "Detects launch of command-line interpreters via Terminal, Automator, or hidden `osascript`, especially when parent process lineage deviates from user-initiated applications.",
+              "log_sources": [
+                {
+                  "data_component": "Process Creation",
+                  "log_source": "macos:unifiedlog",
+                  "channel": "log stream --info --predicate 'eventMessage CONTAINS \"exec\"'"
+                }
+              ]
+            },
+            {
+              "id": "AN1431",
+              "platforms": [
+                "ESXi"
+              ],
+              "description": "Detects use of 'esxcli system' or direct interpreter commands (e.g., busybox shell) invoked from SSH or host terminal unexpectedly.",
+              "log_sources": [
+                {
+                  "data_component": "Command Execution",
+                  "log_source": "esxi:vobd",
+                  "channel": "shell session start"
+                }
+              ]
+            },
+            {
+              "id": "AN1432",
+              "platforms": [
+                "Network Devices"
+              ],
+              "description": "Identifies CLI interpreter access (e.g., Cisco IOS, Juniper JUNOS) via `enable` mode or scripting-capable sessions used by uncommon accounts or from unknown IPs.",
+              "log_sources": [
+                {
+                  "data_component": "Command Execution",
+                  "log_source": "networkdevice:cli",
+                  "channel": "shell command"
+                },
+                {
+                  "data_component": "User Account Authentication",
+                  "log_source": "networkdevice:syslog",
+                  "channel": "authentication & authorization"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "T1059.001": {
+      "name": "PowerShell",
+      "tactics": [
+        "execution"
+      ],
+      "platforms": [
+        "Windows",
+        "Linux",
+        "macOS"
+      ],
+      "version": "1.6",
+      "url": "https://attack.mitre.org/techniques/T1059/001/",
+      "description_first_paragraph": "Adversaries may abuse PowerShell commands and scripts for execution. PowerShell is a powerful interactive command-line interface and scripting environment included in the Windows operating system.(Citation: TechNet PowerShell) PowerShell can also be installed on Linux and macOS.(Citation: Powershell installation) Adversaries can use PowerShell to perform a number of actions, including discovery of information and execution of code. Examples include the <code>Start-Process</code> cmdlet which can be used to run an executable and the <code>Invoke-Command</code> cmdlet which runs a command locally or on a remote computer (though administrator permissions are required to use PowerShell to connect to remote systems).",
+      "groups": [
+        "APT-C-36",
+        "APT19",
+        "APT28",
+        "APT29",
+        "APT3",
+        "APT32",
+        "APT33",
+        "APT38",
+        "APT39",
+        "APT41",
+        "APT42",
+        "APT5",
+        "Akira",
+        "Aquatic Panda",
+        "BRONZE BUTLER",
+        "BlackByte",
+        "Blue Mockingbird",
+        "CURIUM",
+        "Chimera",
+        "Cinnamon Tempest",
+        "Cobalt Group",
+        "Confucius",
+        "CopyKittens",
+        "Daggerfly",
+        "DarkHydrus",
+        "DarkVishnya",
+        "Deep Panda",
+        "Dragonfly",
+        "Earth Lusca",
+        "Ember Bear",
+        "FIN10",
+        "FIN13",
+        "FIN6",
+        "FIN7",
+        "FIN8",
+        "Fox Kitten",
+        "GALLIUM",
+        "GOLD SOUTHFIELD",
+        "Gallmaker",
+        "Gamaredon Group",
+        "Gorgon Group",
+        "HAFNIUM",
+        "HEXANE",
+        "Inception",
+        "Indrik Spider",
+        "Kimsuky",
+        "Lazarus Group",
+        "LazyScripter",
+        "Leviathan",
+        "Magic Hound",
+        "Medusa Group",
+        "Molerats",
+        "MoustachedBouncer",
+        "MuddyWater",
+        "Mustang Panda",
+        "NIMBUS MANTICORE",
+        "Nomadic Octopus",
+        "OilRig",
+        "Patchwork",
+        "Play",
+        "Poseidon Group",
+        "RedCurl",
+        "Saint Bear",
+        "Sandworm Team",
+        "Scattered Spider",
+        "Sidewinder",
+        "Silence",
+        "Stealth Falcon",
+        "Storm-0501",
+        "Storm-1811",
+        "TA2541",
+        "TA459",
+        "TA505",
+        "TeamTNT",
+        "Threat Group-3390",
+        "Thrip",
+        "ToddyCat",
+        "Tonto Team",
+        "Turla",
+        "UNC3886",
+        "VOID MANTICORE",
+        "Volt Typhoon",
+        "WIRTE",
+        "Winter Vivern",
+        "Wizard Spider",
+        "menuPass"
+      ],
+      "software_count": 133,
+      "mitigations": [
+        "M1026 Privileged Account Management",
+        "M1038 Execution Prevention",
+        "M1042 Disable or Remove Feature or Program",
+        "M1045 Code Signing",
+        "M1049 Antivirus/Antimalware"
+      ],
+      "detection_strategies": [
+        {
+          "id": "DET0455",
+          "name": "Abuse of PowerShell for Arbitrary Execution",
+          "analytics": [
+            {
+              "id": "AN1252",
+              "platforms": [
+                "Windows"
+              ],
+              "description": "Detects behavioral chains where PowerShell is launched with encoded commands, unusual parent processes, or suspicious modules loaded, potentially followed by network connections or child process spawning. Supports detection of both direct (powershell.exe) and indirect (.NET automation) invocations.",
+              "log_sources": [
+                {
+                  "data_component": "Process Creation",
+                  "log_source": "WinEventLog:Sysmon",
+                  "channel": "EventCode=1"
+                },
+                {
+                  "data_component": "Command Execution",
+                  "log_source": "WinEventLog:PowerShell",
+                  "channel": "EventCode=4103, 4104, 4105, 4106"
+                },
+                {
+                  "data_component": "Process Metadata",
+                  "log_source": "WinEventLog:PowerShell",
+                  "channel": "EventCode=400, 403"
+                },
+                {
+                  "data_component": "Module Load",
+                  "log_source": "WinEventLog:Sysmon",
+                  "channel": "EventCode=7"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "T1059.003": {
+      "name": "Windows Command Shell",
+      "tactics": [
+        "execution"
+      ],
+      "platforms": [
+        "Windows"
+      ],
+      "version": "1.5",
+      "url": "https://attack.mitre.org/techniques/T1059/003/",
+      "description_first_paragraph": "Adversaries may abuse the Windows command shell for execution. The Windows command shell ([cmd](https://attack.mitre.org/software/S0106)) is the primary command prompt on Windows systems. The Windows command prompt can be used to control almost any aspect of a system, with various permission levels required for different subsets of commands. The command prompt can be invoked remotely via [Remote Services](https://attack.mitre.org/techniques/T1021) such as [SSH](https://attack.mitre.org/techniques/T1021/004).(Citation: SSH in Windows)",
+      "groups": [
+        "APT1",
+        "APT18",
+        "APT28",
+        "APT3",
+        "APT32",
+        "APT37",
+        "APT38",
+        "APT41",
+        "APT5",
+        "Agrius",
+        "Aquatic Panda",
+        "BRONZE BUTLER",
+        "BlackByte",
+        "Blue Mockingbird",
+        "Chimera",
+        "Cinnamon Tempest",
+        "Cobalt Group",
+        "Contagious Interview",
+        "Dark Caracal",
+        "Darkhotel",
+        "Dragonfly",
+        "FIN10",
+        "FIN13",
+        "FIN6",
+        "FIN7",
+        "FIN8",
+        "Fox Kitten",
+        "GALLIUM",
+        "Gamaredon Group",
+        "Gorgon Group",
+        "HAFNIUM",
+        "Higaisa",
+        "INC Ransom",
+        "Indrik Spider",
+        "Ke3chang",
+        "Kimsuky",
+        "Lazarus Group",
+        "LazyScripter",
+        "Machete",
+        "Magic Hound",
+        "Medusa Group",
+        "Metador",
+        "MirrorFace",
+        "MuddyWater",
+        "Mustang Panda",
+        "Nomadic Octopus",
+        "OilRig",
+        "Patchwork",
+        "Play",
+        "Rancor",
+        "RedCurl",
+        "Saint Bear",
+        "Silence",
+        "Sowbug",
+        "Storm-1811",
+        "Suckfly",
+        "TA505",
+        "TA551",
+        "TA577",
+        "TeamTNT",
+        "Threat Group-1314",
+        "Threat Group-3390",
+        "ToddyCat",
+        "Tropic Trooper",
+        "Turla",
+        "UNC3886",
+        "Volt Typhoon",
+        "WIRTE",
+        "Winter Vivern",
+        "Wizard Spider",
+        "ZIRCONIUM",
+        "admin@338",
+        "menuPass"
+      ],
+      "software_count": 298,
+      "mitigations": [
+        "M1038 Execution Prevention"
+      ],
+      "detection_strategies": [
+        {
+          "id": "DET0202",
+          "name": "Behavioral Detection of Windows Command Shell Execution",
+          "analytics": [
+            {
+              "id": "AN0578",
+              "platforms": [
+                "Windows"
+              ],
+              "description": "Detects interactive or scripted abuse of cmd.exe, batch files, or shell invocation chains. Focuses on parent-child relationships (e.g., cmd.exe launched from unusual parents), anomalous command-line parameters, and chaining with discovery, credential access, or lateral movement behaviors.",
+              "log_sources": [
+                {
+                  "data_component": "Process Creation",
+                  "log_source": "WinEventLog:Security",
+                  "channel": "EventCode=4688"
+                },
+                {
+                  "data_component": "Module Load",
+                  "log_source": "WinEventLog:Sysmon",
+                  "channel": "EventCode=7"
+                },
+                {
+                  "data_component": "Script Execution",
+                  "log_source": "EDR:scriptblock",
+                  "channel": "Process Tree + Script Block Logging"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "T1027": {
+      "name": "Obfuscated Files or Information",
+      "tactics": [
+        "stealth"
+      ],
+      "platforms": [
+        "ESXi",
+        "Linux",
+        "macOS",
+        "Network Devices",
+        "Windows"
+      ],
+      "version": "2.0",
+      "url": "https://attack.mitre.org/techniques/T1027/",
+      "description_first_paragraph": "Adversaries may attempt to make an executable or file difficult to discover or analyze by encrypting, encoding, or otherwise obfuscating its contents on the system or in transit. This is common behavior that can be used across different platforms and the network to evade defenses. ",
+      "groups": [
+        "APT-C-36",
+        "APT3",
+        "APT37",
+        "APT41",
+        "BackdoorDiplomacy",
+        "BlackOasis",
+        "Earth Lusca",
+        "GALLIUM",
+        "Gallmaker",
+        "Gamaredon Group",
+        "Ke3chang",
+        "Kimsuky",
+        "Moonstone Sleet",
+        "Mustang Panda",
+        "NIMBUS MANTICORE",
+        "RedCurl",
+        "Rocke",
+        "Sandworm Team",
+        "Windshift"
+      ],
+      "software_count": 142,
+      "mitigations": [
+        "M1017 User Training",
+        "M1040 Behavior Prevention on Endpoint",
+        "M1047 Audit",
+        "M1049 Antivirus/Antimalware"
+      ],
+      "detection_strategies": [
+        {
+          "id": "DET0378",
+          "name": "Behavioral Detection of Obfuscated Files or Information",
+          "analytics": [
+            {
+              "id": "AN1064",
+              "platforms": [
+                "Windows"
+              ],
+              "description": "Correlates script execution or suspicious parent processes with creation or modification of encoded, compressed, or encrypted file formats (e.g., .zip, .7z, .enc) and abnormal command-line syntax or PowerShell obfuscation.",
+              "log_sources": [
+                {
+                  "data_component": "Process Creation",
+                  "log_source": "WinEventLog:Security",
+                  "channel": "EventCode=4688"
+                },
+                {
+                  "data_component": "File Creation",
+                  "log_source": "WinEventLog:Sysmon",
+                  "channel": "EventCode=11"
+                },
+                {
+                  "data_component": "Process Creation",
+                  "log_source": "WinEventLog:Sysmon",
+                  "channel": "EventCode=1"
+                }
+              ]
+            },
+            {
+              "id": "AN1065",
+              "platforms": [
+                "Linux"
+              ],
+              "description": "Detects use of gzip, base64, tar, or openssl in scripts or commands that encode/encrypt files after file staging or system enumeration.",
+              "log_sources": [
+                {
+                  "data_component": "Process Creation",
+                  "log_source": "auditd:SYSCALL",
+                  "channel": "execve"
+                },
+                {
+                  "data_component": "File Modification",
+                  "log_source": "auditd:SYSCALL",
+                  "channel": "open, write"
+                },
+                {
+                  "data_component": "Command Execution",
+                  "log_source": "linux:cli",
+                  "channel": "Shell history logs"
+                }
+              ]
+            },
+            {
+              "id": "AN1066",
+              "platforms": [
+                "macOS"
+              ],
+              "description": "Monitors use of archive or encryption tools (zip, openssl) tied to user-scripted activity or binaries writing encoded payloads under /Users or /Volumes.",
+              "log_sources": [
+                {
+                  "data_component": "Command Execution",
+                  "log_source": "macos:unifiedlog",
+                  "channel": "log stream --predicate 'processImagePath contains \"zip\" OR \"base64\"'"
+                },
+                {
+                  "data_component": "File Creation",
+                  "log_source": "macos:osquery",
+                  "channel": "file_events"
+                }
+              ]
+            },
+            {
+              "id": "AN1067",
+              "platforms": [
+                "Network Devices"
+              ],
+              "description": "Identifies transfer of base64, uuencoded, or high-entropy files over HTTP, FTP, or custom protocols in lateral movement or exfiltration streams.",
+              "log_sources": [
+                {
+                  "data_component": "Network Traffic Content",
+                  "log_source": "networkdevice:IDS",
+                  "channel": "content inspection / PCAP / HTTP body"
+                }
+              ]
+            },
+            {
+              "id": "AN1068",
+              "platforms": [
+                "ESXi"
+              ],
+              "description": "Detects encoded PowerCLI or Base64-encoded payloads staged via datastore uploads or shell access (e.g., ESXi Shell or backdoored VIBs).",
+              "log_sources": [
+                {
+                  "data_component": "File Metadata",
+                  "log_source": "esxi:vmkernel",
+                  "channel": "Datastore modification events"
+                },
+                {
+                  "data_component": "OS API Execution",
+                  "log_source": "esxi:hostd",
+                  "channel": "Remote access API calls and file uploads"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "T1027.010": {
+      "name": "Command Obfuscation",
+      "tactics": [
+        "stealth"
+      ],
+      "platforms": [
+        "Linux",
+        "macOS",
+        "Windows"
+      ],
+      "version": "2.0",
+      "url": "https://attack.mitre.org/techniques/T1027/010/",
+      "description_first_paragraph": "Adversaries may obfuscate content during command execution to impede detection. Command-line obfuscation is a method of making strings and patterns within commands and scripts more difficult to signature and analyze. This type of obfuscation can be included within commands executed by delivered payloads (e.g., [Phishing](https://attack.mitre.org/techniques/T1566) and [Drive-by Compromise](https://attack.mitre.org/techniques/T1189)) or interactively via [Command and Scripting Interpreter](https://attack.mitre.org/techniques/T1059).(Citation: Akamai JS)(Citation: Malware Monday VBE)",
+      "groups": [
+        "APT19",
+        "APT32",
+        "APT38",
+        "Aquatic Panda",
+        "Chimera",
+        "Cobalt Group",
+        "Contagious Interview",
+        "FIN6",
+        "FIN7",
+        "FIN8",
+        "Fox Kitten",
+        "GOLD SOUTHFIELD",
+        "Gamaredon Group",
+        "HEXANE",
+        "Kimsuky",
+        "LazyScripter",
+        "Leafminer",
+        "Magic Hound",
+        "Medusa Group",
+        "MuddyWater",
+        "Patchwork",
+        "Play",
+        "Salt Typhoon",
+        "Sandworm Team",
+        "Sidewinder",
+        "Silence",
+        "TA505",
+        "TA551",
+        "Turla",
+        "WIRTE",
+        "Wizard Spider"
+      ],
+      "software_count": 36,
+      "mitigations": [
+        "M1040 Behavior Prevention on Endpoint",
+        "M1049 Antivirus/Antimalware"
+      ],
+      "detection_strategies": [
+        {
+          "id": "DET0505",
+          "name": "Detection Strategy for Command Obfuscation",
+          "analytics": [
+            {
+              "id": "AN1394",
+              "platforms": [
+                "Windows"
+              ],
+              "description": "Detection of command-line activity exhibiting syntactic obfuscation patterns, such as excessive escape characters, base64 encoding, command concatenation, or outlier command length and entropy.",
+              "log_sources": [
+                {
+                  "data_component": "Process Creation",
+                  "log_source": "WinEventLog:Security",
+                  "channel": "EventCode=4688"
+                }
+              ]
+            },
+            {
+              "id": "AN1395",
+              "platforms": [
+                "Linux"
+              ],
+              "description": "Detection of shell commands that leverage encoded execution, command chaining, excessive piping, or unusual token patterns indicative of obfuscation.",
+              "log_sources": [
+                {
+                  "data_component": "Process Creation",
+                  "log_source": "auditd:SYSCALL",
+                  "channel": "execve"
+                },
+                {
+                  "data_component": "Command Execution",
+                  "log_source": "linux:osquery",
+                  "channel": "process_events.command_line"
+                }
+              ]
+            },
+            {
+              "id": "AN1396",
+              "platforms": [
+                "macOS"
+              ],
+              "description": "Detection of obfuscated commands via shell, osascript, or AppleScript interpreters using unusual tokens, encoding, variable substitution, or runtime string reconstruction.",
+              "log_sources": [
+                {
+                  "data_component": "Command Execution",
+                  "log_source": "macos:unifiedlog",
+                  "channel": "process:spawn, process:exec"
+                },
+                {
+                  "data_component": "Process Creation",
+                  "log_source": "macos:endpointsecurity",
+                  "channel": "ES_EVENT_TYPE_NOTIFY_EXEC"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "T1071": {
+      "name": "Application Layer Protocol",
+      "tactics": [
+        "command-and-control"
+      ],
+      "platforms": [
+        "Linux",
+        "macOS",
+        "Windows",
+        "Network Devices",
+        "ESXi"
+      ],
+      "version": "2.4",
+      "url": "https://attack.mitre.org/techniques/T1071/",
+      "description_first_paragraph": "Adversaries may communicate using OSI application layer protocols to avoid detection/network filtering by blending in with existing traffic. Commands to the remote system, and often the results of those commands, will be embedded within the protocol traffic between the client and server. ",
+      "groups": [
+        "INC Ransom",
+        "Magic Hound",
+        "NIMBUS MANTICORE",
+        "Rocke",
+        "TeamTNT",
+        "Velvet Ant"
+      ],
+      "software_count": 10,
+      "mitigations": [
+        "M1031 Network Intrusion Prevention",
+        "M1037 Filter Network Traffic"
+      ],
+      "detection_strategies": [
+        {
+          "id": "DET0444",
+          "name": "Detection of Command and Control Over Application Layer Protocols",
+          "analytics": [
+            {
+              "id": "AN1225",
+              "platforms": [
+                "Windows"
+              ],
+              "description": "Detects suspicious usage of common application-layer protocols (e.g., HTTP, HTTPS, DNS, SMB) by abnormal processes, with high outbound byte counts or irregular ports, possibly indicating command and control or data exfiltration.",
+              "log_sources": [
+                {
+                  "data_component": "Network Traffic Content",
+                  "log_source": "NSM:Flow",
+                  "channel": "http, dns, smb, ssl logs"
+                },
+                {
+                  "data_component": "Network Connection Creation",
+                  "log_source": "WinEventLog:Sysmon",
+                  "channel": "EventCode=3, 22"
+                }
+              ]
+            },
+            {
+              "id": "AN1226",
+              "platforms": [
+                "Linux"
+              ],
+              "description": "Detects suspicious curl, wget, or custom socket traffic that leverages DNS, HTTPS, or IRC-style protocols with unbalanced traffic or beacon-like intervals.",
+              "log_sources": [
+                {
+                  "data_component": "Network Traffic Content",
+                  "log_source": "NSM:Flow",
+                  "channel": "dns, ssl, conn"
+                },
+                {
+                  "data_component": "Process Creation",
+                  "log_source": "auditd:SYSCALL",
+                  "channel": "execve"
+                }
+              ]
+            },
+            {
+              "id": "AN1227",
+              "platforms": [
+                "macOS"
+              ],
+              "description": "Detects applications using abnormal protocols or high volume traffic not previously associated with the process image, such as Automator or AppleScript invoking curl or python sockets.",
+              "log_sources": [
+                {
+                  "data_component": "Network Traffic Flow",
+                  "log_source": "macos:osquery",
+                  "channel": "socket_events"
+                },
+                {
+                  "data_component": "Command Execution",
+                  "log_source": "macos:unifiedlog",
+                  "channel": "log stream"
+                }
+              ]
+            },
+            {
+              "id": "AN1228",
+              "platforms": [
+                "Network Devices"
+              ],
+              "description": "Detects application-layer tunneling or unauthorized app protocols like DNS-over-HTTPS, embedded C2 in TLS/HTTP headers, or misused SMB traffic crossing VLANs.",
+              "log_sources": [
+                {
+                  "data_component": "Network Traffic Content",
+                  "log_source": "NSM:Flow",
+                  "channel": "conn.log, http.log, dns.log, ssl.log"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "T1071.001": {
+      "name": "Web Protocols",
+      "tactics": [
+        "command-and-control"
+      ],
+      "platforms": [
+        "ESXi",
+        "Linux",
+        "macOS",
+        "Network Devices",
+        "Windows"
+      ],
+      "version": "1.5",
+      "url": "https://attack.mitre.org/techniques/T1071/001/",
+      "description_first_paragraph": "Adversaries may communicate using application layer protocols associated with web traffic to avoid detection/network filtering by blending in with existing traffic. Commands to the remote system, and often the results of those commands, will be embedded within the protocol traffic between the client and server. ",
+      "groups": [
+        "APT18",
+        "APT19",
+        "APT28",
+        "APT32",
+        "APT33",
+        "APT37",
+        "APT38",
+        "APT39",
+        "APT41",
+        "APT42",
+        "BITTER",
+        "BRONZE BUTLER",
+        "BlackByte",
+        "Chimera",
+        "Cobalt Group",
+        "Confucius",
+        "Daggerfly",
+        "Dark Caracal",
+        "FIN13",
+        "FIN4",
+        "FIN8",
+        "Gamaredon Group",
+        "HAFNIUM",
+        "Higaisa",
+        "Inception",
+        "Ke3chang",
+        "Kimsuky",
+        "Lazarus Group",
+        "LuminousMoth",
+        "Magic Hound",
+        "Medusa Group",
+        "Metador",
+        "Moonstone Sleet",
+        "MuddyWater",
+        "Mustang Panda",
+        "OilRig",
+        "Orangeworm",
+        "Rancor",
+        "RedCurl",
+        "RedEcho",
+        "Rocke",
+        "Salt Typhoon",
+        "Sandworm Team",
+        "Sea Turtle",
+        "Sidewinder",
+        "SilverTerrier",
+        "Stealth Falcon",
+        "TA505",
+        "TA551",
+        "TeamTNT",
+        "Threat Group-3390",
+        "Tropic Trooper",
+        "Turla",
+        "VOID MANTICORE",
+        "WIRTE",
+        "Windshift",
+        "Winter Vivern",
+        "Wizard Spider"
+      ],
+      "software_count": 352,
+      "mitigations": [
+        "M1031 Network Intrusion Prevention",
+        "M1037 Filter Network Traffic"
+      ],
+      "detection_strategies": [
+        {
+          "id": "DET0027",
+          "name": "Detection of Web Protocol-Based C2 Over HTTP, HTTPS, or WebSockets",
+          "analytics": [
+            {
+              "id": "AN0075",
+              "platforms": [
+                "Windows"
+              ],
+              "description": "Detects unexpected or high-volume HTTP/S/WebSocket communication from suspicious processes (e.g., PowerShell, rundll32) using uncommon user agents or mimicking browser traffic to unusual domains or IPs.",
+              "log_sources": [
+                {
+                  "data_component": "Network Traffic Content",
+                  "log_source": "NSM:Flow",
+                  "channel": "http.log, ssl.log"
+                },
+                {
+                  "data_component": "Network Connection Creation",
+                  "log_source": "WinEventLog:Sysmon",
+                  "channel": "EventCode=3, 22"
+                }
+              ]
+            },
+            {
+              "id": "AN0076",
+              "platforms": [
+                "Linux"
+              ],
+              "description": "Detects curl, wget, Python requests, or custom HTTP clients communicating over non-standard ports, with repetitive or beacon-like patterns or POST-heavy behavior to rare domains.",
+              "log_sources": [
+                {
+                  "data_component": "Network Traffic Content",
+                  "log_source": "NSM:Flow",
+                  "channel": "http.log, conn.log"
+                },
+                {
+                  "data_component": "Process Creation",
+                  "log_source": "auditd:SYSCALL",
+                  "channel": "execve"
+                }
+              ]
+            },
+            {
+              "id": "AN0077",
+              "platforms": [
+                "macOS"
+              ],
+              "description": "Detects applications such as Automator, AppleScript, or LaunchDaemons invoking HTTP/S traffic to non-standard domains or using suspicious headers (e.g., Base64 in URIs or cookie fields).",
+              "log_sources": [
+                {
+                  "data_component": "Network Traffic Flow",
+                  "log_source": "macos:osquery",
+                  "channel": "socket_events"
+                },
+                {
+                  "data_component": "Command Execution",
+                  "log_source": "macos:unifiedlog",
+                  "channel": "log stream --predicate"
+                }
+              ]
+            },
+            {
+              "id": "AN0078",
+              "platforms": [
+                "ESXi"
+              ],
+              "description": "Detects HTTP or HTTPS communication initiated by shell-based scripts or management daemons, especially those reaching public IPs over ports 80/443 using embedded curl or wget.",
+              "log_sources": [
+                {
+                  "data_component": "Network Traffic Content",
+                  "log_source": "NSM:Flow",
+                  "channel": "SPAN or port-mirrored HTTP/S"
+                },
+                {
+                  "data_component": "Process Creation",
+                  "log_source": "esxi:shell",
+                  "channel": "/root/.ash_history or /etc/init.d/*"
+                }
+              ]
+            },
+            {
+              "id": "AN0079",
+              "platforms": [
+                "Network Devices"
+              ],
+              "description": "Detects Web protocol misuse such as encoded HTTP headers, WebSocket upgrade requests with abnormal payloads, or TLS handshake anomalies suggesting embedded C2 channels.",
+              "log_sources": [
+                {
+                  "data_component": "Network Traffic Content",
+                  "log_source": "NSM:Flow",
+                  "channel": "http.log, ssl.log, websocket.log"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "T1105": {
+      "name": "Ingress Tool Transfer",
+      "tactics": [
+        "command-and-control"
+      ],
+      "platforms": [
+        "ESXi",
+        "Linux",
+        "macOS",
+        "Network Devices",
+        "Windows"
+      ],
+      "version": "2.6",
+      "url": "https://attack.mitre.org/techniques/T1105/",
+      "description_first_paragraph": "Adversaries may transfer tools or other files from an external system into a compromised environment. Tools or files may be copied from an external adversary-controlled system to the victim network through the command and control channel or through alternate protocols such as [ftp](https://attack.mitre.org/software/S0095). Once present, adversaries may also transfer/spread tools between victim devices within a compromised environment (i.e. [Lateral Tool Transfer](https://attack.mitre.org/techniques/T1570)). ",
+      "groups": [
+        "APT-C-36",
+        "APT18",
+        "APT28",
+        "APT29",
+        "APT3",
+        "APT32",
+        "APT33",
+        "APT37",
+        "APT38",
+        "APT39",
+        "APT41",
+        "Ajax Security Team",
+        "Andariel",
+        "Aquatic Panda",
+        "BITTER",
+        "BRONZE BUTLER",
+        "BackdoorDiplomacy",
+        "BlackByte",
+        "Chimera",
+        "Cinnamon Tempest",
+        "Cobalt Group",
+        "Confucius",
+        "Daggerfly",
+        "Darkhotel",
+        "Dragonfly",
+        "Elderwood",
+        "Evilnum",
+        "FIN13",
+        "FIN7",
+        "FIN8",
+        "Fox Kitten",
+        "GALLIUM",
+        "Gamaredon Group",
+        "Gorgon Group",
+        "HAFNIUM",
+        "HEXANE",
+        "INC Ransom",
+        "IndigoZebra",
+        "Indrik Spider",
+        "Ke3chang",
+        "Kimsuky",
+        "Lazarus Group",
+        "LazyScripter",
+        "Leviathan",
+        "LuminousMoth",
+        "Magic Hound",
+        "Medusa Group",
+        "Metador",
+        "Molerats",
+        "Moonstone Sleet",
+        "Moses Staff",
+        "MuddyWater",
+        "Mustang Panda",
+        "Mustard Tempest",
+        "NIMBUS MANTICORE",
+        "Nomadic Octopus",
+        "OilRig",
+        "PLATINUM",
+        "Patchwork",
+        "Play",
+        "Rancor",
+        "Rocke",
+        "Salt Typhoon",
+        "Sandworm Team",
+        "Scattered Spider",
+        "ShinyHunters",
+        "SideCopy",
+        "Sidewinder",
+        "Silence",
+        "Storm-1811",
+        "TA2541",
+        "TA505",
+        "TA551",
+        "TeamPCP",
+        "TeamTNT",
+        "Threat Group-3390",
+        "Tonto Team",
+        "Tropic Trooper",
+        "Turla",
+        "VOID MANTICORE",
+        "Volatile Cedar",
+        "Volt Typhoon",
+        "WIRTE",
+        "Whitefly",
+        "Windshift",
+        "Winnti Group",
+        "Winter Vivern",
+        "Wizard Spider",
+        "ZIRCONIUM",
+        "menuPass"
+      ],
+      "software_count": 411,
+      "mitigations": [
+        "M1031 Network Intrusion Prevention",
+        "M1037 Filter Network Traffic"
+      ],
+      "detection_strategies": [
+        {
+          "id": "DET0060",
+          "name": "Detect Ingress Tool Transfers via Behavioral Chain",
+          "analytics": [
+            {
+              "id": "AN0165",
+              "platforms": [
+                "Windows"
+              ],
+              "description": "Unusual or uncommon processes initiate network connections to external destinations followed by file creation (tools downloaded).",
+              "log_sources": [
+                {
+                  "data_component": "Network Connection Creation",
+                  "log_source": "WinEventLog:Sysmon",
+                  "channel": "EventCode=3, 22"
+                },
+                {
+                  "data_component": "File Creation",
+                  "log_source": "WinEventLog:Sysmon",
+                  "channel": "EventCode=11"
+                },
+                {
+                  "data_component": "Process Creation",
+                  "log_source": "WinEventLog:Sysmon",
+                  "channel": "EventCode=1"
+                }
+              ]
+            },
+            {
+              "id": "AN0166",
+              "platforms": [
+                "Linux"
+              ],
+              "description": "Shell-based tools (curl, wget, scp) initiate connections to external domains followed by creation of executable files on disk.",
+              "log_sources": [
+                {
+                  "data_component": "Command Execution",
+                  "log_source": "auditd:SYSCALL",
+                  "channel": "connect, execve, write"
+                },
+                {
+                  "data_component": "File Creation",
+                  "log_source": "auditd:SYSCALL",
+                  "channel": "file creation/modification"
+                },
+                {
+                  "data_component": "Network Traffic Flow",
+                  "log_source": "iptables:LOG",
+                  "channel": "TCP connections"
+                }
+              ]
+            },
+            {
+              "id": "AN0167",
+              "platforms": [
+                "macOS"
+              ],
+              "description": "Process execution of curl or wget followed by a network connection and a file created in temporary or user-specific directories.",
+              "log_sources": [
+                {
+                  "data_component": "Process Creation",
+                  "log_source": "macos:endpointsecurity",
+                  "channel": "ES_EVENT_TYPE_NOTIFY_EXEC"
+                },
+                {
+                  "data_component": "File Creation",
+                  "log_source": "macos:unifiedlog",
+                  "channel": "file write/create"
+                },
+                {
+                  "data_component": "Network Connection Creation",
+                  "log_source": "macos:unifiedlog",
+                  "channel": "connection open"
+                }
+              ]
+            },
+            {
+              "id": "AN0168",
+              "platforms": [
+                "ESXi"
+              ],
+              "description": "Command line interface or vCLI triggers remote transfer using wget or curl, writing files into datastore paths or local tmp directories.",
+              "log_sources": [
+                {
+                  "data_component": "Command Execution",
+                  "log_source": "esxi:hostd",
+                  "channel": "command execution"
+                },
+                {
+                  "data_component": "File Creation",
+                  "log_source": "esxi:vmkernel",
+                  "channel": "file write"
+                }
+              ]
+            },
+            {
+              "id": "AN0169",
+              "platforms": [
+                "Network Devices"
+              ],
+              "description": "Network device logs show anomalous inbound file transfers or uncharacteristic flows with high payload volume to network devices with storage or automation hooks.",
+              "log_sources": [
+                {
+                  "data_component": "Network Traffic Flow",
+                  "log_source": "NSM:Flow",
+                  "channel": "connection metadata"
+                },
+                {
+                  "data_component": "File Creation",
+                  "log_source": "snmp:syslog",
+                  "channel": "firmware write/log event"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "T1547": {
+      "name": "Boot or Logon Autostart Execution",
+      "tactics": [
+        "persistence",
+        "privilege-escalation"
+      ],
+      "platforms": [
+        "Linux",
+        "macOS",
+        "Windows",
+        "Network Devices"
+      ],
+      "version": "1.3",
+      "url": "https://attack.mitre.org/techniques/T1547/",
+      "description_first_paragraph": "Adversaries may configure system settings to automatically execute a program during system boot or logon to maintain persistence or gain higher-level privileges on compromised systems. Operating systems may have mechanisms for automatically running a program on system boot or account logon.(Citation: Microsoft Run Key)(Citation: MSDN Authentication Packages)(Citation: Microsoft TimeProvider)(Citation: Cylance Reg Persistence Sept 2013)(Citation: Linux Kernel Programming) These mechanisms may include automatically executing programs that are placed in specially designated directories or are referenced by repositories that store configuration information, such as the Windows Registry. An adversary may achieve the same goal by modifying or extending features of the kernel.",
+      "groups": [
+        "APT42"
+      ],
+      "software_count": 5,
+      "mitigations": [],
+      "detection_strategies": [
+        {
+          "id": "DET0274",
+          "name": "Boot or Logon Autostart Execution Detection Strategy",
+          "analytics": [
+            {
+              "id": "AN0764",
+              "platforms": [
+                "Windows"
+              ],
+              "description": "Correlation of registry key modification for Run/RunOnce with abnormal parent-child process relationships and outlier execution at user logon or system startup",
+              "log_sources": [
+                {
+                  "data_component": "Process Creation",
+                  "log_source": "WinEventLog:Security",
+                  "channel": "EventCode=4688"
+                },
+                {
+                  "data_component": "Windows Registry Key Modification",
+                  "log_source": "WinEventLog:Sysmon",
+                  "channel": "EventCode=13, 14"
+                }
+              ]
+            },
+            {
+              "id": "AN0765",
+              "platforms": [
+                "Linux"
+              ],
+              "description": "Correlates creation/modification of systemd service files or /etc/init.d scripts with outlier process behavior during boot",
+              "log_sources": [
+                {
+                  "data_component": "File Creation",
+                  "log_source": "auditd:SYSCALL",
+                  "channel": "creat"
+                },
+                {
+                  "data_component": "File Modification",
+                  "log_source": "auditd:SYSCALL",
+                  "channel": "write"
+                },
+                {
+                  "data_component": "Process Creation",
+                  "log_source": "auditd:SYSCALL",
+                  "channel": "Execution of binaries located in /etc/init.d/ or systemd service paths"
+                }
+              ]
+            },
+            {
+              "id": "AN0766",
+              "platforms": [
+                "macOS"
+              ],
+              "description": "Observes creation or modification of LaunchAgent/LaunchDaemon property list files combined with anomalous plist payload execution after user logon",
+              "log_sources": [
+                {
+                  "data_component": "Service Metadata",
+                  "log_source": "macos:unifiedlog",
+                  "channel": "Observed loading of new LaunchAgent or LaunchDaemon plist"
+                },
+                {
+                  "data_component": "File Modification",
+                  "log_source": "macos:unifiedlog",
+                  "channel": "write"
+                },
+                {
+                  "data_component": "Process Creation",
+                  "log_source": "macos:unifiedlog",
+                  "channel": "Execution of binary listed in newly modified LaunchAgent plist"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "T1547.001": {
+      "name": "Registry Run Keys / Startup Folder",
+      "tactics": [
+        "persistence",
+        "privilege-escalation"
+      ],
+      "platforms": [
+        "Windows"
+      ],
+      "version": "2.1",
+      "url": "https://attack.mitre.org/techniques/T1547/001/",
+      "description_first_paragraph": "Adversaries may achieve persistence by adding a program to a startup folder or referencing it with a Registry run key. Adding an entry to the \"run keys\" in the Registry or startup folder will cause the program referenced to be executed when a user logs in.(Citation: Microsoft Run Key) These programs will be executed under the context of the user and will have the account's associated permissions level.",
+      "groups": [
+        "APT18",
+        "APT19",
+        "APT28",
+        "APT29",
+        "APT3",
+        "APT32",
+        "APT33",
+        "APT37",
+        "APT38",
+        "APT39",
+        "APT41",
+        "BRONZE BUTLER",
+        "BlackByte",
+        "Cobalt Group",
+        "Confucius",
+        "Contagious Interview",
+        "Dark Caracal",
+        "Darkhotel",
+        "Dragonfly",
+        "FIN10",
+        "FIN13",
+        "FIN6",
+        "FIN7",
+        "Gamaredon Group",
+        "Gorgon Group",
+        "Higaisa",
+        "Inception",
+        "Ke3chang",
+        "Kimsuky",
+        "Lazarus Group",
+        "LazyScripter",
+        "Leviathan",
+        "LuminousMoth",
+        "Magic Hound",
+        "Molerats",
+        "Moonstone Sleet",
+        "MuddyWater",
+        "Mustang Panda",
+        "NIMBUS MANTICORE",
+        "Naikon",
+        "PROMETHIUM",
+        "Patchwork",
+        "Putter Panda",
+        "RTM",
+        "RedCurl",
+        "Rocke",
+        "Sidewinder",
+        "Silence",
+        "Storm-1811",
+        "TA2541",
+        "TeamPCP",
+        "TeamTNT",
+        "Threat Group-3390",
+        "Tropic Trooper",
+        "Turla",
+        "VOID MANTICORE",
+        "Windshift",
+        "Wizard Spider",
+        "ZIRCONIUM"
+      ],
+      "software_count": 205,
+      "mitigations": [],
+      "detection_strategies": [
+        {
+          "id": "DET0365",
+          "name": "Detect Registry and Startup Folder Persistence (Windows)",
+          "analytics": [
+            {
+              "id": "AN1032",
+              "platforms": [
+                "Windows"
+              ],
+              "description": "Correlation of Registry key creation/modification events under known Run/Startup keys with new or unusual binary paths or script-based payloads. Multi-event detection includes registry modification followed by process execution from non-standard directories or abnormal parent-child process relationships.",
+              "log_sources": [
+                {
+                  "data_component": "Process Creation",
+                  "log_source": "WinEventLog:Sysmon",
+                  "channel": "EventCode=1"
+                },
+                {
+                  "data_component": "Windows Registry Key Modification",
+                  "log_source": "WinEventLog:Sysmon",
+                  "channel": "EventCode=13, 14"
+                },
+                {
+                  "data_component": "File Creation",
+                  "log_source": "WinEventLog:Microsoft-Windows-Shell-Core",
+                  "channel": "New startup folder shortcut or binary placed in Startup directory"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "T1036": {
+      "name": "Masquerading",
+      "tactics": [
+        "stealth"
+      ],
+      "platforms": [
+        "Containers",
+        "ESXi",
+        "Linux",
+        "macOS",
+        "Windows"
+      ],
+      "version": "2.0",
+      "url": "https://attack.mitre.org/techniques/T1036/",
+      "description_first_paragraph": "Adversaries may attempt to manipulate features of their artifacts to make them appear legitimate or benign to users and/or security tools. Masquerading occurs when the name or location of an object, legitimate or malicious, is manipulated or abused for the sake of evading defenses and observation. This may include manipulating file metadata, tricking users into misidentifying the file type, and giving legitimate task or service names.",
+      "groups": [
+        "APT28",
+        "APT32",
+        "Agrius",
+        "Aoqin Dragon",
+        "BRONZE BUTLER",
+        "Contagious Interview",
+        "Ember Bear",
+        "FIN13",
+        "LazyScripter",
+        "Nomadic Octopus",
+        "OilRig",
+        "PLATINUM",
+        "Sandworm Team",
+        "Storm-1811",
+        "TA551",
+        "TeamTNT",
+        "The Gentlemen",
+        "Windshift",
+        "Winter Vivern",
+        "ZIRCONIUM",
+        "menuPass"
+      ],
+      "software_count": 33,
+      "mitigations": [
+        "M1017 User Training",
+        "M1018 User Account Management",
+        "M1022 Restrict File and Directory Permissions",
+        "M1038 Execution Prevention",
+        "M1040 Behavior Prevention on Endpoint",
+        "M1045 Code Signing",
+        "M1047 Audit",
+        "M1049 Antivirus/Antimalware"
+      ],
+      "detection_strategies": [
+        {
+          "id": "DET0127",
+          "name": "Behavioral Detection of Masquerading Across Platforms via Metadata and Execution Discrepancy",
+          "analytics": [
+            {
+              "id": "AN0355",
+              "platforms": [
+                "Windows"
+              ],
+              "description": "Adversary renames LOLBINs or deploys binaries with spoofed file names, internal PE metadata, or misleading icons to appear legitimate. File creation is followed by execution or service registration inconsistent with known usage.",
+              "log_sources": [
+                {
+                  "data_component": "Process Creation",
+                  "log_source": "WinEventLog:Sysmon",
+                  "channel": "EventCode=1"
+                },
+                {
+                  "data_component": "Service Creation",
+                  "log_source": "WinEventLog:System",
+                  "channel": "EventCode=7045"
+                }
+              ]
+            },
+            {
+              "id": "AN0356",
+              "platforms": [
+                "Linux"
+              ],
+              "description": "Adversary drops renamed binaries in uncommon directories (e.g., /tmp, /dev/shm) or uses special characters in names (e.g., trailing space, Unicode RLO). Execution or cronjob registration follows shortly after file drop.",
+              "log_sources": [
+                {
+                  "data_component": "Process Creation",
+                  "log_source": "auditd:SYSCALL",
+                  "channel": "execve"
+                },
+                {
+                  "data_component": "File Modification",
+                  "log_source": "linux:syslog",
+                  "channel": "rename"
+                },
+                {
+                  "data_component": "File Metadata",
+                  "log_source": "linux:osquery",
+                  "channel": "file_events"
+                }
+              ]
+            },
+            {
+              "id": "AN0357",
+              "platforms": [
+                "macOS"
+              ],
+              "description": "Adversary creates disguised launch daemons or apps with misleading names and bundle metadata (e.g., Info.plist values inconsistent with binary path or icon). Launch is correlated with user logon or persistence setup.",
+              "log_sources": [
+                {
+                  "data_component": "Process Metadata",
+                  "log_source": "macos:unifiedlog",
+                  "channel": "process"
+                },
+                {
+                  "data_component": "Process Creation",
+                  "log_source": "macos:endpointsecurity",
+                  "channel": "ES_EVENT_TYPE_NOTIFY_EXEC"
+                },
+                {
+                  "data_component": "File Metadata",
+                  "log_source": "fs:fileevents",
+                  "channel": "/var/log/install.log"
+                }
+              ]
+            },
+            {
+              "id": "AN0358",
+              "platforms": [
+                "Containers"
+              ],
+              "description": "Adversary uses renamed container images, injects files into containers with misleading names or metadata (e.g., renamed system binaries), and executes them during startup or scheduled jobs.",
+              "log_sources": [
+                {
+                  "data_component": "Process Creation",
+                  "log_source": "containerd:runtime",
+                  "channel": "/var/log/containers/*.log"
+                },
+                {
+                  "data_component": "Image Metadata",
+                  "log_source": "docker:events",
+                  "channel": "docker.events.json"
+                },
+                {
+                  "data_component": "File Modification",
+                  "log_source": "ebpf:syscalls",
+                  "channel": "file_write"
+                }
+              ]
+            },
+            {
+              "id": "AN0359",
+              "platforms": [
+                "ESXi"
+              ],
+              "description": "Adversary places scripts or binaries with misleading names in /etc/rc.local.d or /var/spool/cron, or registers services with legitimate-sounding names not present in default ESXi builds.",
+              "log_sources": [
+                {
+                  "data_component": "Service Metadata",
+                  "log_source": "esxi:hostd",
+                  "channel": "registers services with legitimate-sounding names"
+                },
+                {
+                  "data_component": "Command Execution",
+                  "log_source": "esxi:shell",
+                  "channel": "scripts or binaries with misleading names"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "T1036.007": {
+      "name": "Double File Extension",
+      "tactics": [
+        "stealth"
+      ],
+      "platforms": [
+        "Windows"
+      ],
+      "version": "2.0",
+      "url": "https://attack.mitre.org/techniques/T1036/007/",
+      "description_first_paragraph": "Adversaries may abuse a double extension in the filename as a means of masquerading the true file type. A file name may include a secondary file type extension that may cause only the first extension to be displayed (ex: <code>File.txt.exe</code> may render in some views as just <code>File.txt</code>). However, the second extension is the true file type that determines how the file is opened and executed. The real file extension may be hidden by the operating system in the file browser (ex: explorer.exe), as well as in any software configured using or similar to the system’s policies.(Citation: PCMag DoubleExtension)(Citation: SOCPrime DoubleExtension) ",
+      "groups": [
+        "Kimsuky",
+        "Mustang Panda"
+      ],
+      "software_count": 3,
+      "mitigations": [
+        "M1017 User Training",
+        "M1028 Operating System Configuration"
+      ],
+      "detection_strategies": [
+        {
+          "id": "DET0366",
+          "name": "Detection Strategy for Double File Extension Masquerading",
+          "analytics": [
+            {
+              "id": "AN1033",
+              "platforms": [
+                "Windows"
+              ],
+              "description": "Detects adversary behavior where a file with a benign-looking first extension (e.g., .txt, .jpg) ends with a dangerous second extension (e.g., .exe, .scr), and is subsequently executed. The behavior chain includes file creation with misleading naming and user or system-initiated process execution from the disguised file.",
+              "log_sources": [
+                {
+                  "data_component": "Process Creation",
+                  "log_source": "WinEventLog:Sysmon",
+                  "channel": "EventCode=1"
+                },
+                {
+                  "data_component": "File Creation",
+                  "log_source": "WinEventLog:Sysmon",
+                  "channel": "EventCode=11"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "T1598.002": {
+      "name": "Spearphishing Attachment",
+      "tactics": [
+        "reconnaissance"
+      ],
+      "platforms": [
+        "PRE"
+      ],
+      "version": "1.2",
+      "url": "https://attack.mitre.org/techniques/T1598/002/",
+      "description_first_paragraph": "Adversaries may send spearphishing messages with a malicious attachment to elicit sensitive information that can be used during targeting. Spearphishing for information is an attempt to trick targets into divulging information, frequently credentials or other actionable information. Spearphishing for information frequently involves social engineering techniques, such as posing as a source with a reason to collect information (ex: [Establish Accounts](https://attack.mitre.org/techniques/T1585) or [Compromise Accounts](https://attack.mitre.org/techniques/T1586)) and/or sending multiple, seemingly urgent messages.",
+      "groups": [
+        "Dragonfly",
+        "SideCopy",
+        "Sidewinder",
+        "Star Blizzard"
+      ],
+      "software_count": 0,
+      "mitigations": [
+        "M1017 User Training",
+        "M1054 Software Configuration"
+      ],
+      "detection_strategies": [
+        {
+          "id": "DET0865",
+          "name": "Detection of Spearphishing Attachment",
+          "analytics": [
+            {
+              "id": "AN1997",
+              "platforms": [
+                "PRE"
+              ],
+              "description": "Monitor network data for uncommon data flows. Processes utilizing the network that do not normally have network communication or have never been seen before are suspicious.\nMonitor for suspicious email activity, such as numerous accounts receiving messages from a single unusual/unknown sender. Filtering based on DKIM+SPF or header analysis can help detect when the email sender is spoofed.(Citation: Microsoft Anti Spoofing)(Citation: ACSC Email Spoofing)\nMonitor and analyze traffic patterns and packet inspection associated to protocol(s) that do not follow the expected protocol standards and traffic flows (e.g extraneous packets that do not belong to established flows, gratuitous or anomalous traffic patterns, anomalous syntax, or structure). Consider correlation with process monitoring and command line to detect anomalous processes execution and command line arguments associated to traffic patterns (e.g. monitor anomalies in use of files that do not normally initiate connections for respective protocol(s)).",
+              "log_sources": [
+                {
+                  "data_component": "Network Traffic Flow",
+                  "log_source": "Network Traffic",
+                  "channel": "None"
+                },
+                {
+                  "data_component": "Application Log Content",
+                  "log_source": "Application Log",
+                  "channel": "None"
+                },
+                {
+                  "data_component": "Network Traffic Content",
+                  "log_source": "Network Traffic",
+                  "channel": "None"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

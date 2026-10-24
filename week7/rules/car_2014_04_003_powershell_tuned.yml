@@ -1,0 +1,41 @@
+title: Office-Spawned Encoded PowerShell (CAR-2014-04-003 tuned)
+id: bd9f112d-910f-4d83-955b-b9c0ee00f85f
+status: experimental
+description: >
+  Tuned variant of CAR-2014-04-003 for the group's spearphishing topic. Keeps
+  only PowerShell whose parent is an Office application AND whose command line
+  carries an encoded-command flag. This trades CAR's broad coverage for high
+  precision against the Week 6 attack chain (T1566.001 -> T1204.002 ->
+  T1059.001 with T1027.010 obfuscation).
+references:
+  - https://car.mitre.org/analytics/CAR-2014-04-003/
+  - https://attack.mitre.org/techniques/T1059/001/
+  - https://attack.mitre.org/techniques/T1027/010/
+author: Week 7 group project (Detecting Spearphishing Attacks)
+date: 2026/10/24
+logsource:
+  product: windows
+  category: process_creation
+detection:
+  selection_ps:
+    Image|endswith: '\powershell.exe'
+  selection_office_parent:
+    ParentImage|endswith:
+      - '\WINWORD.EXE'
+      - '\EXCEL.EXE'
+      - '\POWERPNT.EXE'
+  selection_encoded:
+    CommandLine|contains:
+      - ' -enc '
+      - ' -enc'
+      - '-EncodedCommand'
+  condition: selection_ps and selection_office_parent and selection_encoded
+falsepositives:
+  - Approved Office automation that legitimately uses encoded commands (rare; verify owner and script)
+level: high
+tags:
+  - attack.execution
+  - attack.t1059.001
+  - attack.t1027.010
+  - attack.t1204.002
+  - car.2014-04-003

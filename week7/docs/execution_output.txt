@@ -1,0 +1,27 @@
+Week 7 CAR analytics execution (SQLite log store)
+============================================================
+EventID=1 process-creation records indexed: 4
+
+[car_2014_04_003_powershell]  CAR-2014-04-003 raw (PowerShell not from explorer)
+    rows: 3   hosts: FIN-WS01, FIN-WS03, FIN-WS04
+      FIN-WS01: WINWORD.EXE -> powershell.exe  | powershell.exe -NoProfile -EncodedCommand VwBlAGUAawA2ACAAcwBpAG0A
+      FIN-WS03: EXCEL.EXE -> powershell.exe  | powershell.exe -NoProfile -File C:\Scripts\Export-Report.ps1
+      FIN-WS04: WINWORD.EXE -> powershell.exe  | powershell.exe -enc VABlAHMAdAA2ACAAYwBvAG4AdAByAG8AbAA=
+
+[car_2014_04_003_powershell_tuned]  CAR-2014-04-003 tuned (Office + encoded)
+    rows: 2   hosts: FIN-WS01, FIN-WS04
+      FIN-WS01: WINWORD.EXE -> powershell.exe  | powershell.exe -NoProfile -EncodedCommand VwBlAGUAawA2ACAAcwBpAG0A
+      FIN-WS04: WINWORD.EXE -> powershell.exe  | powershell.exe -enc VABlAHMAdAA2ACAAYwBvAG4AdAByAG8AbAA=
+
+[car_2013_02_003_cmd_parent]  CAR-2013-02-003 tuned (cmd from Office/reader)
+    rows: 0   hosts: none
+
+Interpretation
+------------------------------------------------------------
+Raw CAR-2014-04-003 flags every non-interactive PowerShell (FIN-WS01, FIN-WS03,
+FIN-WS04) - three hosts, including the approved automation on FIN-WS03. The tuned
+variant adds Office parent + encoded command and keeps only FIN-WS01 and FIN-WS04,
+removing the benign automation. FIN-WS04 still needs the Week 6 process-correlation
+step (its egress belonged to a different process) to be dismissed. CAR-2013-02-003
+returns no rows here because the simulated chain used PowerShell, not cmd.exe; it is
+retained as coverage for the Office->cmd->PowerShell variant.

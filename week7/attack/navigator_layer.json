@@ -1,0 +1,54 @@
+{
+  "name": "Week 7 - CAR analytics coverage (executed)",
+  "versions": {
+    "attack": "20",
+    "navigator": "4.9.1",
+    "layer": "4.5"
+  },
+  "domain": "enterprise-attack",
+  "description": "ATT&CK techniques covered by the Week 7 MITRE CAR analytics (CAR-2014-04-003, CAR-2013-02-003) implemented as Sigma and executed in a SQLite log store. Synthetic data.",
+  "techniques": [
+    {
+      "techniqueID": "T1059.001",
+      "score": 2,
+      "comment": "CAR-2014-04-003 raw + tuned",
+      "color": "#5f93b9",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1027.010",
+      "score": 1,
+      "comment": "tuned variant: encoded command",
+      "color": "#5f93b9",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1204.002",
+      "score": 1,
+      "comment": "Office-spawned execution",
+      "color": "#5f93b9",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1059.003",
+      "score": 1,
+      "comment": "CAR-2013-02-003 (cmd variant coverage)",
+      "color": "#5f93b9",
+      "enabled": true
+    }
+  ],
+  "gradient": {
+    "colors": [
+      "#ffe766",
+      "#5f93b9"
+    ],
+    "minValue": 1,
+    "maxValue": 2
+  },
+  "metadata": [
+    {
+      "name": "source",
+      "value": "car.mitre.org + attack-stix-data v20"
+    }
+  ]
+}

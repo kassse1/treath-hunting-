@@ -1,0 +1,71 @@
+{
+  "name": "Week 6 - Spearphishing simulation (synthetic)",
+  "versions": {
+    "attack": "20",
+    "navigator": "4.9.1",
+    "layer": "4.5"
+  },
+  "domain": "enterprise-attack",
+  "description": "Techniques observed in the Week 6 synthetic spearphishing hunt. Score = number of simulated hosts exhibiting the technique. Data is synthetic; see data/attack_v20_subset.json for provenance.",
+  "techniques": [
+    {
+      "techniqueID": "T1027.010",
+      "score": 2,
+      "comment": "Command Obfuscation",
+      "color": "",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1059.001",
+      "score": 3,
+      "comment": "PowerShell",
+      "color": "",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1071.001",
+      "score": 1,
+      "comment": "Web Protocols",
+      "color": "",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1204.002",
+      "score": 3,
+      "comment": "Malicious File",
+      "color": "",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1566.001",
+      "score": 1,
+      "comment": "Spearphishing Attachment",
+      "color": "",
+      "enabled": true
+    }
+  ],
+  "gradient": {
+    "colors": [
+      "#ffe766",
+      "#ff6666"
+    ],
+    "minValue": 1,
+    "maxValue": 2
+  },
+  "legendItems": [
+    {
+      "label": "1 host",
+      "color": "#ffe766"
+    },
+    {
+      "label": "2+ hosts",
+      "color": "#ff6666"
+    }
+  ],
+  "metadata": [
+    {
+      "name": "source",
+      "value": "https://github.com/mitre-attack/attack-stix-data (enterprise-attack.json)"
+    }
+  ]
+}

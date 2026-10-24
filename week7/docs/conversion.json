@@ -1,0 +1,22 @@
+{
+  "tool": "pySigma",
+  "backends": {
+    "splunk": "pysigma-backend-splunk",
+    "sqlite": "pysigma-backend-sqlite"
+  },
+  "pipeline": "sysmon (Splunk output)",
+  "rules": {
+    "car_2013_02_003_cmd_parent": {
+      "spl": "EventID=1 Image=\"*\\\\cmd.exe\" ParentImage IN (\"*\\\\WINWORD.EXE\", \"*\\\\EXCEL.EXE\", \"*\\\\POWERPNT.EXE\", \"*\\\\OUTLOOK.EXE\", \"*\\\\Acrobat.exe\", \"*\\\\AcroRd32.exe\")",
+      "sqlite_where": "SELECT * FROM logs WHERE EventID=1 AND (Image LIKE '%\\\\cmd.exe' ESCAPE '\\' AND (ParentImage LIKE '%\\\\WINWORD.EXE' ESCAPE '\\' OR ParentImage LIKE '%\\\\EXCEL.EXE' ESCAPE '\\' OR ParentImage LIKE '%\\\\POWERPNT.EXE' ESCAPE '\\' OR ParentImage LIKE '%\\\\OUTLOOK.EXE' ESCAPE '\\' OR ParentImage LIKE '%\\\\Acrobat.exe' ESCAPE '\\' OR ParentImage LIKE '%\\\\AcroRd32.exe' ESCAPE '\\'))"
+    },
+    "car_2014_04_003_powershell": {
+      "spl": "EventID=1 Image=\"*\\\\powershell.exe\" NOT ParentImage=\"*\\\\explorer.exe\"",
+      "sqlite_where": "SELECT * FROM logs WHERE EventID=1 AND (Image LIKE '%\\\\powershell.exe' ESCAPE '\\' AND (NOT COALESCE((ParentImage LIKE '%\\\\explorer.exe' ESCAPE '\\'), 0)))"
+    },
+    "car_2014_04_003_powershell_tuned": {
+      "spl": "EventID=1 Image=\"*\\\\powershell.exe\" ParentImage IN (\"*\\\\WINWORD.EXE\", \"*\\\\EXCEL.EXE\", \"*\\\\POWERPNT.EXE\") CommandLine IN (\"* -enc *\", \"* -enc*\", \"*-EncodedCommand*\")",
+      "sqlite_where": "SELECT * FROM logs WHERE EventID=1 AND (Image LIKE '%\\\\powershell.exe' ESCAPE '\\' AND (ParentImage LIKE '%\\\\WINWORD.EXE' ESCAPE '\\' OR ParentImage LIKE '%\\\\EXCEL.EXE' ESCAPE '\\' OR ParentImage LIKE '%\\\\POWERPNT.EXE' ESCAPE '\\') AND (CommandLine LIKE '% -enc %' ESCAPE '\\' OR CommandLine LIKE '% -enc%' ESCAPE '\\' OR CommandLine LIKE '%-EncodedCommand%' ESCAPE '\\'))"
+    }
+  }
+}

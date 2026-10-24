@@ -1,0 +1,1 @@
+SELECT * FROM logs WHERE EventID=1 AND (Image LIKE '%\\cmd.exe' ESCAPE '\' AND (ParentImage LIKE '%\\WINWORD.EXE' ESCAPE '\' OR ParentImage LIKE '%\\EXCEL.EXE' ESCAPE '\' OR ParentImage LIKE '%\\POWERPNT.EXE' ESCAPE '\' OR ParentImage LIKE '%\\OUTLOOK.EXE' ESCAPE '\' OR ParentImage LIKE '%\\Acrobat.exe' ESCAPE '\' OR ParentImage LIKE '%\\AcroRd32.exe' ESCAPE '\'))

@@ -1,0 +1,62 @@
+{
+  "car_2014_04_003_powershell": {
+    "label": "CAR-2014-04-003 raw (PowerShell not from explorer)",
+    "sql": "SELECT * FROM logs WHERE EventID=1 AND (Image LIKE '%\\\\powershell.exe' ESCAPE '\\' AND (NOT COALESCE((ParentImage LIKE '%\\\\explorer.exe' ESCAPE '\\'), 0)))",
+    "rows": 3,
+    "hosts": [
+      "FIN-WS01",
+      "FIN-WS03",
+      "FIN-WS04"
+    ],
+    "matches": [
+      {
+        "Computer": "FIN-WS01",
+        "ParentImage": "WINWORD.EXE",
+        "Image": "powershell.exe",
+        "CommandLine": "powershell.exe -NoProfile -EncodedCommand VwBlAGUAawA2ACAAcwBpAG0A"
+      },
+      {
+        "Computer": "FIN-WS03",
+        "ParentImage": "EXCEL.EXE",
+        "Image": "powershell.exe",
+        "CommandLine": "powershell.exe -NoProfile -File C:\\Scripts\\Export-Report.ps1"
+      },
+      {
+        "Computer": "FIN-WS04",
+        "ParentImage": "WINWORD.EXE",
+        "Image": "powershell.exe",
+        "CommandLine": "powershell.exe -enc VABlAHMAdAA2ACAAYwBvAG4AdAByAG8AbAA="
+      }
+    ]
+  },
+  "car_2014_04_003_powershell_tuned": {
+    "label": "CAR-2014-04-003 tuned (Office + encoded)",
+    "sql": "SELECT * FROM logs WHERE EventID=1 AND (Image LIKE '%\\\\powershell.exe' ESCAPE '\\' AND (ParentImage LIKE '%\\\\WINWORD.EXE' ESCAPE '\\' OR ParentImage LIKE '%\\\\EXCEL.EXE' ESCAPE '\\' OR ParentImage LIKE '%\\\\POWERPNT.EXE' ESCAPE '\\') AND (CommandLine LIKE '% -enc %' ESCAPE '\\' OR CommandLine LIKE '% -enc%' ESCAPE '\\' OR CommandLine LIKE '%-EncodedCommand%' ESCAPE '\\'))",
+    "rows": 2,
+    "hosts": [
+      "FIN-WS01",
+      "FIN-WS04"
+    ],
+    "matches": [
+      {
+        "Computer": "FIN-WS01",
+        "ParentImage": "WINWORD.EXE",
+        "Image": "powershell.exe",
+        "CommandLine": "powershell.exe -NoProfile -EncodedCommand VwBlAGUAawA2ACAAcwBpAG0A"
+      },
+      {
+        "Computer": "FIN-WS04",
+        "ParentImage": "WINWORD.EXE",
+        "Image": "powershell.exe",
+        "CommandLine": "powershell.exe -enc VABlAHMAdAA2ACAAYwBvAG4AdAByAG8AbAA="
+      }
+    ]
+  },
+  "car_2013_02_003_cmd_parent": {
+    "label": "CAR-2013-02-003 tuned (cmd from Office/reader)",
+    "sql": "SELECT * FROM logs WHERE EventID=1 AND (Image LIKE '%\\\\cmd.exe' ESCAPE '\\' AND (ParentImage LIKE '%\\\\WINWORD.EXE' ESCAPE '\\' OR ParentImage LIKE '%\\\\EXCEL.EXE' ESCAPE '\\' OR ParentImage LIKE '%\\\\POWERPNT.EXE' ESCAPE '\\' OR ParentImage LIKE '%\\\\OUTLOOK.EXE' ESCAPE '\\' OR ParentImage LIKE '%\\\\Acrobat.exe' ESCAPE '\\' OR ParentImage LIKE '%\\\\AcroRd32.exe' ESCAPE '\\'))",
+    "rows": 0,
+    "hosts": [],
+    "matches": []
+  }
+}

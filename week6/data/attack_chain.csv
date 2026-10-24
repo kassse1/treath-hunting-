@@ -1,0 +1,6 @@
+order,technique_id,name,tactic,observed_on_FIN-WS01
+1,T1566.001,Spearphishing Attachment,initial-access,yes
+2,T1204.002,Malicious File,execution,yes
+3,T1059.001,PowerShell,execution,yes
+4,T1027.010,Command Obfuscation,stealth,yes
+5,T1071.001,Web Protocols,command-and-control,yes

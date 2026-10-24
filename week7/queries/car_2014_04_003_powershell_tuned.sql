@@ -1,0 +1,1 @@
+SELECT * FROM logs WHERE EventID=1 AND (Image LIKE '%\\powershell.exe' ESCAPE '\' AND (ParentImage LIKE '%\\WINWORD.EXE' ESCAPE '\' OR ParentImage LIKE '%\\EXCEL.EXE' ESCAPE '\' OR ParentImage LIKE '%\\POWERPNT.EXE' ESCAPE '\') AND (CommandLine LIKE '% -enc %' ESCAPE '\' OR CommandLine LIKE '% -enc%' ESCAPE '\' OR CommandLine LIKE '%-EncodedCommand%' ESCAPE '\'))
