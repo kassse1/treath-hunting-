@@ -1,0 +1,21 @@
+ATT&CK 20.1 - APT29 (G0016), aliases: APT29, IRON RITUAL, IRON HEMLOCK, NobleBaron, Dark Halo, NOBELIUM, UNC2452, YTTRIUM, ...
+group-level techniques: 66; campaign techniques: 75; union: 119; software: 49
+campaigns: C0023 Operation Ghost (2013-09-01 - 2019-10-01); C0024 SolarWinds Compromise (2019-08-01 - 2021-01-01)
+initial-access techniques (11): T1078, T1078.002, T1078.003, T1078.004, T1133, T1190, T1195.002, T1199, T1566.001, T1566.002, T1566.003
+
+Week 8 plan techniques used by APT29 (group or campaign): 8/11 -> T1005, T1053.005, T1059.001, T1105, T1204.002, T1547.001, T1560.001, T1566.001
+Week 8 plan techniques NOT attributed to APT29: T1003.001, T1027.010, T1041
+
+coverage of all APT29 techniques: detected=6, sibling=8, emulated=2, gap=103
+coverage of group-level techniques: detected=5, sibling=5, emulated=2, gap=54
+share detected or sibling-detected: 11.8%
+
+APT41 (G0096): 82 techniques; shared with APT29 group-level: 19 (Jaccard 0.15) -> T1003.002, T1005, T1027.002, T1036.005, T1037, T1047, T1053.005, T1059.001, T1070.004, T1078, T1105, T1133, T1190, T1203, T1546.008, T1547.001, T1566.001, T1588.002, T1595.002
+
+priority hunts for uncovered APT29 techniques (analyst judgement):
+  1. T1566.002 Spearphishing Link - proxy/DNS + Sysmon 11 (zip/iso in Downloads)
+  2. T1027.006 HTML Smuggling - Sysmon 11: .iso/.img/.vhdx written by a browser right after an .html opens
+  3. T1553.005 Mark-of-the-Web Bypass - Sysmon 1/11: files executed from a mounted ISO/VHDX volume
+  4. T1218.005 Mshta - Sysmon 1: mshta.exe with http/javascript in the command line
+  5. T1546.003 WMI Event Subscription - Sysmon 19/20/21
+  6. T1078 Valid Accounts - Windows 4624/4625 + VPN logs

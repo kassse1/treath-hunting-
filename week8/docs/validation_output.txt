@@ -1,0 +1,56 @@
+Plan EP-2026-01 'Operation INVOICE STORM' - 9 steps, ATT&CK 20.1
+[OK ] step 1: T1566.001 exists in ATT&CK 20.1 (Spearphishing Attachment)
+[OK ] step 1: tactic 'initial-access' in ['initial-access']
+[OK ] step 1: has atomic
+[OK ] step 1: has cleanup
+[OK ] step 1: has expected_detection
+[OK ] step 2: T1204.002 exists in ATT&CK 20.1 (Malicious File)
+[OK ] step 2: tactic 'execution' in ['execution']
+[OK ] step 2: has atomic
+[OK ] step 2: has cleanup
+[OK ] step 2: has expected_detection
+[OK ] step 3: T1059.001 exists in ATT&CK 20.1 (PowerShell)
+[OK ] step 3: T1027.010 exists in ATT&CK 20.1 (Command Obfuscation)
+[OK ] step 3: tactic 'execution' in ['execution']
+[OK ] step 3: has atomic
+[OK ] step 3: has cleanup
+[OK ] step 3: has expected_detection
+[OK ] step 4: T1105 exists in ATT&CK 20.1 (Ingress Tool Transfer)
+[OK ] step 4: tactic 'command-and-control' in ['command-and-control']
+[OK ] step 4: has atomic
+[OK ] step 4: has cleanup
+[OK ] step 4: has expected_detection
+[OK ] step 5: T1547.001 exists in ATT&CK 20.1 (Registry Run Keys / Startup Folder)
+[OK ] step 5: tactic 'persistence' in ['persistence', 'privilege-escalation']
+[NOTE] step 5: Persistence comes after a later matrix column - expected, ATT&CK is not a linear kill chain
+[OK ] step 5: has atomic
+[OK ] step 5: has cleanup
+[OK ] step 5: has expected_detection
+[OK ] step 6: T1053.005 exists in ATT&CK 20.1 (Scheduled Task)
+[OK ] step 6: tactic 'persistence' in ['execution', 'persistence', 'privilege-escalation']
+[OK ] step 6: has atomic
+[OK ] step 6: has cleanup
+[OK ] step 6: has expected_detection
+[OK ] step 7: T1003.001 exists in ATT&CK 20.1 (LSASS Memory)
+[OK ] step 7: tactic 'credential-access' in ['credential-access']
+[OK ] step 7: has atomic
+[OK ] step 7: has cleanup
+[OK ] step 7: has expected_detection
+[OK ] step 8: T1560.001 exists in ATT&CK 20.1 (Archive via Utility)
+[OK ] step 8: T1005 exists in ATT&CK 20.1 (Data from Local System)
+[OK ] step 8: tactic 'collection' in ['collection']
+[OK ] step 8: has atomic
+[OK ] step 8: has cleanup
+[OK ] step 8: has expected_detection
+[OK ] step 9: T1041 exists in ATT&CK 20.1 (Exfiltration Over C2 Channel)
+[OK ] step 9: tactic 'exfiltration' in ['exfiltration']
+[OK ] step 9: has atomic
+[OK ] step 9: has cleanup
+[OK ] step 9: has expected_detection
+[OK ] plan starts with Initial Access
+[OK ] plan ends with Exfiltration
+[OK ] plan covers syllabus stage 'Initial Access'
+[OK ] plan covers syllabus stage 'Persistence'
+[OK ] plan covers syllabus stage 'Exfiltration'
+APT29 overlap: 6/9 primary step techniques are mapped to APT29 (G0016)
+RESULT: PASS

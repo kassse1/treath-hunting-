@@ -1,0 +1,31 @@
+Loaded 42 events into SQLite table 'logs'; 9 Atomic step windows from run_log.csv
+
+[w7_car_2013_02_003_cmd_parent] rows=0 steps=[] harness_hits=0 false_positives=0
+[w7_car_2014_04_003_powershell] rows=6 steps=[1, 2, 3, 7, 9] harness_hits=4 false_positives=1
+    FP: FIN-WS03 2026-11-09T11:05:00Z C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+[w7_car_2014_04_003_powershell_tuned] rows=0 steps=[] harness_hits=0 false_positives=0
+[w9_archive_with_password] rows=1 steps=[8] harness_hits=0 false_positives=0
+[w9_certutil_download] rows=1 steps=[4] harness_hits=0 false_positives=0
+[w9_lsass_dump_comsvcs] rows=1 steps=[7] harness_hits=0 false_positives=0
+[w9_macro_doc_written_by_non_office] rows=1 steps=[1] harness_hits=0 false_positives=0
+[w9_office_suspicious_child] rows=1 steps=[2] harness_hits=0 false_positives=0
+[w9_powershell_encoded_any_parent] rows=1 steps=[3] harness_hits=0 false_positives=0
+[w9_powershell_external_connection] rows=5 steps=[1, 2, 9] harness_hits=1 false_positives=1
+    FP: LAB-WIN10-01 2026-11-09T08:13:00Z C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+[w9_run_key_set] rows=2 steps=[5] harness_hits=0 false_positives=1
+    FP: LAB-WIN10-01 2026-11-09T08:31:00Z C:\Users\art.tester\AppData\Local\Microsoft\Teams\Update.exe
+[w9_schtasks_create_from_shell] rows=2 steps=[6] harness_hits=0 false_positives=1
+    FP: LAB-WIN10-01 2026-11-09T08:40:00Z C:\Windows\System32\schtasks.exe
+
+step technique  week7 rule set     week7+week9 rule set  detected by
+1    T1566.001  MISSED (harness)   PARTIAL               w9_macro_doc_written_by_non_office, w9_powershell_external_connection
+2    T1204.002  MISSED (harness)   DETECTED              w9_office_suspicious_child
+3    T1059.001  DETECTED           DETECTED              w7_car_2014_04_003_powershell, w9_powershell_encoded_any_parent
+4    T1105      MISSED             DETECTED              w9_certutil_download
+5    T1547.001  MISSED             DETECTED              w9_run_key_set
+6    T1053.005  MISSED             DETECTED              w9_schtasks_create_from_shell
+7    T1003.001  MISSED (harness)   DETECTED              w9_lsass_dump_comsvcs
+8    T1560.001  MISSED             DETECTED              w9_archive_with_password
+9    T1041      MISSED (harness)   DETECTED              w9_powershell_external_connection
+week7 rule set (3 rules): 1 detected, 0 partial, 8 missed of 9 tests; 1 false positives on baseline
+week9 rule set (12 rules): 8 detected, 1 partial, 0 missed of 9 tests; 4 false positives on baseline

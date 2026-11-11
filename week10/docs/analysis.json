@@ -1,0 +1,116 @@
+{
+  "attack_version": "20.1",
+  "apt29": {
+    "group_techniques": 66,
+    "campaign_techniques": 75,
+    "union": 119,
+    "software": 49,
+    "campaigns": [
+      "C0023 Operation Ghost (2013-09-01 - 2019-10-01)",
+      "C0024 SolarWinds Compromise (2019-08-01 - 2021-01-01)"
+    ],
+    "initial_access_techniques": [
+      "T1078",
+      "T1078.002",
+      "T1078.003",
+      "T1078.004",
+      "T1133",
+      "T1190",
+      "T1195.002",
+      "T1199",
+      "T1566.001",
+      "T1566.002",
+      "T1566.003"
+    ]
+  },
+  "coverage_all": {
+    "gap": 103,
+    "sibling": 8,
+    "detected": 6,
+    "emulated": 2
+  },
+  "coverage_group_only": {
+    "gap": 54,
+    "sibling": 5,
+    "detected": 5,
+    "emulated": 2
+  },
+  "plan_techniques_used_by_apt29": [
+    "T1005",
+    "T1053.005",
+    "T1059.001",
+    "T1105",
+    "T1204.002",
+    "T1547.001",
+    "T1560.001",
+    "T1566.001"
+  ],
+  "plan_techniques_not_in_apt29": [
+    "T1003.001",
+    "T1027.010",
+    "T1041"
+  ],
+  "apt41": {
+    "techniques": 82,
+    "shared_with_apt29": [
+      "T1003.002",
+      "T1005",
+      "T1027.002",
+      "T1036.005",
+      "T1037",
+      "T1047",
+      "T1053.005",
+      "T1059.001",
+      "T1070.004",
+      "T1078",
+      "T1105",
+      "T1133",
+      "T1190",
+      "T1203",
+      "T1546.008",
+      "T1547.001",
+      "T1566.001",
+      "T1588.002",
+      "T1595.002"
+    ],
+    "jaccard": 0.147
+  },
+  "next_hunts": [
+    {
+      "technique": "T1566.002",
+      "name": "Spearphishing Link",
+      "data_source": "proxy/DNS + Sysmon 11 (zip/iso in Downloads)",
+      "why": "APT29's most-reported delivery method in ATT&CK; our plan only emulates attachments"
+    },
+    {
+      "technique": "T1027.006",
+      "name": "HTML Smuggling",
+      "data_source": "Sysmon 11: .iso/.img/.vhdx written by a browser right after an .html opens",
+      "why": "NOBELIUM 2021 (EnvyScout) delivered ISO payloads inside HTML attachments"
+    },
+    {
+      "technique": "T1553.005",
+      "name": "Mark-of-the-Web Bypass",
+      "data_source": "Sysmon 1/11: files executed from a mounted ISO/VHDX volume",
+      "why": "ISO/VHDX containers strip MOTW, so Office macro blocking never triggers"
+    },
+    {
+      "technique": "T1218.005",
+      "name": "Mshta",
+      "data_source": "Sysmon 1: mshta.exe with http/javascript in the command line",
+      "why": "already in the Week 9 Office-child list as a child; needs a standalone rule"
+    },
+    {
+      "technique": "T1546.003",
+      "name": "WMI Event Subscription",
+      "data_source": "Sysmon 19/20/21",
+      "why": "APT29 persistence used in both Operation Ghost and SolarWinds; our persistence rules cover only Run keys/tasks"
+    },
+    {
+      "technique": "T1078",
+      "name": "Valid Accounts",
+      "data_source": "Windows 4624/4625 + VPN logs",
+      "why": "APT29 often skips phishing entirely with password spraying + valid accounts"
+    }
+  ]
+}

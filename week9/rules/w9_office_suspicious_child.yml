@@ -1,0 +1,47 @@
+title: Office Application Spawns a Shell, Script Host or LOLBin
+id: 4f6c1f8e-0d1b-4c2a-9b1e-6a1b2c3d9001
+status: experimental
+description: >
+  Week 9 replacement for CAR-2013-02-003 after Atomic T1566.001 #2 showed that a
+  macro can launch ping.exe (or any LOLBin) directly from WINWORD.EXE without
+  cmd.exe. Broadens the child list and filters the approved FIN-WS03 automation
+  (svc_report refresh script on \\fs01.corp.local\reports\) found in Week 7.
+references:
+  - https://car.mitre.org/analytics/CAR-2013-02-003/
+  - https://attack.mitre.org/techniques/T1204/002/
+author: Danial Rahman (CS-2421)
+date: 2026/11/09
+logsource:
+  product: windows
+  category: process_creation
+detection:
+  selection_parent:
+    ParentImage|endswith:
+      - '\WINWORD.EXE'
+      - '\EXCEL.EXE'
+      - '\POWERPNT.EXE'
+      - '\OUTLOOK.EXE'
+  selection_child:
+    Image|endswith:
+      - '\cmd.exe'
+      - '\powershell.exe'
+      - '\pwsh.exe'
+      - '\wscript.exe'
+      - '\cscript.exe'
+      - '\mshta.exe'
+      - '\rundll32.exe'
+      - '\regsvr32.exe'
+      - '\certutil.exe'
+      - '\bitsadmin.exe'
+      - '\schtasks.exe'
+      - '\PING.EXE'
+  filter_approved_automation:
+    CommandLine|contains: '\\fs01.corp.local\reports\'
+  condition: selection_parent and selection_child and not filter_approved_automation
+falsepositives:
+  - Add-ins that shell out legitimately; allowlist by command line, not by parent
+level: high
+tags:
+  - attack.execution
+  - attack.t1204.002
+  - attack.t1059

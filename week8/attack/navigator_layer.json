@@ -1,0 +1,100 @@
+{
+  "name": "Week 8 - Operation INVOICE STORM emulation plan",
+  "versions": {
+    "attack": "20",
+    "navigator": "4.9.1",
+    "layer": "4.5"
+  },
+  "domain": "enterprise-attack",
+  "description": "Techniques in the Week 8 adversary emulation plan. Score = step number.",
+  "techniques": [
+    {
+      "techniqueID": "T1566.001",
+      "score": 1,
+      "color": "",
+      "comment": "step 1: Initial Access - Atomic 114ccff9",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1204.002",
+      "score": 2,
+      "color": "",
+      "comment": "step 2: Execution - Atomic cbb6799a",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1059.001",
+      "score": 3,
+      "color": "",
+      "comment": "step 3: Execution - Atomic a538de64",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1027.010",
+      "score": 3,
+      "color": "",
+      "comment": "step 3: Execution - Atomic a538de64",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1105",
+      "score": 4,
+      "color": "",
+      "comment": "step 4: Command and Control - Atomic dd3b61dd",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1547.001",
+      "score": 5,
+      "color": "",
+      "comment": "step 5: Persistence - Atomic e55be3fd",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1053.005",
+      "score": 6,
+      "color": "",
+      "comment": "step 6: Persistence - Atomic 42f53695",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1003.001",
+      "score": 7,
+      "color": "",
+      "comment": "step 7: Credential Access - Atomic 2536dee2",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1560.001",
+      "score": 8,
+      "color": "",
+      "comment": "step 8: Collection - Atomic d1334303",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1005",
+      "score": 8,
+      "color": "",
+      "comment": "step 8: Collection - Atomic d1334303",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1041",
+      "score": 9,
+      "color": "",
+      "comment": "step 9: Exfiltration - Atomic d1253f6e",
+      "enabled": true
+    }
+  ],
+  "gradient": {
+    "colors": [
+      "#dbe8f3",
+      "#b4543f"
+    ],
+    "minValue": 1,
+    "maxValue": 9
+  },
+  "legendItems": [],
+  "showTacticRowBackground": false,
+  "selectTechniquesAcrossTactics": true
+}

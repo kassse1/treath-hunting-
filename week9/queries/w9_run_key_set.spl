@@ -1,0 +1,2 @@
+index=win_sysmon source="WinEventLog:Microsoft-Windows-Sysmon/Operational"
+| search EventID=13 (TargetObject IN ("*\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run\\*", "*\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\RunOnce\\*"))

@@ -1,0 +1,1 @@
+SELECT * FROM logs WHERE EventID=13 AND (EventID=13 AND (TargetObject LIKE '%\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run\\%' ESCAPE '\' OR TargetObject LIKE '%\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\RunOnce\\%' ESCAPE '\'))

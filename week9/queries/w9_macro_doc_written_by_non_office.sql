@@ -1,0 +1,1 @@
+SELECT * FROM logs WHERE EventID=11 AND (EventID=11 AND ((TargetFilename LIKE '%.docm' ESCAPE '\' OR TargetFilename LIKE '%.xlsm' ESCAPE '\' OR TargetFilename LIKE '%.pptm' ESCAPE '\' OR TargetFilename LIKE '%.dotm' ESCAPE '\') AND (NOT COALESCE((Image LIKE '%\\WINWORD.EXE' ESCAPE '\' OR Image LIKE '%\\EXCEL.EXE' ESCAPE '\' OR Image LIKE '%\\POWERPNT.EXE' ESCAPE '\'), 0))))

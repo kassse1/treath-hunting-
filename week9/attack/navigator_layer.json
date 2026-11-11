@@ -1,0 +1,80 @@
+{
+  "name": "Week 9 - Atomic Red Team detection coverage",
+  "versions": {
+    "attack": "20",
+    "navigator": "4.9.1",
+    "layer": "4.5"
+  },
+  "domain": "enterprise-attack",
+  "description": "Blue = detected, amber = only the test's emulation proxy matched, red = missed. Synthetic telemetry modelled from pinned Atomic tests.",
+  "techniques": [
+    {
+      "techniqueID": "T1566.001",
+      "color": "#e3b26b",
+      "comment": "Atomic T1566.001 #1 (114ccff9): PARTIAL by w9_macro_doc_written_by_non_office, w9_powershell_external_connection; Week 7 rules: MISSED",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1204.002",
+      "color": "#3f7fb4",
+      "comment": "Atomic T1566.001 #2 (cbb6799a): DETECTED by w9_office_suspicious_child; Week 7 rules: MISSED",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1059.001",
+      "color": "#3f7fb4",
+      "comment": "Atomic T1059.001 #17 (a538de64): DETECTED by w7_car_2014_04_003_powershell, w9_powershell_encoded_any_parent; Week 7 rules: DETECTED",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1105",
+      "color": "#3f7fb4",
+      "comment": "Atomic T1105 #7 (dd3b61dd): DETECTED by w9_certutil_download; Week 7 rules: MISSED",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1547.001",
+      "color": "#3f7fb4",
+      "comment": "Atomic T1547.001 #1 (e55be3fd): DETECTED by w9_run_key_set; Week 7 rules: MISSED",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1053.005",
+      "color": "#3f7fb4",
+      "comment": "Atomic T1053.005 #2 (42f53695): DETECTED by w9_schtasks_create_from_shell; Week 7 rules: MISSED",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1003.001",
+      "color": "#3f7fb4",
+      "comment": "Atomic T1003.001 #2 (2536dee2): DETECTED by w9_lsass_dump_comsvcs; Week 7 rules: MISSED",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1560.001",
+      "color": "#3f7fb4",
+      "comment": "Atomic T1560.001 #4 (d1334303): DETECTED by w9_archive_with_password; Week 7 rules: MISSED",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1041",
+      "color": "#3f7fb4",
+      "comment": "Atomic T1041 #1 (d1253f6e): DETECTED by w9_powershell_external_connection; Week 7 rules: MISSED",
+      "enabled": true
+    }
+  ],
+  "legendItems": [
+    {
+      "label": "detected",
+      "color": "#3f7fb4"
+    },
+    {
+      "label": "partial",
+      "color": "#e3b26b"
+    },
+    {
+      "label": "missed",
+      "color": "#b4543f"
+    }
+  ]
+}

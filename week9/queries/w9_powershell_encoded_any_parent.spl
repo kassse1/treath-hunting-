@@ -1,0 +1,2 @@
+index=win_sysmon source="WinEventLog:Microsoft-Windows-Sysmon/Operational"
+| search EventID=1 (Image IN ("*\\powershell.exe", "*\\pwsh.exe")) (CommandLine IN ("* -e *", "* -ec *", "* -en *", "* -enc *", "* -enco*", "* -encodedcommand *"))

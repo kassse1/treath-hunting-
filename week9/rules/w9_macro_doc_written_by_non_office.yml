@@ -1,0 +1,33 @@
+title: Macro-Enabled Office Document Written by a Non-Office Process
+id: 4f6c1f8e-0d1b-4c2a-9b1e-6a1b2c3d9008
+status: experimental
+description: >
+  A .docm/.xlsm/.pptm/.dotm file created by something other than Office itself
+  (browser, mail client, PowerShell download) - the on-disk step of DET0236 for
+  T1566.001 (Atomic T1566.001 #1).
+references:
+  - https://attack.mitre.org/techniques/T1566/001/
+author: Danial Rahman (CS-2421)
+date: 2026/11/09
+logsource:
+  product: windows
+  category: file_event
+detection:
+  selection:
+    TargetFilename|endswith:
+      - '.docm'
+      - '.xlsm'
+      - '.pptm'
+      - '.dotm'
+  filter_office:
+    Image|endswith:
+      - '\WINWORD.EXE'
+      - '\EXCEL.EXE'
+      - '\POWERPNT.EXE'
+  condition: selection and not filter_office
+falsepositives:
+  - Users downloading legitimate macro workbooks from the intranet
+level: medium
+tags:
+  - attack.initial_access
+  - attack.t1566.001

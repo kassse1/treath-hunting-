@@ -1,0 +1,26 @@
+title: Certutil Used to Download a File
+id: 4f6c1f8e-0d1b-4c2a-9b1e-6a1b2c3d9003
+status: experimental
+description: certutil.exe with -urlcache or -verifyctl retrieving a remote file (Atomic T1105 #7/#8).
+references:
+  - https://attack.mitre.org/techniques/T1105/
+  - https://lolbas-project.github.io/lolbas/Binaries/Certutil/
+author: Danial Rahman (CS-2421)
+date: 2026/11/09
+logsource:
+  product: windows
+  category: process_creation
+detection:
+  selection_img:
+    Image|endswith: '\certutil.exe'
+  selection_cmd:
+    CommandLine|contains:
+      - 'urlcache'
+      - 'verifyctl'
+  condition: selection_img and selection_cmd
+falsepositives:
+  - Rare; certificate troubleshooting by administrators
+level: high
+tags:
+  - attack.command_and_control
+  - attack.t1105

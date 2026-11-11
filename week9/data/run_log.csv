@@ -1,0 +1,10 @@
+step,technique,guid,start_utc,end_utc,executed,notes
+1,T1566.001,114ccff9-ae6d-4547-9ead-4cd69f687306,2026-11-09T08:59:59Z,2026-11-09T09:00:45Z,yes,modelled run (synthetic)
+2,T1566.001,cbb6799a-425c-4f83-9194-5447a909d67f,2026-11-09T09:04:59Z,2026-11-09T09:05:45Z,yes,modelled run (synthetic)
+3,T1059.001,a538de64-1c74-46ed-aa60-b995ed302598,2026-11-09T09:09:59Z,2026-11-09T09:10:45Z,yes,modelled run (synthetic)
+4,T1105,dd3b61dd-7bbc-48cd-ab51-49ad1a776df0,2026-11-09T09:14:59Z,2026-11-09T09:15:45Z,yes,modelled run (synthetic)
+5,T1547.001,e55be3fd-3521-4610-9d1a-e210e42dcf05,2026-11-09T09:19:59Z,2026-11-09T09:20:45Z,yes,modelled run (synthetic)
+6,T1053.005,42f53695-ad4a-4546-abb6-7d837f644a71,2026-11-09T09:24:59Z,2026-11-09T09:25:45Z,yes,modelled run (synthetic)
+7,T1003.001,2536dee2-12fb-459a-8c37-971844fa73be,2026-11-09T09:29:59Z,2026-11-09T09:30:45Z,yes,modelled run (synthetic)
+8,T1560.001,d1334303-59cb-4a03-8313-b3e24d02c198,2026-11-09T09:34:59Z,2026-11-09T09:35:45Z,yes,modelled run (synthetic)
+9,T1041,d1253f6e-c29b-49dc-b466-2147a6191932,2026-11-09T09:39:59Z,2026-11-09T09:40:45Z,yes,modelled run (synthetic)

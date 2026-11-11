@@ -1,0 +1,23 @@
+title: Value Written Under a Registry Run Key
+id: 4f6c1f8e-0d1b-4c2a-9b1e-6a1b2c3d9004
+status: experimental
+description: Any process writing a value under ...\CurrentVersion\Run or RunOnce (Atomic T1547.001 #1).
+references:
+  - https://attack.mitre.org/techniques/T1547/001/
+author: Danial Rahman (CS-2421)
+date: 2026/11/09
+logsource:
+  product: windows
+  category: registry_set
+detection:
+  selection:
+    TargetObject|contains:
+      - '\SOFTWARE\Microsoft\Windows\CurrentVersion\Run\'
+      - '\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce\'
+  condition: selection
+falsepositives:
+  - Software updaters (Teams, OneDrive) that register themselves; baseline per host
+level: medium
+tags:
+  - attack.persistence
+  - attack.t1547.001

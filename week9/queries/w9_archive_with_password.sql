@@ -1,0 +1,1 @@
+SELECT * FROM logs WHERE EventID=1 AND (EventID=1 AND ((Image LIKE '%\\7z.exe' ESCAPE '\' OR Image LIKE '%\\7za.exe' ESCAPE '\' OR Image LIKE '%\\rar.exe' ESCAPE '\' OR Image LIKE '%\\WinRAR.exe' ESCAPE '\') AND CommandLine LIKE '% -p%' ESCAPE '\'))

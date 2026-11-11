@@ -1,0 +1,1 @@
+SELECT * FROM logs WHERE EventID=1 AND (EventID=1 AND ((Image LIKE '%\\rundll32.exe' ESCAPE '\' AND CommandLine LIKE '%comsvcs%' ESCAPE '\') AND (CommandLine LIKE '%MiniDump%' ESCAPE '\' OR CommandLine LIKE '%#24%' ESCAPE '\')))

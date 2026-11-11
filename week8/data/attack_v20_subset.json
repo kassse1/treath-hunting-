@@ -1,0 +1,273 @@
+{
+  "source": "https://github.com/mitre-attack/attack-stix-data (enterprise-attack.json)",
+  "attack_version": "20.1",
+  "tactics": [
+    {
+      "id": "TA0043",
+      "name": "Reconnaissance",
+      "shortname": "reconnaissance"
+    },
+    {
+      "id": "TA0042",
+      "name": "Resource Development",
+      "shortname": "resource-development"
+    },
+    {
+      "id": "TA0001",
+      "name": "Initial Access",
+      "shortname": "initial-access"
+    },
+    {
+      "id": "TA0002",
+      "name": "Execution",
+      "shortname": "execution"
+    },
+    {
+      "id": "TA0003",
+      "name": "Persistence",
+      "shortname": "persistence"
+    },
+    {
+      "id": "TA0004",
+      "name": "Privilege Escalation",
+      "shortname": "privilege-escalation"
+    },
+    {
+      "id": "TA0005",
+      "name": "Stealth",
+      "shortname": "stealth"
+    },
+    {
+      "id": "TA0112",
+      "name": "Defense Impairment",
+      "shortname": "defense-impairment"
+    },
+    {
+      "id": "TA0006",
+      "name": "Credential Access",
+      "shortname": "credential-access"
+    },
+    {
+      "id": "TA0007",
+      "name": "Discovery",
+      "shortname": "discovery"
+    },
+    {
+      "id": "TA0008",
+      "name": "Lateral Movement",
+      "shortname": "lateral-movement"
+    },
+    {
+      "id": "TA0009",
+      "name": "Collection",
+      "shortname": "collection"
+    },
+    {
+      "id": "TA0011",
+      "name": "Command and Control",
+      "shortname": "command-and-control"
+    },
+    {
+      "id": "TA0010",
+      "name": "Exfiltration",
+      "shortname": "exfiltration"
+    },
+    {
+      "id": "TA0040",
+      "name": "Impact",
+      "shortname": "impact"
+    }
+  ],
+  "techniques": {
+    "T1003.001": {
+      "name": "LSASS Memory",
+      "tactics": [
+        "credential-access"
+      ],
+      "url": "https://attack.mitre.org/techniques/T1003/001/",
+      "group_count": 44,
+      "used_by_apt29": false,
+      "mitigations": [
+        "M1017 User Training",
+        "M1025 Privileged Process Integrity",
+        "M1026 Privileged Account Management",
+        "M1027 Password Policies",
+        "M1028 Operating System Configuration",
+        "M1040 Behavior Prevention on Endpoint",
+        "M1043 Credential Access Protection"
+      ],
+      "detection_strategies": [
+        "DET0363 Detection of Credential Dumping from LSASS Memory via Access and Dump Sequence"
+      ]
+    },
+    "T1005": {
+      "name": "Data from Local System",
+      "tactics": [
+        "collection"
+      ],
+      "url": "https://attack.mitre.org/techniques/T1005/",
+      "group_count": 47,
+      "used_by_apt29": true,
+      "mitigations": [
+        "M1057 Data Loss Prevention"
+      ],
+      "detection_strategies": [
+        "DET0380 Detection of Local Data Collection Prior to Exfiltration"
+      ]
+    },
+    "T1027.010": {
+      "name": "Command Obfuscation",
+      "tactics": [
+        "stealth"
+      ],
+      "url": "https://attack.mitre.org/techniques/T1027/010/",
+      "group_count": 31,
+      "used_by_apt29": false,
+      "mitigations": [
+        "M1040 Behavior Prevention on Endpoint",
+        "M1049 Antivirus/Antimalware"
+      ],
+      "detection_strategies": [
+        "DET0505 Detection Strategy for Command Obfuscation"
+      ]
+    },
+    "T1041": {
+      "name": "Exfiltration Over C2 Channel",
+      "tactics": [
+        "exfiltration"
+      ],
+      "url": "https://attack.mitre.org/techniques/T1041/",
+      "group_count": 28,
+      "used_by_apt29": false,
+      "mitigations": [
+        "M1031 Network Intrusion Prevention",
+        "M1057 Data Loss Prevention"
+      ],
+      "detection_strategies": [
+        "DET0348 Detection Strategy for Exfiltration Over C2 Channel"
+      ]
+    },
+    "T1053.005": {
+      "name": "Scheduled Task",
+      "tactics": [
+        "execution",
+        "persistence",
+        "privilege-escalation"
+      ],
+      "url": "https://attack.mitre.org/techniques/T1053/005/",
+      "group_count": 55,
+      "used_by_apt29": true,
+      "mitigations": [
+        "M1018 User Account Management",
+        "M1026 Privileged Account Management",
+        "M1028 Operating System Configuration",
+        "M1047 Audit"
+      ],
+      "detection_strategies": [
+        "DET0441 Detection of Suspicious Scheduled Task Creation and Execution on Windows"
+      ]
+    },
+    "T1059.001": {
+      "name": "PowerShell",
+      "tactics": [
+        "execution"
+      ],
+      "url": "https://attack.mitre.org/techniques/T1059/001/",
+      "group_count": 86,
+      "used_by_apt29": true,
+      "mitigations": [
+        "M1026 Privileged Account Management",
+        "M1038 Execution Prevention",
+        "M1042 Disable or Remove Feature or Program",
+        "M1045 Code Signing",
+        "M1049 Antivirus/Antimalware"
+      ],
+      "detection_strategies": [
+        "DET0455 Abuse of PowerShell for Arbitrary Execution"
+      ]
+    },
+    "T1105": {
+      "name": "Ingress Tool Transfer",
+      "tactics": [
+        "command-and-control"
+      ],
+      "url": "https://attack.mitre.org/techniques/T1105/",
+      "group_count": 90,
+      "used_by_apt29": true,
+      "mitigations": [
+        "M1031 Network Intrusion Prevention",
+        "M1037 Filter Network Traffic"
+      ],
+      "detection_strategies": [
+        "DET0060 Detect Ingress Tool Transfers via Behavioral Chain"
+      ]
+    },
+    "T1204.002": {
+      "name": "Malicious File",
+      "tactics": [
+        "execution"
+      ],
+      "url": "https://attack.mitre.org/techniques/T1204/002/",
+      "group_count": 87,
+      "used_by_apt29": true,
+      "mitigations": [
+        "M1017 User Training",
+        "M1038 Execution Prevention",
+        "M1040 Behavior Prevention on Endpoint"
+      ],
+      "detection_strategies": [
+        "DET0294 User Execution – Malicious File via download/open → spawn chain (T1204.002)"
+      ]
+    },
+    "T1547.001": {
+      "name": "Registry Run Keys / Startup Folder",
+      "tactics": [
+        "persistence",
+        "privilege-escalation"
+      ],
+      "url": "https://attack.mitre.org/techniques/T1547/001/",
+      "group_count": 59,
+      "used_by_apt29": true,
+      "mitigations": [],
+      "detection_strategies": [
+        "DET0365 Detect Registry and Startup Folder Persistence (Windows)"
+      ]
+    },
+    "T1560.001": {
+      "name": "Archive via Utility",
+      "tactics": [
+        "collection"
+      ],
+      "url": "https://attack.mitre.org/techniques/T1560/001/",
+      "group_count": 40,
+      "used_by_apt29": false,
+      "mitigations": [
+        "M1047 Audit"
+      ],
+      "detection_strategies": [
+        "DET0298 Detect Archiving via Utility (T1560.001)"
+      ]
+    },
+    "T1566.001": {
+      "name": "Spearphishing Attachment",
+      "tactics": [
+        "initial-access"
+      ],
+      "url": "https://attack.mitre.org/techniques/T1566/001/",
+      "group_count": 79,
+      "used_by_apt29": true,
+      "mitigations": [
+        "M1017 User Training",
+        "M1018 User Account Management",
+        "M1021 Restrict Web-Based Content",
+        "M1031 Network Intrusion Prevention",
+        "M1047 Audit",
+        "M1049 Antivirus/Antimalware",
+        "M1054 Software Configuration"
+      ],
+      "detection_strategies": [
+        "DET0236 Detection Strategy for Spearphishing Attachment across OS Platforms"
+      ]
+    }
+  }
+}

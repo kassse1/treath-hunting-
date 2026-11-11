@@ -1,0 +1,30 @@
+title: Scheduled Task Created With schtasks From a Shell
+id: 4f6c1f8e-0d1b-4c2a-9b1e-6a1b2c3d9005
+status: experimental
+description: schtasks.exe /create launched by cmd.exe, PowerShell or a script host (Atomic T1053.005 #2).
+references:
+  - https://attack.mitre.org/techniques/T1053/005/
+author: Danial Rahman (CS-2421)
+date: 2026/11/09
+logsource:
+  product: windows
+  category: process_creation
+detection:
+  selection_img:
+    Image|endswith: '\schtasks.exe'
+    CommandLine|contains: '/create'
+  selection_parent:
+    ParentImage|endswith:
+      - '\cmd.exe'
+      - '\powershell.exe'
+      - '\pwsh.exe'
+      - '\wscript.exe'
+      - '\cscript.exe'
+      - '\mshta.exe'
+  condition: selection_img and selection_parent
+falsepositives:
+  - Administrators creating maintenance tasks interactively
+level: medium
+tags:
+  - attack.persistence
+  - attack.t1053.005

@@ -1,0 +1,27 @@
+title: LSASS Dump via comsvcs.dll MiniDump
+id: 4f6c1f8e-0d1b-4c2a-9b1e-6a1b2c3d9006
+status: experimental
+description: rundll32 calling the MiniDump export (or its ordinal #24) of comsvcs.dll (Atomic T1003.001 #2).
+references:
+  - https://attack.mitre.org/techniques/T1003/001/
+  - https://lolbas-project.github.io/lolbas/Libraries/comsvcs/
+author: Danial Rahman (CS-2421)
+date: 2026/11/09
+logsource:
+  product: windows
+  category: process_creation
+detection:
+  selection_img:
+    Image|endswith: '\rundll32.exe'
+    CommandLine|contains: 'comsvcs'
+  selection_export:
+    CommandLine|contains:
+      - 'MiniDump'
+      - '#24'
+  condition: selection_img and selection_export
+falsepositives:
+  - None expected
+level: critical
+tags:
+  - attack.credential_access
+  - attack.t1003.001

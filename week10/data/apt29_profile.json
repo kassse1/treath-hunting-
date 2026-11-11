@@ -1,0 +1,2388 @@
+{
+  "source": "https://github.com/mitre-attack/attack-stix-data (enterprise-attack.json)",
+  "attack_version": "20.1",
+  "tactic_order": [
+    "reconnaissance",
+    "resource-development",
+    "initial-access",
+    "execution",
+    "persistence",
+    "privilege-escalation",
+    "stealth",
+    "defense-impairment",
+    "credential-access",
+    "discovery",
+    "lateral-movement",
+    "collection",
+    "command-and-control",
+    "exfiltration",
+    "impact"
+  ],
+  "tactic_names": {
+    "reconnaissance": "Reconnaissance",
+    "resource-development": "Resource Development",
+    "initial-access": "Initial Access",
+    "execution": "Execution",
+    "persistence": "Persistence",
+    "privilege-escalation": "Privilege Escalation",
+    "stealth": "Stealth",
+    "defense-impairment": "Defense Impairment",
+    "credential-access": "Credential Access",
+    "discovery": "Discovery",
+    "lateral-movement": "Lateral Movement",
+    "collection": "Collection",
+    "command-and-control": "Command and Control",
+    "exfiltration": "Exfiltration",
+    "impact": "Impact"
+  },
+  "group": {
+    "id": "G0016",
+    "name": "APT29",
+    "aliases": [
+      "APT29",
+      "IRON RITUAL",
+      "IRON HEMLOCK",
+      "NobleBaron",
+      "Dark Halo",
+      "NOBELIUM",
+      "UNC2452",
+      "YTTRIUM",
+      "The Dukes",
+      "Cozy Bear",
+      "CozyDuke",
+      "SolarStorm",
+      "Blue Kitsune",
+      "UNC3524",
+      "Midnight Blizzard"
+    ],
+    "description": "APT29 is threat group that has been attributed to Russia's Foreign Intelligence Service (SVR). They have operated since at least 2008, often targeting government networks in Europe and NATO member countries, research institutes, and think tanks. APT29 reportedly compromised the Democratic National Committee starting in the summer of 2015. In April 2021, the US and UK governments attributed the SolarWinds Compromise to the SVR; public statements included citations to APT29, Cozy Bear, and The Dukes. Industry reporting also referred to the actors involved in this campaign as UNC2452, NOBELIUM, StellarParticle, Dark Halo, and SolarStorm."
+  },
+  "techniques": {
+    "T1621": {
+      "name": "Multi-Factor Authentication Request Generation",
+      "tactics": [
+        "credential-access"
+      ],
+      "procedure": "APT29 has used repeated MFA requests to gain access to victim accounts.",
+      "references": [
+        {
+          "source": "Suspected Russian Activity Targeting Government and Business Entities Around the Globe",
+          "url": "https://www.mandiant.com/resources/russian-targeting-gov-business"
+        },
+        {
+          "source": "NCSC et al APT29 2024",
+          "url": "https://www.ic3.gov/Media/News/2024/240226.pdf"
+        }
+      ]
+    },
+    "T1003.002": {
+      "name": "OS Credential Dumping: Security Account Manager",
+      "tactics": [
+        "credential-access"
+      ],
+      "procedure": "APT29 has used the `reg save` command to save registry hives.",
+      "references": [
+        {
+          "source": "Mandiant APT29 Eye Spy Email Nov 22",
+          "url": "https://www.mandiant.com/resources/blog/unc3524-eye-spy-email"
+        }
+      ]
+    },
+    "T1588.002": {
+      "name": "Obtain Capabilities: Tool",
+      "tactics": [
+        "resource-development"
+      ],
+      "procedure": "APT29 has obtained and used a variety of tools including Mimikatz, SDelete, Tor, meek, and Cobalt Strike.",
+      "references": [
+        {
+          "source": "Mandiant No Easy Breach",
+          "url": "https://www.slideshare.net/slideshow/no-easy-breach-derby-con-2016/66447908"
+        },
+        {
+          "source": "F-Secure The Dukes",
+          "url": "https://www.f-secure.com/documents/996508/1030745/dukes_whitepaper.pdf"
+        },
+        {
+          "source": "Mandiant APT29 Eye Spy Email Nov 22",
+          "url": "https://www.mandiant.com/resources/blog/unc3524-eye-spy-email"
+        }
+      ]
+    },
+    "T1090.004": {
+      "name": "Proxy: Domain Fronting",
+      "tactics": [
+        "command-and-control"
+      ],
+      "procedure": "APT29 has used the meek domain fronting plugin for Tor to hide the destination of C2 traffic.",
+      "references": [
+        {
+          "source": "Mandiant No Easy Breach",
+          "url": "https://www.slideshare.net/slideshow/no-easy-breach-derby-con-2016/66447908"
+        }
+      ]
+    },
+    "T1528": {
+      "name": "Steal Application Access Token",
+      "tactics": [
+        "credential-access"
+      ],
+      "procedure": "APT29 uses stolen tokens to access victim accounts, without needing a password.",
+      "references": [
+        {
+          "source": "NCSC et al APT29 2024",
+          "url": "https://www.ic3.gov/Media/News/2024/240226.pdf"
+        }
+      ]
+    },
+    "T1568": {
+      "name": "Dynamic Resolution",
+      "tactics": [
+        "command-and-control"
+      ],
+      "procedure": "APT29 has used Dynamic DNS providers for their malware C2 infrastructure.",
+      "references": [
+        {
+          "source": "Mandiant APT29 Eye Spy Email Nov 22",
+          "url": "https://www.mandiant.com/resources/blog/unc3524-eye-spy-email"
+        }
+      ]
+    },
+    "T1068": {
+      "name": "Exploitation for Privilege Escalation",
+      "tactics": [
+        "privilege-escalation"
+      ],
+      "procedure": "APT29 has exploited CVE-2021-36934 to escalate privileges on a compromised host.",
+      "references": [
+        {
+          "source": "ESET T3 Threat Report 2021",
+          "url": "https://www.welivesecurity.com/wp-content/uploads/2022/02/eset_threat_report_t32021.pdf"
+        }
+      ]
+    },
+    "T1546.003": {
+      "name": "Event Triggered Execution: Windows Management Instrumentation Event Subscription",
+      "tactics": [
+        "privilege-escalation",
+        "persistence"
+      ],
+      "procedure": "APT29 has used WMI event subscriptions for persistence.",
+      "references": [
+        {
+          "source": "Mandiant No Easy Breach",
+          "url": "https://www.slideshare.net/slideshow/no-easy-breach-derby-con-2016/66447908"
+        }
+      ]
+    },
+    "T1547.001": {
+      "name": "Boot or Logon Autostart Execution: Registry Run Keys / Startup Folder",
+      "tactics": [
+        "persistence",
+        "privilege-escalation"
+      ],
+      "procedure": "APT29 added Registry Run keys to establish persistence.",
+      "references": [
+        {
+          "source": "Mandiant No Easy Breach",
+          "url": "https://www.slideshare.net/slideshow/no-easy-breach-derby-con-2016/66447908"
+        }
+      ]
+    },
+    "T1136.003": {
+      "name": "Create Account: Cloud Account",
+      "tactics": [
+        "persistence"
+      ],
+      "procedure": "APT29 can create new users through Azure AD.",
+      "references": [
+        {
+          "source": "MSTIC Nobelium Oct 2021",
+          "url": "https://www.microsoft.com/security/blog/2021/10/25/nobelium-targeting-delegated-administrative-privileges-to-facilitate-broader-attacks/"
+        }
+      ]
+    },
+    "T1098.005": {
+      "name": "Account Manipulation: Device Registration",
+      "tactics": [
+        "persistence",
+        "privilege-escalation"
+      ],
+      "procedure": "APT29 has enrolled their own devices into compromised cloud tenants, including enrolling a device in MFA to an Azure AD environment following a successful password guessing attack against a dormant account.",
+      "references": [
+        {
+          "source": "Mandiant APT29 Microsoft 365 2022",
+          "url": "https://www.mandiant.com/resources/blog/apt29-continues-targeting-microsoft"
+        },
+        {
+          "source": "NCSC et al APT29 2024",
+          "url": "https://www.ic3.gov/Media/News/2024/240226.pdf"
+        }
+      ]
+    },
+    "T1587.003": {
+      "name": "Develop Capabilities: Digital Certificates",
+      "tactics": [
+        "resource-development"
+      ],
+      "procedure": "APT29 has created self-signed digital certificates to enable mutual TLS authentication for malware.",
+      "references": [
+        {
+          "source": "PWC WellMess July 2020",
+          "url": "https://www.pwc.co.uk/issues/cyber-security-services/insights/cleaning-up-after-wellmess.html"
+        },
+        {
+          "source": "PWC WellMess C2 August 2020",
+          "url": "https://www.pwc.co.uk/issues/cyber-security-services/insights/wellmess-analysis-command-control.html"
+        }
+      ]
+    },
+    "T1005": {
+      "name": "Data from Local System",
+      "tactics": [
+        "collection"
+      ],
+      "procedure": "APT29 has stolen data from compromised hosts.",
+      "references": [
+        {
+          "source": "Mandiant APT29 Eye Spy Email Nov 22",
+          "url": "https://www.mandiant.com/resources/blog/unc3524-eye-spy-email"
+        }
+      ]
+    },
+    "T1105": {
+      "name": "Ingress Tool Transfer",
+      "tactics": [
+        "command-and-control"
+      ],
+      "procedure": "APT29 has downloaded additional tools and malware onto compromised networks.",
+      "references": [
+        {
+          "source": "Mandiant No Easy Breach",
+          "url": "https://www.slideshare.net/slideshow/no-easy-breach-derby-con-2016/66447908"
+        },
+        {
+          "source": "F-Secure The Dukes",
+          "url": "https://www.f-secure.com/documents/996508/1030745/dukes_whitepaper.pdf"
+        },
+        {
+          "source": "Mandiant APT29 Eye Spy Email Nov 22",
+          "url": "https://www.mandiant.com/resources/blog/unc3524-eye-spy-email"
+        },
+        {
+          "source": "PWC WellMess July 2020",
+          "url": "https://www.pwc.co.uk/issues/cyber-security-services/insights/cleaning-up-after-wellmess.html"
+        }
+      ]
+    },
+    "T1651": {
+      "name": "Cloud Administration Command",
+      "tactics": [
+        "execution"
+      ],
+      "procedure": "APT29 has used Azure Run Command and Azure Admin-on-Behalf-of (AOBO) to execute code on virtual machines.",
+      "references": [
+        {
+          "source": "MSTIC Nobelium Oct 2021",
+          "url": "https://www.microsoft.com/security/blog/2021/10/25/nobelium-targeting-delegated-administrative-privileges-to-facilitate-broader-attacks/"
+        }
+      ]
+    },
+    "T1566.001": {
+      "name": "Phishing: Spearphishing Attachment",
+      "tactics": [
+        "initial-access"
+      ],
+      "procedure": "APT29 has used spearphishing emails with an attachment to deliver files with exploits to initial victims.",
+      "references": [
+        {
+          "source": "ESET T3 Threat Report 2021",
+          "url": "https://www.welivesecurity.com/wp-content/uploads/2022/02/eset_threat_report_t32021.pdf"
+        },
+        {
+          "source": "F-Secure The Dukes",
+          "url": "https://www.f-secure.com/documents/996508/1030745/dukes_whitepaper.pdf"
+        },
+        {
+          "source": "MSTIC NOBELIUM May 2021",
+          "url": "https://www.microsoft.com/security/blog/2021/05/27/new-sophisticated-email-based-attack-from-nobelium/"
+        },
+        {
+          "source": "Secureworks IRON HEMLOCK Profile",
+          "url": "http://www.secureworks.com/research/threat-profiles/iron-hemlock"
+        }
+      ]
+    },
+    "T1078.004": {
+      "name": "Valid Accounts: Cloud Accounts",
+      "tactics": [
+        "stealth",
+        "persistence",
+        "privilege-escalation",
+        "initial-access"
+      ],
+      "procedure": "APT29 has gained access to a global administrator account in Azure AD and has used `Service Principal` credentials in Exchange.",
+      "references": [
+        {
+          "source": "Mandiant APT29 Microsoft 365 2022",
+          "url": "https://www.mandiant.com/resources/blog/apt29-continues-targeting-microsoft"
+        },
+        {
+          "source": "Mandiant APT29 Eye Spy Email Nov 22",
+          "url": "https://www.mandiant.com/resources/blog/unc3524-eye-spy-email"
+        }
+      ]
+    },
+    "T1053.005": {
+      "name": "Scheduled Task/Job: Scheduled Task",
+      "tactics": [
+        "execution",
+        "persistence",
+        "privilege-escalation"
+      ],
+      "procedure": "APT29 has used named and hijacked scheduled tasks to establish persistence.",
+      "references": [
+        {
+          "source": "Mandiant No Easy Breach",
+          "url": "https://www.slideshare.net/slideshow/no-easy-breach-derby-con-2016/66447908"
+        }
+      ]
+    },
+    "T1016.001": {
+      "name": "System Network Configuration Discovery: Internet Connection Discovery",
+      "tactics": [
+        "discovery"
+      ],
+      "procedure": "APT29 has ensured web servers in a victim environment are Internet accessible before copying tools or malware to it.",
+      "references": [
+        {
+          "source": "Mandiant APT29 Eye Spy Email Nov 22",
+          "url": "https://www.mandiant.com/resources/blog/unc3524-eye-spy-email"
+        }
+      ]
+    },
+    "T1587.001": {
+      "name": "Develop Capabilities: Malware",
+      "tactics": [
+        "resource-development"
+      ],
+      "procedure": "APT29 has used unique malware in many of their operations.",
+      "references": [
+        {
+          "source": "Mandiant No Easy Breach",
+          "url": "https://www.slideshare.net/slideshow/no-easy-breach-derby-con-2016/66447908"
+        },
+        {
+          "source": "F-Secure The Dukes",
+          "url": "https://www.f-secure.com/documents/996508/1030745/dukes_whitepaper.pdf"
+        },
+        {
+          "source": "Mandiant APT29 Eye Spy Email Nov 22",
+          "url": "https://www.mandiant.com/resources/blog/unc3524-eye-spy-email"
+        },
+        {
+          "source": "MSTIC Nobelium Toolset May 2021",
+          "url": "https://www.microsoft.com/security/blog/2021/05/28/breaking-down-nobeliums-latest-early-stage-toolset/"
+        }
+      ]
+    },
+    "T1583.006": {
+      "name": "Acquire Infrastructure: Web Services",
+      "tactics": [
+        "resource-development"
+      ],
+      "procedure": "APT29 has registered algorithmically generated Twitter handles that are used for C2 by malware, such as HAMMERTOSS. APT29 has also used legitimate web services such as Dropbox and Constant Contact in their operations.",
+      "references": [
+        {
+          "source": "FireEye APT29",
+          "url": "https://services.google.com/fh/files/misc/rpt-apt29-hammertoss-stealthy-tactics-define-en.pdf"
+        },
+        {
+          "source": "MSTIC NOBELIUM May 2021",
+          "url": "https://www.microsoft.com/security/blog/2021/05/27/new-sophisticated-email-based-attack-from-nobelium/"
+        }
+      ]
+    },
+    "T1090.003": {
+      "name": "Proxy: Multi-hop Proxy",
+      "tactics": [
+        "command-and-control"
+      ],
+      "procedure": "A backdoor used by APT29 created a Tor hidden service to forward traffic from the Tor client to local ports 3389 (RDP), 139 (Netbios), and 445 (SMB) enabling full remote access from outside the network and has also used TOR.",
+      "references": [
+        {
+          "source": "Mandiant No Easy Breach",
+          "url": "https://www.slideshare.net/slideshow/no-easy-breach-derby-con-2016/66447908"
+        },
+        {
+          "source": "MSTIC Nobelium Oct 2021",
+          "url": "https://www.microsoft.com/security/blog/2021/10/25/nobelium-targeting-delegated-administrative-privileges-to-facilitate-broader-attacks/"
+        }
+      ]
+    },
+    "T1037": {
+      "name": "Boot or Logon Initialization Scripts",
+      "tactics": [
+        "persistence",
+        "privilege-escalation"
+      ],
+      "procedure": "APT29 has hijacked legitimate application-specific startup scripts to enable malware to execute on system startup.",
+      "references": [
+        {
+          "source": "Mandiant APT29 Eye Spy Email Nov 22",
+          "url": "https://www.mandiant.com/resources/blog/unc3524-eye-spy-email"
+        }
+      ]
+    },
+    "T1027.006": {
+      "name": "Obfuscated Files or Information: HTML Smuggling",
+      "tactics": [
+        "stealth"
+      ],
+      "procedure": "APT29 has embedded an ISO file within an HTML attachment that contained JavaScript code to initiate malware execution.",
+      "references": [
+        {
+          "source": "ESET T3 Threat Report 2021",
+          "url": "https://www.welivesecurity.com/wp-content/uploads/2022/02/eset_threat_report_t32021.pdf"
+        }
+      ]
+    },
+    "T1070.004": {
+      "name": "Indicator Removal: File Deletion",
+      "tactics": [
+        "stealth"
+      ],
+      "procedure": "APT29 has used SDelete to remove artifacts from victim networks.",
+      "references": [
+        {
+          "source": "Mandiant No Easy Breach",
+          "url": "https://www.slideshare.net/slideshow/no-easy-breach-derby-con-2016/66447908"
+        }
+      ]
+    },
+    "T1203": {
+      "name": "Exploitation for Client Execution",
+      "tactics": [
+        "execution"
+      ],
+      "procedure": "APT29 has used multiple software exploits for common client software, like Microsoft Word, Exchange, and Adobe Reader, to gain code execution.",
+      "references": [
+        {
+          "source": "F-Secure The Dukes",
+          "url": "https://www.f-secure.com/documents/996508/1030745/dukes_whitepaper.pdf"
+        },
+        {
+          "source": "Cybersecurity Advisory SVR TTP May 2021",
+          "url": "https://www.ncsc.gov.uk/files/Advisory-further-TTPs-associated-with-SVR-cyber-actors.pdf"
+        },
+        {
+          "source": "MSTIC NOBELIUM May 2021",
+          "url": "https://www.microsoft.com/security/blog/2021/05/27/new-sophisticated-email-based-attack-from-nobelium/"
+        }
+      ]
+    },
+    "T1550.003": {
+      "name": "Use Alternate Authentication Material: Pass the Ticket",
+      "tactics": [
+        "lateral-movement"
+      ],
+      "procedure": "APT29 used Kerberos ticket attacks for lateral movement.",
+      "references": [
+        {
+          "source": "Mandiant No Easy Breach",
+          "url": "https://www.slideshare.net/slideshow/no-easy-breach-derby-con-2016/66447908"
+        }
+      ]
+    },
+    "T1204.001": {
+      "name": "User Execution: Malicious Link",
+      "tactics": [
+        "execution"
+      ],
+      "procedure": "APT29 has used various forms of spearphishing attempting to get a user to click on a malicious link.",
+      "references": [
+        {
+          "source": "MSTIC NOBELIUM May 2021",
+          "url": "https://www.microsoft.com/security/blog/2021/05/27/new-sophisticated-email-based-attack-from-nobelium/"
+        },
+        {
+          "source": "Secureworks IRON RITUAL USAID Phish May 2021",
+          "url": "https://www.secureworks.com/blog/usaid-themed-phishing-campaign-leverages-us-elections-lure"
+        }
+      ]
+    },
+    "T1036.005": {
+      "name": "Masquerading: Match Legitimate Resource Name or Location",
+      "tactics": [
+        "stealth"
+      ],
+      "procedure": "APT29 has renamed malicious DLLs with legitimate names to appear benign; they have also created an Azure AD certificate with a Common Name that matched the display name of the compromised service principal.",
+      "references": [
+        {
+          "source": "Mandiant APT29 Microsoft 365 2022",
+          "url": "https://www.mandiant.com/resources/blog/apt29-continues-targeting-microsoft"
+        },
+        {
+          "source": "SentinelOne NobleBaron June 2021",
+          "url": "https://labs.sentinelone.com/noblebaron-new-poisoned-installers-could-be-used-in-supply-chain-attacks/"
+        }
+      ]
+    },
+    "T1110.003": {
+      "name": "Brute Force: Password Spraying",
+      "tactics": [
+        "credential-access"
+      ],
+      "procedure": "APT29 has conducted brute force password spray attacks.",
+      "references": [
+        {
+          "source": "MSTIC Nobelium Oct 2021",
+          "url": "https://www.microsoft.com/security/blog/2021/10/25/nobelium-targeting-delegated-administrative-privileges-to-facilitate-broader-attacks/"
+        },
+        {
+          "source": "MSRC Nobelium June 2021",
+          "url": "https://msrc-blog.microsoft.com/2021/06/25/new-nobelium-activity/"
+        },
+        {
+          "source": "NCSC et al APT29 2024",
+          "url": "https://www.ic3.gov/Media/News/2024/240226.pdf"
+        }
+      ]
+    },
+    "T1114.002": {
+      "name": "Email Collection: Remote Email Collection",
+      "tactics": [
+        "collection"
+      ],
+      "procedure": "APT29 has collected emails from targeted mailboxes within a compromised Azure AD tenant and compromised Exchange servers, including via Exchange Web Services (EWS) API requests.",
+      "references": [
+        {
+          "source": "Mandiant APT29 Microsoft 365 2022",
+          "url": "https://www.mandiant.com/resources/blog/apt29-continues-targeting-microsoft"
+        },
+        {
+          "source": "Mandiant APT29 Eye Spy Email Nov 22",
+          "url": "https://www.mandiant.com/resources/blog/unc3524-eye-spy-email"
+        }
+      ]
+    },
+    "T1027.001": {
+      "name": "Obfuscated Files or Information: Binary Padding",
+      "tactics": [
+        "stealth"
+      ],
+      "procedure": "APT29 used large size files to avoid detection by security solutions with hardcoded size limits.",
+      "references": [
+        {
+          "source": "SentinelOne NobleBaron June 2021",
+          "url": "https://labs.sentinelone.com/noblebaron-new-poisoned-installers-could-be-used-in-supply-chain-attacks/"
+        }
+      ]
+    },
+    "T1556.007": {
+      "name": "Modify Authentication Process: Hybrid Identity",
+      "tactics": [
+        "defense-impairment",
+        "persistence",
+        "credential-access"
+      ],
+      "procedure": "APT29 has edited the `Microsoft.IdentityServer.Servicehost.exe.config` file to load a malicious DLL into the AD FS process, thereby enabling persistent access to any service federated with AD FS for a user with a specified User Principal Name.",
+      "references": [
+        {
+          "source": "MagicWeb",
+          "url": "https://www.microsoft.com/security/blog/2022/08/24/magicweb-nobeliums-post-compromise-trick-to-authenticate-as-anyone/"
+        }
+      ]
+    },
+    "T1059.001": {
+      "name": "Command and Scripting Interpreter: PowerShell",
+      "tactics": [
+        "execution"
+      ],
+      "procedure": "APT29 has used encoded PowerShell scripts uploaded to CozyCar installations to download and install SeaDuke.",
+      "references": [
+        {
+          "source": "Mandiant No Easy Breach",
+          "url": "https://www.slideshare.net/slideshow/no-easy-breach-derby-con-2016/66447908"
+        },
+        {
+          "source": "ESET T3 Threat Report 2021",
+          "url": "https://www.welivesecurity.com/wp-content/uploads/2022/02/eset_threat_report_t32021.pdf"
+        },
+        {
+          "source": "Secureworks IRON HEMLOCK Profile",
+          "url": "http://www.secureworks.com/research/threat-profiles/iron-hemlock"
+        },
+        {
+          "source": "Symantec Seaduke 2015",
+          "url": "https://web.archive.org/web/20150717011546/http://www.symantec.com/connect/blogs/forkmeiamfamous-seaduke-latest-weapon-duke-armory"
+        }
+      ]
+    },
+    "T1133": {
+      "name": "External Remote Services",
+      "tactics": [
+        "persistence",
+        "initial-access"
+      ],
+      "procedure": "APT29 has used compromised identities to access networks via VPNs and Citrix.",
+      "references": [
+        {
+          "source": "Mandiant APT29 Microsoft 365 2022",
+          "url": "https://www.mandiant.com/resources/blog/apt29-continues-targeting-microsoft"
+        },
+        {
+          "source": "NCSC APT29 July 2020",
+          "url": "https://www.ncsc.gov.uk/files/Advisory-APT29-targets-COVID-19-vaccine-development-V1-1.pdf"
+        }
+      ]
+    },
+    "T1037.004": {
+      "name": "Boot or Logon Initialization Scripts: RC Scripts",
+      "tactics": [
+        "persistence",
+        "privilege-escalation"
+      ],
+      "procedure": "APT29 has installed a run command on a compromised system to enable malware execution on system startup.",
+      "references": [
+        {
+          "source": "Mandiant APT29 Eye Spy Email Nov 22",
+          "url": "https://www.mandiant.com/resources/blog/unc3524-eye-spy-email"
+        }
+      ]
+    },
+    "T1021.007": {
+      "name": "Remote Services: Cloud Services",
+      "tactics": [
+        "lateral-movement"
+      ],
+      "procedure": "APT29 has leveraged compromised high-privileged on-premises accounts synced to Office 365 to move laterally into a cloud environment, including through the use of Azure AD PowerShell.",
+      "references": [
+        {
+          "source": "Mandiant Remediation and Hardening Strategies for Microsoft 365",
+          "url": "https://www.mandiant.com/sites/default/files/2022-08/remediation-hardening-strategies-for-m365-defend-against-apt29-white-paper.pdf"
+        }
+      ]
+    },
+    "T1595.002": {
+      "name": "Active Scanning: Vulnerability Scanning",
+      "tactics": [
+        "reconnaissance"
+      ],
+      "procedure": "APT29 has conducted widespread scanning of target environments to identify vulnerabilities for exploit.",
+      "references": [
+        {
+          "source": "Cybersecurity Advisory SVR TTP May 2021",
+          "url": "https://www.ncsc.gov.uk/files/Advisory-further-TTPs-associated-with-SVR-cyber-actors.pdf"
+        }
+      ]
+    },
+    "T1566.002": {
+      "name": "Phishing: Spearphishing Link",
+      "tactics": [
+        "initial-access"
+      ],
+      "procedure": "APT29 has used spearphishing with a link to trick victims into clicking on a link to a zip file containing malicious files.",
+      "references": [
+        {
+          "source": "Mandiant No Easy Breach",
+          "url": "https://www.slideshare.net/slideshow/no-easy-breach-derby-con-2016/66447908"
+        },
+        {
+          "source": "MSTIC NOBELIUM May 2021",
+          "url": "https://www.microsoft.com/security/blog/2021/05/27/new-sophisticated-email-based-attack-from-nobelium/"
+        },
+        {
+          "source": "Secureworks IRON RITUAL USAID Phish May 2021",
+          "url": "https://www.secureworks.com/blog/usaid-themed-phishing-campaign-leverages-us-elections-lure"
+        }
+      ]
+    },
+    "T1070.006": {
+      "name": "Indicator Removal: Timestomp",
+      "tactics": [
+        "stealth"
+      ],
+      "procedure": "APT29 has used timestomping to alter the Standard Information timestamps on their web shells to match other files in the same directory.",
+      "references": [
+        {
+          "source": "Mandiant APT29 Eye Spy Email Nov 22",
+          "url": "https://www.mandiant.com/resources/blog/unc3524-eye-spy-email"
+        }
+      ]
+    },
+    "T1586.003": {
+      "name": "Compromise Accounts: Cloud Accounts",
+      "tactics": [
+        "resource-development"
+      ],
+      "procedure": "APT29 has used residential proxies, including Azure Virtual Machines, to obfuscate their access to victim environments.",
+      "references": [
+        {
+          "source": "Mandiant APT29 Microsoft 365 2022",
+          "url": "https://www.mandiant.com/resources/blog/apt29-continues-targeting-microsoft"
+        }
+      ]
+    },
+    "T1090.002": {
+      "name": "Proxy: External Proxy",
+      "tactics": [
+        "command-and-control"
+      ],
+      "procedure": "APT29 uses compromised residential endpoints as proxies for defense evasion and network access.",
+      "references": [
+        {
+          "source": "NCSC et al APT29 2024",
+          "url": "https://www.ic3.gov/Media/News/2024/240226.pdf"
+        }
+      ]
+    },
+    "T1573": {
+      "name": "Encrypted Channel",
+      "tactics": [
+        "command-and-control"
+      ],
+      "procedure": "APT29 has used multiple layers of encryption within malware to protect C2 communication.",
+      "references": [
+        {
+          "source": "Secureworks IRON HEMLOCK Profile",
+          "url": "http://www.secureworks.com/research/threat-profiles/iron-hemlock"
+        }
+      ]
+    },
+    "T1047": {
+      "name": "Windows Management Instrumentation",
+      "tactics": [
+        "execution"
+      ],
+      "procedure": "APT29 used WMI to steal credentials and execute backdoors at a future time.",
+      "references": [
+        {
+          "source": "Mandiant No Easy Breach",
+          "url": "https://www.slideshare.net/slideshow/no-easy-breach-derby-con-2016/66447908"
+        }
+      ]
+    },
+    "T1110.001": {
+      "name": "Brute Force: Password Guessing",
+      "tactics": [
+        "credential-access"
+      ],
+      "procedure": "APT29 has successfully conducted password guessing attacks against a list of mailboxes.",
+      "references": [
+        {
+          "source": "Mandiant APT29 Microsoft 365 2022",
+          "url": "https://www.mandiant.com/resources/blog/apt29-continues-targeting-microsoft"
+        }
+      ]
+    },
+    "T1199": {
+      "name": "Trusted Relationship",
+      "tactics": [
+        "initial-access"
+      ],
+      "procedure": "APT29 has compromised IT, cloud services, and managed services providers to gain broad access to multiple customers for subsequent operations.",
+      "references": [
+        {
+          "source": "MSTIC Nobelium Oct 2021",
+          "url": "https://www.microsoft.com/security/blog/2021/10/25/nobelium-targeting-delegated-administrative-privileges-to-facilitate-broader-attacks/"
+        }
+      ]
+    },
+    "T1566.003": {
+      "name": "Phishing: Spearphishing via Service",
+      "tactics": [
+        "initial-access"
+      ],
+      "procedure": "APT29 has used the legitimate mailing service Constant Contact to send phishing e-mails.",
+      "references": [
+        {
+          "source": "MSTIC NOBELIUM May 2021",
+          "url": "https://www.microsoft.com/security/blog/2021/05/27/new-sophisticated-email-based-attack-from-nobelium/"
+        }
+      ]
+    },
+    "T1078": {
+      "name": "Valid Accounts",
+      "tactics": [
+        "stealth",
+        "persistence",
+        "privilege-escalation",
+        "initial-access"
+      ],
+      "procedure": "APT29 has used a compromised account to access an organization's VPN infrastructure.",
+      "references": [
+        {
+          "source": "Mandiant APT29 Microsoft 365 2022",
+          "url": "https://www.mandiant.com/resources/blog/apt29-continues-targeting-microsoft"
+        }
+      ]
+    },
+    "T1505.003": {
+      "name": "Server Software Component: Web Shell",
+      "tactics": [
+        "persistence"
+      ],
+      "procedure": "APT29 has installed web shells on exploited Microsoft Exchange servers.",
+      "references": [
+        {
+          "source": "Mandiant APT29 Eye Spy Email Nov 22",
+          "url": "https://www.mandiant.com/resources/blog/unc3524-eye-spy-email"
+        },
+        {
+          "source": "Cybersecurity Advisory SVR TTP May 2021",
+          "url": "https://www.ncsc.gov.uk/files/Advisory-further-TTPs-associated-with-SVR-cyber-actors.pdf"
+        }
+      ]
+    },
+    "T1059.006": {
+      "name": "Command and Scripting Interpreter: Python",
+      "tactics": [
+        "execution"
+      ],
+      "procedure": "APT29 has developed malware variants written in Python.",
+      "references": [
+        {
+          "source": "Symantec Seaduke 2015",
+          "url": "https://web.archive.org/web/20150717011546/http://www.symantec.com/connect/blogs/forkmeiamfamous-seaduke-latest-weapon-duke-armory"
+        }
+      ]
+    },
+    "T1665": {
+      "name": "Hide Infrastructure",
+      "tactics": [
+        "command-and-control"
+      ],
+      "procedure": "APT29 uses compromised residential endpoints, typically within the same ISP IP address range, as proxies to hide the true source of C2 traffic.",
+      "references": [
+        {
+          "source": "NCSC et al APT29 2024",
+          "url": "https://www.ic3.gov/Media/News/2024/240226.pdf"
+        }
+      ]
+    },
+    "T1218.005": {
+      "name": "System Binary Proxy Execution: Mshta",
+      "tactics": [
+        "stealth"
+      ],
+      "procedure": "APT29 has use `mshta` to execute malicious scripts on a compromised host.",
+      "references": [
+        {
+          "source": "ESET T3 Threat Report 2021",
+          "url": "https://www.welivesecurity.com/wp-content/uploads/2022/02/eset_threat_report_t32021.pdf"
+        }
+      ]
+    },
+    "T1003.004": {
+      "name": "OS Credential Dumping: LSA Secrets",
+      "tactics": [
+        "credential-access"
+      ],
+      "procedure": "APT29 has used the `reg save` command to extract LSA secrets offline.",
+      "references": [
+        {
+          "source": "Mandiant APT29 Eye Spy Email Nov 22",
+          "url": "https://www.mandiant.com/resources/blog/unc3524-eye-spy-email"
+        }
+      ]
+    },
+    "T1190": {
+      "name": "Exploit Public-Facing Application",
+      "tactics": [
+        "initial-access"
+      ],
+      "procedure": "APT29 has exploited CVE-2019-19781 for Citrix, CVE-2019-11510 for Pulse Secure VPNs, CVE-2018-13379 for FortiGate VPNs, and CVE-2019-9670 in Zimbra software to gain access.",
+      "references": [
+        {
+          "source": "NCSC APT29 July 2020",
+          "url": "https://www.ncsc.gov.uk/files/Advisory-APT29-targets-COVID-19-vaccine-development-V1-1.pdf"
+        },
+        {
+          "source": "Cybersecurity Advisory SVR TTP May 2021",
+          "url": "https://www.ncsc.gov.uk/files/Advisory-further-TTPs-associated-with-SVR-cyber-actors.pdf"
+        }
+      ]
+    },
+    "T1553.005": {
+      "name": "Subvert Trust Controls: Mark-of-the-Web Bypass",
+      "tactics": [
+        "defense-impairment"
+      ],
+      "procedure": "APT29 has embedded ISO images and VHDX files in HTML to evade Mark-of-the-Web.",
+      "references": [
+        {
+          "source": "ESET T3 Threat Report 2021",
+          "url": "https://www.welivesecurity.com/wp-content/uploads/2022/02/eset_threat_report_t32021.pdf"
+        }
+      ]
+    },
+    "T1649": {
+      "name": "Steal or Forge Authentication Certificates",
+      "tactics": [
+        "credential-access"
+      ],
+      "procedure": "APT29 has abused misconfigured AD CS certificate templates to impersonate admin users and create additional authentication certificates.",
+      "references": [
+        {
+          "source": "Mandiant APT29 Trello",
+          "url": "https://www.mandiant.com/resources/tracking-apt29-phishing-campaigns"
+        }
+      ]
+    },
+    "T1087.004": {
+      "name": "Account Discovery: Cloud Account",
+      "tactics": [
+        "discovery"
+      ],
+      "procedure": "APT29 has conducted enumeration of Azure AD accounts.",
+      "references": [
+        {
+          "source": "MSTIC Nobelium Oct 2021",
+          "url": "https://www.microsoft.com/security/blog/2021/10/25/nobelium-targeting-delegated-administrative-privileges-to-facilitate-broader-attacks/"
+        }
+      ]
+    },
+    "T1098.002": {
+      "name": "Account Manipulation: Additional Email Delegate Permissions",
+      "tactics": [
+        "persistence",
+        "privilege-escalation"
+      ],
+      "procedure": "APT29 has used a compromised global administrator account in Azure AD to backdoor a service principal with `ApplicationImpersonation` rights to start collecting emails from targeted mailboxes; APT29 has also used compromised accounts holding `ApplicationImpersonation` rights in Exchange to collect emails.",
+      "references": [
+        {
+          "source": "Mandiant APT29 Microsoft 365 2022",
+          "url": "https://www.mandiant.com/resources/blog/apt29-continues-targeting-microsoft"
+        },
+        {
+          "source": "Mandiant APT29 Eye Spy Email Nov 22",
+          "url": "https://www.mandiant.com/resources/blog/unc3524-eye-spy-email"
+        }
+      ]
+    },
+    "T1078.003": {
+      "name": "Valid Accounts: Local Accounts",
+      "tactics": [
+        "stealth",
+        "persistence",
+        "privilege-escalation",
+        "initial-access"
+      ],
+      "procedure": "APT29 targets dormant or inactive user accounts, accounts belonging to individuals no longer at the organization but whose accounts remain on the system, for access and persistence.",
+      "references": [
+        {
+          "source": "NCSC et al APT29 2024",
+          "url": "https://www.ic3.gov/Media/News/2024/240226.pdf"
+        }
+      ]
+    },
+    "T1546.008": {
+      "name": "Event Triggered Execution: Accessibility Features",
+      "tactics": [
+        "privilege-escalation",
+        "persistence"
+      ],
+      "procedure": "APT29 used sticky-keys to obtain unauthenticated, privileged console access.",
+      "references": [
+        {
+          "source": "FireEye APT29 Domain Fronting",
+          "url": "https://www.fireeye.com/blog/threat-research/2017/03/apt29_domain_frontin.html"
+        },
+        {
+          "source": "Mandiant No Easy Breach",
+          "url": "https://www.slideshare.net/slideshow/no-easy-breach-derby-con-2016/66447908"
+        }
+      ]
+    },
+    "T1059.009": {
+      "name": "Command and Scripting Interpreter: Cloud API",
+      "tactics": [
+        "execution"
+      ],
+      "procedure": "APT29 has leveraged the Microsoft Graph API to perform various actions across Azure and M365 environments. They have also utilized AADInternals PowerShell Modules to access the API",
+      "references": [
+        {
+          "source": "MSTIC Nobelium Toolset May 2021",
+          "url": "https://www.microsoft.com/security/blog/2021/05/28/breaking-down-nobeliums-latest-early-stage-toolset/"
+        }
+      ]
+    },
+    "T1586.002": {
+      "name": "Compromise Accounts: Email Accounts",
+      "tactics": [
+        "resource-development"
+      ],
+      "procedure": "APT29 has compromised email accounts to further enable phishing campaigns and taken control of dormant accounts.",
+      "references": [
+        {
+          "source": "ANSSI Nobelium Phishing December 2021",
+          "url": "https://www.cert.ssi.gouv.fr/uploads/CERTFR-2021-CTI-011.pdf"
+        },
+        {
+          "source": "Mandiant APT29 Microsoft 365 2022",
+          "url": "https://www.mandiant.com/resources/blog/apt29-continues-targeting-microsoft"
+        }
+      ]
+    },
+    "T1204.002": {
+      "name": "User Execution: Malicious File",
+      "tactics": [
+        "execution"
+      ],
+      "procedure": "APT29 has used various forms of spearphishing attempting to get a user to open attachments, including, but not limited to, malicious Microsoft Word documents, .pdf, and .lnk files.",
+      "references": [
+        {
+          "source": "ESET T3 Threat Report 2021",
+          "url": "https://www.welivesecurity.com/wp-content/uploads/2022/02/eset_threat_report_t32021.pdf"
+        },
+        {
+          "source": "F-Secure The Dukes",
+          "url": "https://www.f-secure.com/documents/996508/1030745/dukes_whitepaper.pdf"
+        },
+        {
+          "source": "Secureworks IRON HEMLOCK Profile",
+          "url": "http://www.secureworks.com/research/threat-profiles/iron-hemlock"
+        }
+      ]
+    },
+    "T1685.002": {
+      "name": "Disable or Modify Tools: Disable or Modify Cloud Log",
+      "tactics": [
+        "defense-impairment"
+      ],
+      "procedure": "APT29 has disabled Purview Audit on targeted accounts prior to stealing emails from Microsoft 365 tenants.",
+      "references": [
+        {
+          "source": "Mandiant APT29 Microsoft 365 2022",
+          "url": "https://www.mandiant.com/resources/blog/apt29-continues-targeting-microsoft"
+        }
+      ]
+    },
+    "T1548.002": {
+      "name": "Abuse Elevation Control Mechanism: Bypass User Account Control",
+      "tactics": [
+        "privilege-escalation"
+      ],
+      "procedure": "APT29 has bypassed UAC.",
+      "references": [
+        {
+          "source": "Mandiant No Easy Breach",
+          "url": "https://www.slideshare.net/slideshow/no-easy-breach-derby-con-2016/66447908"
+        }
+      ]
+    },
+    "T1027.002": {
+      "name": "Obfuscated Files or Information: Software Packing",
+      "tactics": [
+        "stealth"
+      ],
+      "procedure": "APT29 used UPX to pack files.",
+      "references": [
+        {
+          "source": "Mandiant No Easy Breach",
+          "url": "https://www.slideshare.net/slideshow/no-easy-breach-derby-con-2016/66447908"
+        }
+      ]
+    }
+  },
+  "software": [
+    "S0002 Mimikatz",
+    "S0029 PsExec",
+    "S0037 HAMMERTOSS",
+    "S0039 Net",
+    "S0046 CozyCar",
+    "S0048 PinchDuke",
+    "S0049 GeminiDuke",
+    "S0050 CosmicDuke",
+    "S0051 MiniDuke",
+    "S0052 OnionDuke",
+    "S0053 SeaDuke",
+    "S0054 CloudDuke",
+    "S0057 Tasklist",
+    "S0096 Systeminfo",
+    "S0100 ipconfig",
+    "S0139 PowerDuke",
+    "S0150 POSHSPY",
+    "S0154 Cobalt Strike",
+    "S0175 meek",
+    "S0183 Tor",
+    "S0195 SDelete",
+    "S0357 Impacket",
+    "S0511 RegDuke",
+    "S0512 FatDuke",
+    "S0513 LiteDuke",
+    "S0514 WellMess",
+    "S0515 WellMail",
+    "S0516 SoreFang",
+    "S0518 PolyglotDuke",
+    "S0521 BloodHound",
+    "S0552 AdFind",
+    "S0559 SUNBURST",
+    "S0560 TEARDROP",
+    "S0562 SUNSPOT",
+    "S0565 Raindrop",
+    "S0588 GoldMax",
+    "S0589 Sibot",
+    "S0597 GoldFinder",
+    "S0633 Sliver",
+    "S0634 EnvyScout",
+    "S0635 BoomBox",
+    "S0636 VaporRage",
+    "S0637 NativeZone",
+    "S0661 FoggyWeb",
+    "S0677 AADInternals",
+    "S0682 TrailBlazer",
+    "S0684 ROADTools",
+    "S1084 QUIETEXIT",
+    "S1187 reGeorg"
+  ],
+  "campaigns": [
+    {
+      "id": "C0023",
+      "name": "Operation Ghost",
+      "first_seen": "2013-09-01",
+      "last_seen": "2019-10-01",
+      "description": "Operation Ghost was an APT29 campaign starting in 2013 that included operations against ministries of foreign affairs in Europe and the Washington, D.C.",
+      "techniques": {
+        "T1078.002": {
+          "name": "Valid Accounts: Domain Accounts",
+          "tactics": [
+            "stealth",
+            "persistence",
+            "privilege-escalation",
+            "initial-access"
+          ],
+          "procedure": "For Operation Ghost, APT29 used stolen administrator credentials for lateral movement on compromised networks.",
+          "references": [
+            {
+              "source": "ESET Dukes October 2019",
+              "url": "https://www.welivesecurity.com/wp-content/uploads/2019/10/ESET_Operation_Ghost_Dukes.pdf"
+            }
+          ]
+        },
+        "T1102.002": {
+          "name": "Web Service: Bidirectional Communication",
+          "tactics": [
+            "command-and-control"
+          ],
+          "procedure": "For Operation Ghost, APT29 used social media platforms to hide communications to C2 servers.",
+          "references": [
+            {
+              "source": "ESET Dukes October 2019",
+              "url": "https://www.welivesecurity.com/wp-content/uploads/2019/10/ESET_Operation_Ghost_Dukes.pdf"
+            }
+          ]
+        },
+        "T1001.002": {
+          "name": "Data Obfuscation: Steganography",
+          "tactics": [
+            "command-and-control"
+          ],
+          "procedure": "During Operation Ghost, APT29 used steganography to hide the communications between the implants and their C&C servers.",
+          "references": [
+            {
+              "source": "ESET Dukes October 2019",
+              "url": "https://www.welivesecurity.com/wp-content/uploads/2019/10/ESET_Operation_Ghost_Dukes.pdf"
+            }
+          ]
+        },
+        "T1583.001": {
+          "name": "Acquire Infrastructure: Domains",
+          "tactics": [
+            "resource-development"
+          ],
+          "procedure": "For Operation Ghost, APT29 registered domains for use in C2 including some crafted to appear as existing legitimate domains.",
+          "references": [
+            {
+              "source": "ESET Dukes October 2019",
+              "url": "https://www.welivesecurity.com/wp-content/uploads/2019/10/ESET_Operation_Ghost_Dukes.pdf"
+            }
+          ]
+        },
+        "T1587.001": {
+          "name": "Develop Capabilities: Malware",
+          "tactics": [
+            "resource-development"
+          ],
+          "procedure": "For Operation Ghost, APT29 used new strains of malware including FatDuke, MiniDuke, RegDuke, and PolyglotDuke.",
+          "references": [
+            {
+              "source": "ESET Dukes October 2019",
+              "url": "https://www.welivesecurity.com/wp-content/uploads/2019/10/ESET_Operation_Ghost_Dukes.pdf"
+            }
+          ]
+        },
+        "T1546.003": {
+          "name": "Event Triggered Execution: Windows Management Instrumentation Event Subscription",
+          "tactics": [
+            "privilege-escalation",
+            "persistence"
+          ],
+          "procedure": "During Operation Ghost, APT29 used WMI event subscriptions to establish persistence for malware.",
+          "references": [
+            {
+              "source": "ESET Dukes October 2019",
+              "url": "https://www.welivesecurity.com/wp-content/uploads/2019/10/ESET_Operation_Ghost_Dukes.pdf"
+            }
+          ]
+        },
+        "T1585.001": {
+          "name": "Establish Accounts: Social Media Accounts",
+          "tactics": [
+            "resource-development"
+          ],
+          "procedure": "For Operation Ghost, APT29 registered Twitter accounts to host C2 nodes.",
+          "references": [
+            {
+              "source": "ESET Dukes October 2019",
+              "url": "https://www.welivesecurity.com/wp-content/uploads/2019/10/ESET_Operation_Ghost_Dukes.pdf"
+            }
+          ]
+        },
+        "T1027.003": {
+          "name": "Obfuscated Files or Information: Steganography",
+          "tactics": [
+            "stealth"
+          ],
+          "procedure": "During Operation Ghost, APT29 used steganography to hide payloads inside valid images.",
+          "references": [
+            {
+              "source": "ESET Dukes October 2019",
+              "url": "https://www.welivesecurity.com/wp-content/uploads/2019/10/ESET_Operation_Ghost_Dukes.pdf"
+            }
+          ]
+        }
+      },
+      "software": [
+        "S0029 PsExec",
+        "S0051 MiniDuke",
+        "S0511 RegDuke",
+        "S0512 FatDuke",
+        "S0518 PolyglotDuke"
+      ]
+    },
+    {
+      "id": "C0024",
+      "name": "SolarWinds Compromise",
+      "first_seen": "2019-08-01",
+      "last_seen": "2021-01-01",
+      "description": "The SolarWinds Compromise was a sophisticated supply chain cyber operation conducted by APT29 that was discovered in mid-December 2020.",
+      "techniques": {
+        "T1606.002": {
+          "name": "Forge Web Credentials: SAML Tokens",
+          "tactics": [
+            "credential-access"
+          ],
+          "procedure": "During the SolarWinds Compromise, APT29 created tokens using compromised SAML signing certificates.",
+          "references": [
+            {
+              "source": "Microsoft - Customer Guidance on Recent Nation-State Cyber Attacks",
+              "url": "https://msrc-blog.microsoft.com/2020/12/13/customer-guidance-on-recent-nation-state-cyber-attacks/"
+            },
+            {
+              "source": "Secureworks IRON RITUAL Profile",
+              "url": "https://www.sophos.com/en-us/threat-profiles/iron-ritual"
+            }
+          ]
+        },
+        "T1078.004": {
+          "name": "Valid Accounts: Cloud Accounts",
+          "tactics": [
+            "stealth",
+            "persistence",
+            "privilege-escalation",
+            "initial-access"
+          ],
+          "procedure": "During the SolarWinds Compromise, APT29 used a compromised O365 administrator account to create a new Service Principal.",
+          "references": [
+            {
+              "source": "CrowdStrike StellarParticle January 2022",
+              "url": "https://www.crowdstrike.com/blog/observations-from-the-stellarparticle-campaign/"
+            }
+          ]
+        },
+        "T1053.005": {
+          "name": "Scheduled Task/Job: Scheduled Task",
+          "tactics": [
+            "execution",
+            "persistence",
+            "privilege-escalation"
+          ],
+          "procedure": "During the SolarWinds Compromise, APT29 used `scheduler` and `schtasks` to create new tasks on remote host as part of their lateral movement. They manipulated scheduled tasks by updating an existing legitimate task to execute their tools and then returned the scheduled task to its original configuration. APT29 also created a scheduled task to maintain SUNSPOT persistence when the host booted.",
+          "references": [
+            {
+              "source": "Volexity SolarWinds",
+              "url": "https://www.volexity.com/blog/2020/12/14/dark-halo-leverages-solarwinds-compromise-to-breach-organizations/"
+            },
+            {
+              "source": "CrowdStrike SUNSPOT Implant January 2021",
+              "url": "https://www.crowdstrike.com/blog/sunspot-malware-technical-analysis/"
+            },
+            {
+              "source": "FireEye SUNBURST Backdoor December 2020",
+              "url": "https://www.fireeye.com/blog/threat-research/2020/12/evasive-attacker-leverages-solarwinds-supply-chain-compromises-with-sunburst-backdoor.html"
+            }
+          ]
+        },
+        "T1087.002": {
+          "name": "Account Discovery: Domain Account",
+          "tactics": [
+            "discovery"
+          ],
+          "procedure": "During the SolarWinds Compromise, APT29 used PowerShell to discover domain accounts by exectuing `Get-ADUser` and `Get-ADGroupMember`.",
+          "references": [
+            {
+              "source": "CrowdStrike StellarParticle January 2022",
+              "url": "https://www.crowdstrike.com/blog/observations-from-the-stellarparticle-campaign/"
+            },
+            {
+              "source": "Secureworks IRON RITUAL Profile",
+              "url": "https://www.sophos.com/en-us/threat-profiles/iron-ritual"
+            }
+          ]
+        },
+        "T1090.001": {
+          "name": "Proxy: Internal Proxy",
+          "tactics": [
+            "command-and-control"
+          ],
+          "procedure": "During the SolarWinds Compromise, APT29 used SSH port forwarding capabilities on public-facing systems, and configured at least one instance of Cobalt Strike to use a network pipe over SMB.",
+          "references": [
+            {
+              "source": "CrowdStrike StellarParticle January 2022",
+              "url": "https://www.crowdstrike.com/blog/observations-from-the-stellarparticle-campaign/"
+            },
+            {
+              "source": "Symantec RAINDROP January 2021",
+              "url": "https://symantec-enterprise-blogs.security.com/blogs/threat-intelligence/solarwinds-raindrop-malware"
+            }
+          ]
+        },
+        "T1114.002": {
+          "name": "Email Collection: Remote Email Collection",
+          "tactics": [
+            "collection"
+          ],
+          "procedure": "During the SolarWinds Compromise, APT29 collected emails from specific individuals, such as executives and IT staff, using `New-MailboxExportRequest` followed by `Get-MailboxExportRequest`.",
+          "references": [
+            {
+              "source": "Volexity SolarWinds",
+              "url": "https://www.volexity.com/blog/2020/12/14/dark-halo-leverages-solarwinds-compromise-to-breach-organizations/"
+            },
+            {
+              "source": "Cybersecurity Advisory SVR TTP May 2021",
+              "url": "https://www.ncsc.gov.uk/files/Advisory-further-TTPs-associated-with-SVR-cyber-actors.pdf"
+            }
+          ]
+        },
+        "T1069.002": {
+          "name": "Permission Groups Discovery: Domain Groups",
+          "tactics": [
+            "discovery"
+          ],
+          "procedure": "During the SolarWinds Compromise, APT29 used AdFind to enumerate domain groups.",
+          "references": [
+            {
+              "source": "CrowdStrike StellarParticle January 2022",
+              "url": "https://www.crowdstrike.com/blog/observations-from-the-stellarparticle-campaign/"
+            }
+          ]
+        },
+        "T1057": {
+          "name": "Process Discovery",
+          "tactics": [
+            "discovery"
+          ],
+          "procedure": "During the SolarWinds Compromise, APT29 used multiple command-line utilities to enumerate running processes.",
+          "references": [
+            {
+              "source": "Volexity SolarWinds",
+              "url": "https://www.volexity.com/blog/2020/12/14/dark-halo-leverages-solarwinds-compromise-to-breach-organizations/"
+            },
+            {
+              "source": "CrowdStrike StellarParticle January 2022",
+              "url": "https://www.crowdstrike.com/blog/observations-from-the-stellarparticle-campaign/"
+            },
+            {
+              "source": "Microsoft Deep Dive Solorigate January 2021",
+              "url": "https://www.microsoft.com/security/blog/2021/01/20/deep-dive-into-the-solorigate-second-stage-activation-from-sunburst-to-teardrop-and-raindrop/"
+            }
+          ]
+        },
+        "T1584.001": {
+          "name": "Compromise Infrastructure: Domains",
+          "tactics": [
+            "resource-development"
+          ],
+          "procedure": "For the SolarWinds Compromise, APT29 compromised domains to use for C2.",
+          "references": [
+            {
+              "source": "MSTIC NOBELIUM Mar 2021",
+              "url": "https://www.microsoft.com/security/blog/2021/03/04/goldmax-goldfinder-sibot-analyzing-nobelium-malware/"
+            }
+          ]
+        },
+        "T1016.001": {
+          "name": "System Network Configuration Discovery: Internet Connection Discovery",
+          "tactics": [
+            "discovery"
+          ],
+          "procedure": "During the SolarWinds Compromise, APT29 used GoldFinder to perform HTTP GET requests to check internet connectivity and identify HTTP proxy servers and other redirectors that an HTTP request travels through.",
+          "references": [
+            {
+              "source": "MSTIC NOBELIUM Mar 2021",
+              "url": "https://www.microsoft.com/security/blog/2021/03/04/goldmax-goldfinder-sibot-analyzing-nobelium-malware/"
+            }
+          ]
+        },
+        "T1550": {
+          "name": "Use Alternate Authentication Material",
+          "tactics": [
+            "lateral-movement"
+          ],
+          "procedure": "During the SolarWinds Compromise, APT29 used forged SAML tokens that allowed the actors to impersonate users and bypass MFA, enabling APT29 to access enterprise cloud applications and services.",
+          "references": [
+            {
+              "source": "Microsoft 365 Defender Solorigate",
+              "url": "https://www.microsoft.com/security/blog/2020/12/28/using-microsoft-365-defender-to-coordinate-protection-against-solorigate/"
+            },
+            {
+              "source": "Secureworks IRON RITUAL Profile",
+              "url": "https://www.sophos.com/en-us/threat-profiles/iron-ritual"
+            }
+          ]
+        },
+        "T1555.003": {
+          "name": "Credentials from Password Stores: Credentials from Web Browsers",
+          "tactics": [
+            "credential-access"
+          ],
+          "procedure": "During the SolarWinds Compromise, APT29 stole users' saved passwords from Chrome.",
+          "references": [
+            {
+              "source": "CrowdStrike StellarParticle January 2022",
+              "url": "https://www.crowdstrike.com/blog/observations-from-the-stellarparticle-campaign/"
+            }
+          ]
+        },
+        "T1078.002": {
+          "name": "Valid Accounts: Domain Accounts",
+          "tactics": [
+            "stealth",
+            "persistence",
+            "privilege-escalation",
+            "initial-access"
+          ],
+          "procedure": "During the SolarWinds Compromise, APT29 used domain administrators' accounts to help facilitate lateral movement on compromised networks.",
+          "references": [
+            {
+              "source": "CrowdStrike StellarParticle January 2022",
+              "url": "https://www.crowdstrike.com/blog/observations-from-the-stellarparticle-campaign/"
+            }
+          ]
+        },
+        "T1036.005": {
+          "name": "Masquerading: Match Legitimate Resource Name or Location",
+          "tactics": [
+            "stealth"
+          ],
+          "procedure": "During the SolarWinds Compromise, APT29 renamed software and DLLs with legitimate names to appear benign.",
+          "references": [
+            {
+              "source": "Volexity SolarWinds",
+              "url": "https://www.volexity.com/blog/2020/12/14/dark-halo-leverages-solarwinds-compromise-to-breach-organizations/"
+            },
+            {
+              "source": "Microsoft Analyzing Solorigate Dec 2020",
+              "url": "https://www.microsoft.com/security/blog/2020/12/18/analyzing-solorigate-the-compromised-dll-file-that-started-a-sophisticated-cyberattack-and-how-microsoft-defender-helps-protect/"
+            }
+          ]
+        },
+        "T1665": {
+          "name": "Hide Infrastructure",
+          "tactics": [
+            "command-and-control"
+          ],
+          "procedure": "During the SolarWinds Compromise, APT29 set the hostnames of their C2 infrastructure to match legitimate hostnames in the victim environment. They also used IP addresses originating from the same country as the victim for their VPN infrastructure.",
+          "references": [
+            {
+              "source": "FireEye SUNBURST Backdoor December 2020",
+              "url": "https://www.fireeye.com/blog/threat-research/2020/12/evasive-attacker-leverages-solarwinds-supply-chain-compromises-with-sunburst-backdoor.html"
+            }
+          ]
+        },
+        "T1098.002": {
+          "name": "Account Manipulation: Additional Email Delegate Permissions",
+          "tactics": [
+            "persistence",
+            "privilege-escalation"
+          ],
+          "procedure": "During the SolarWinds Compromise, APT29 added their own devices as allowed IDs for active sync using `Set-CASMailbox`, allowing it to obtain copies of victim mailboxes. It also added additional permissions (such as Mail.Read and Mail.ReadWrite) to compromised Application or Service Principals.",
+          "references": [
+            {
+              "source": "Volexity SolarWinds",
+              "url": "https://www.volexity.com/blog/2020/12/14/dark-halo-leverages-solarwinds-compromise-to-breach-organizations/"
+            },
+            {
+              "source": "MSTIC Nobelium Oct 2021",
+              "url": "https://www.microsoft.com/security/blog/2021/10/25/nobelium-targeting-delegated-administrative-privileges-to-facilitate-broader-attacks/"
+            },
+            {
+              "source": "Microsoft - Customer Guidance on Recent Nation-State Cyber Attacks",
+              "url": "https://msrc-blog.microsoft.com/2020/12/13/customer-guidance-on-recent-nation-state-cyber-attacks/"
+            }
+          ]
+        },
+        "T1021.001": {
+          "name": "Remote Services: Remote Desktop Protocol",
+          "tactics": [
+            "lateral-movement"
+          ],
+          "procedure": "During the SolarWinds Compromise, APT29 used RDP sessions from public-facing systems to internal servers.",
+          "references": [
+            {
+              "source": "CrowdStrike StellarParticle January 2022",
+              "url": "https://www.crowdstrike.com/blog/observations-from-the-stellarparticle-campaign/"
+            }
+          ]
+        },
+        "T1213": {
+          "name": "Data from Information Repositories",
+          "tactics": [
+            "collection"
+          ],
+          "procedure": "During the SolarWinds Compromise, APT29 accessed victims' internal knowledge repositories (wikis) to view sensitive corporate information on products, services, and internal business operations.",
+          "references": [
+            {
+              "source": "CrowdStrike StellarParticle January 2022",
+              "url": "https://www.crowdstrike.com/blog/observations-from-the-stellarparticle-campaign/"
+            }
+          ]
+        },
+        "T1021.002": {
+          "name": "Remote Services: SMB/Windows Admin Shares",
+          "tactics": [
+            "lateral-movement"
+          ],
+          "procedure": "During the SolarWinds Compromise, APT29 used administrative accounts to connect over SMB to targeted users.",
+          "references": [
+            {
+              "source": "CrowdStrike StellarParticle January 2022",
+              "url": "https://www.crowdstrike.com/blog/observations-from-the-stellarparticle-campaign/"
+            }
+          ]
+        },
+        "T1059.005": {
+          "name": "Command and Scripting Interpreter: Visual Basic",
+          "tactics": [
+            "execution"
+          ],
+          "procedure": "For the SolarWinds Compromise, APT29 wrote malware such as Sibot in Visual Basic.",
+          "references": [
+            {
+              "source": "Cybersecurity Advisory SVR TTP May 2021",
+              "url": "https://www.ncsc.gov.uk/files/Advisory-further-TTPs-associated-with-SVR-cyber-actors.pdf"
+            }
+          ]
+        },
+        "T1568": {
+          "name": "Dynamic Resolution",
+          "tactics": [
+            "command-and-control"
+          ],
+          "procedure": "During the SolarWinds Compromise, APT29 used dynamic DNS resolution to construct and resolve to randomly-generated subdomains for C2.",
+          "references": [
+            {
+              "source": "Volexity SolarWinds",
+              "url": "https://www.volexity.com/blog/2020/12/14/dark-halo-leverages-solarwinds-compromise-to-breach-organizations/"
+            }
+          ]
+        },
+        "T1589.001": {
+          "name": "Gather Victim Identity Information: Credentials",
+          "tactics": [
+            "reconnaissance"
+          ],
+          "procedure": "For the SolarWinds Compromise, APT29 conducted credential theft operations to obtain credentials to be used for access to victim environments.",
+          "references": [
+            {
+              "source": "CrowdStrike StellarParticle January 2022",
+              "url": "https://www.crowdstrike.com/blog/observations-from-the-stellarparticle-campaign/"
+            }
+          ]
+        },
+        "T1552.004": {
+          "name": "Unsecured Credentials: Private Keys",
+          "tactics": [
+            "credential-access"
+          ],
+          "procedure": "During the SolarWinds Compromise, APT29 obtained PKI keys, certificate files, and the private encryption key from an Active Directory Federation Services (AD FS) container to decrypt corresponding SAML signing certificates.",
+          "references": [
+            {
+              "source": "Microsoft 365 Defender Solorigate",
+              "url": "https://www.microsoft.com/security/blog/2020/12/28/using-microsoft-365-defender-to-coordinate-protection-against-solorigate/"
+            },
+            {
+              "source": "Cybersecurity Advisory SVR TTP May 2021",
+              "url": "https://www.ncsc.gov.uk/files/Advisory-further-TTPs-associated-with-SVR-cyber-actors.pdf"
+            }
+          ]
+        },
+        "T1587.001": {
+          "name": "Develop Capabilities: Malware",
+          "tactics": [
+            "resource-development"
+          ],
+          "procedure": "For the SolarWinds Compromise, APT29 used numerous pieces of malware that were likely developed for or by the group, including SUNBURST, SUNSPOT, Raindrop, and TEARDROP.",
+          "references": [
+            {
+              "source": "CrowdStrike SUNSPOT Implant January 2021",
+              "url": "https://www.crowdstrike.com/blog/sunspot-malware-technical-analysis/"
+            },
+            {
+              "source": "FireEye SUNBURST Backdoor December 2020",
+              "url": "https://www.fireeye.com/blog/threat-research/2020/12/evasive-attacker-leverages-solarwinds-supply-chain-compromises-with-sunburst-backdoor.html"
+            },
+            {
+              "source": "Microsoft Deep Dive Solorigate January 2021",
+              "url": "https://www.microsoft.com/security/blog/2021/01/20/deep-dive-into-the-solorigate-second-stage-activation-from-sunburst-to-teardrop-and-raindrop/"
+            }
+          ]
+        },
+        "T1140": {
+          "name": "Deobfuscate/Decode Files or Information",
+          "tactics": [
+            "stealth"
+          ],
+          "procedure": "During the SolarWinds Compromise, APT29 used 7-Zip to decode their Raindrop malware.",
+          "references": [
+            {
+              "source": "Symantec RAINDROP January 2021",
+              "url": "https://symantec-enterprise-blogs.security.com/blogs/threat-intelligence/solarwinds-raindrop-malware"
+            }
+          ]
+        },
+        "T1005": {
+          "name": "Data from Local System",
+          "tactics": [
+            "collection"
+          ],
+          "procedure": "During the SolarWinds Compromise, APT29 extracted files from compromised networks.",
+          "references": [
+            {
+              "source": "Volexity SolarWinds",
+              "url": "https://www.volexity.com/blog/2020/12/14/dark-halo-leverages-solarwinds-compromise-to-breach-organizations/"
+            }
+          ]
+        },
+        "T1685.001": {
+          "name": "Disable or Modify Tools: Disable or Modify Windows Event Log",
+          "tactics": [
+            "defense-impairment"
+          ],
+          "procedure": "During the SolarWinds Compromise, APT29, used `AUDITPOL` to prevent the collection of audit logs.",
+          "references": [
+            {
+              "source": "Microsoft Deep Dive Solorigate January 2021",
+              "url": "https://www.microsoft.com/security/blog/2021/01/20/deep-dive-into-the-solorigate-second-stage-activation-from-sunburst-to-teardrop-and-raindrop/"
+            }
+          ]
+        },
+        "T1083": {
+          "name": "File and Directory Discovery",
+          "tactics": [
+            "discovery"
+          ],
+          "procedure": "During the SolarWinds Compromise, APT29 obtained information about the configured Exchange virtual directory using `Get-WebServicesVirtualDirectory`.",
+          "references": [
+            {
+              "source": "Volexity SolarWinds",
+              "url": "https://www.volexity.com/blog/2020/12/14/dark-halo-leverages-solarwinds-compromise-to-breach-organizations/"
+            }
+          ]
+        },
+        "T1069": {
+          "name": "Permission Groups Discovery",
+          "tactics": [
+            "discovery"
+          ],
+          "procedure": "During the SolarWinds Compromise, APT29 used the `Get-ManagementRoleAssignment` PowerShell cmdlet to enumerate Exchange management role assignments through an Exchange Management Shell.",
+          "references": [
+            {
+              "source": "Volexity SolarWinds",
+              "url": "https://www.volexity.com/blog/2020/12/14/dark-halo-leverages-solarwinds-compromise-to-breach-organizations/"
+            }
+          ]
+        },
+        "T1018": {
+          "name": "Remote System Discovery",
+          "tactics": [
+            "discovery"
+          ],
+          "procedure": "During the SolarWinds Compromise, APT29 used AdFind to enumerate remote systems.",
+          "references": [
+            {
+              "source": "Microsoft Deep Dive Solorigate January 2021",
+              "url": "https://www.microsoft.com/security/blog/2021/01/20/deep-dive-into-the-solorigate-second-stage-activation-from-sunburst-to-teardrop-and-raindrop/"
+            }
+          ]
+        },
+        "T1021.006": {
+          "name": "Remote Services: Windows Remote Management",
+          "tactics": [
+            "lateral-movement"
+          ],
+          "procedure": "During the SolarWinds Compromise, APT29 used WinRM via PowerShell to execute commands and payloads on remote hosts.",
+          "references": [
+            {
+              "source": "Symantec RAINDROP January 2021",
+              "url": "https://symantec-enterprise-blogs.security.com/blogs/threat-intelligence/solarwinds-raindrop-malware"
+            }
+          ]
+        },
+        "T1550.001": {
+          "name": "Use Alternate Authentication Material: Application Access Token",
+          "tactics": [
+            "lateral-movement"
+          ],
+          "procedure": "During the SolarWinds Compromise, APT29 used compromised service principals to make changes to the Office 365 environment.",
+          "references": [
+            {
+              "source": "CrowdStrike StellarParticle January 2022",
+              "url": "https://www.crowdstrike.com/blog/observations-from-the-stellarparticle-campaign/"
+            }
+          ]
+        },
+        "T1098.003": {
+          "name": "Account Manipulation: Additional Cloud Roles",
+          "tactics": [
+            "persistence",
+            "privilege-escalation"
+          ],
+          "procedure": "During the SolarWinds Compromise, APT29 granted `company administrator` privileges to a newly created service principle.",
+          "references": [
+            {
+              "source": "CrowdStrike StellarParticle January 2022",
+              "url": "https://www.crowdstrike.com/blog/observations-from-the-stellarparticle-campaign/"
+            }
+          ]
+        },
+        "T1553.002": {
+          "name": "Subvert Trust Controls: Code Signing",
+          "tactics": [
+            "defense-impairment"
+          ],
+          "procedure": "During the SolarWinds Compromise, APT29 was able to get SUNBURST signed by SolarWinds code signing certificates by injecting the malware into the SolarWinds Orion software lifecycle.",
+          "references": [
+            {
+              "source": "FireEye SUNBURST Backdoor December 2020",
+              "url": "https://www.fireeye.com/blog/threat-research/2020/12/evasive-attacker-leverages-solarwinds-supply-chain-compromises-with-sunburst-backdoor.html"
+            }
+          ]
+        },
+        "T1218.011": {
+          "name": "System Binary Proxy Execution: Rundll32",
+          "tactics": [
+            "stealth"
+          ],
+          "procedure": "During the SolarWinds Compromise, APT29 used `Rundll32.exe` to execute payloads.",
+          "references": [
+            {
+              "source": "Microsoft - Customer Guidance on Recent Nation-State Cyber Attacks",
+              "url": "https://msrc-blog.microsoft.com/2020/12/13/customer-guidance-on-recent-nation-state-cyber-attacks/"
+            },
+            {
+              "source": "Microsoft Deep Dive Solorigate January 2021",
+              "url": "https://www.microsoft.com/security/blog/2021/01/20/deep-dive-into-the-solorigate-second-stage-activation-from-sunburst-to-teardrop-and-raindrop/"
+            }
+          ]
+        },
+        "T1546.003": {
+          "name": "Event Triggered Execution: Windows Management Instrumentation Event Subscription",
+          "tactics": [
+            "privilege-escalation",
+            "persistence"
+          ],
+          "procedure": "During the SolarWinds Compromise, APT29 used a WMI event filter to invoke a command-line event consumer at system boot time to launch a backdoor with `rundll32.exe`.",
+          "references": [
+            {
+              "source": "Microsoft 365 Defender Solorigate",
+              "url": "https://www.microsoft.com/security/blog/2020/12/28/using-microsoft-365-defender-to-coordinate-protection-against-solorigate/"
+            },
+            {
+              "source": "Microsoft Deep Dive Solorigate January 2021",
+              "url": "https://www.microsoft.com/security/blog/2021/01/20/deep-dive-into-the-solorigate-second-stage-activation-from-sunburst-to-teardrop-and-raindrop/"
+            }
+          ]
+        },
+        "T1190": {
+          "name": "Exploit Public-Facing Application",
+          "tactics": [
+            "initial-access"
+          ],
+          "procedure": "During the SolarWinds Compromise, APT29 exploited CVE-2020-0688 against the Microsoft Exchange Control Panel to regain access to a network.",
+          "references": [
+            {
+              "source": "Volexity SolarWinds",
+              "url": "https://www.volexity.com/blog/2020/12/14/dark-halo-leverages-solarwinds-compromise-to-breach-organizations/"
+            },
+            {
+              "source": "Cybersecurity Advisory SVR TTP May 2021",
+              "url": "https://www.ncsc.gov.uk/files/Advisory-further-TTPs-associated-with-SVR-cyber-actors.pdf"
+            }
+          ]
+        },
+        "T1213.003": {
+          "name": "Data from Information Repositories: Code Repositories",
+          "tactics": [
+            "collection"
+          ],
+          "procedure": "During the SolarWinds Compromise, APT29 downloaded source code from code repositories.",
+          "references": [
+            {
+              "source": "Microsoft Internal Solorigate Investigation Blog",
+              "url": "https://msrc-blog.microsoft.com/2021/02/18/microsoft-internal-solorigate-investigation-final-update/"
+            }
+          ]
+        },
+        "T1686": {
+          "name": "Disable or Modify System Firewall",
+          "tactics": [
+            "defense-impairment"
+          ],
+          "procedure": "During the SolarWinds Compromise, APT29 used `netsh` to configure firewall rules that limited certain UDP outbound packets.",
+          "references": [
+            {
+              "source": "Microsoft Deep Dive Solorigate January 2021",
+              "url": "https://www.microsoft.com/security/blog/2021/01/20/deep-dive-into-the-solorigate-second-stage-activation-from-sunburst-to-teardrop-and-raindrop/"
+            }
+          ]
+        },
+        "T1059.001": {
+          "name": "Command and Scripting Interpreter: PowerShell",
+          "tactics": [
+            "execution"
+          ],
+          "procedure": "During the SolarWinds Compromise, APT29 used PowerShell to create new tasks on remote machines, identify configuration settings, exfiltrate data, and execute other commands.",
+          "references": [
+            {
+              "source": "Volexity SolarWinds",
+              "url": "https://www.volexity.com/blog/2020/12/14/dark-halo-leverages-solarwinds-compromise-to-breach-organizations/"
+            },
+            {
+              "source": "CrowdStrike StellarParticle January 2022",
+              "url": "https://www.crowdstrike.com/blog/observations-from-the-stellarparticle-campaign/"
+            },
+            {
+              "source": "Microsoft Analyzing Solorigate Dec 2020",
+              "url": "https://www.microsoft.com/security/blog/2020/12/18/analyzing-solorigate-the-compromised-dll-file-that-started-a-sophisticated-cyberattack-and-how-microsoft-defender-helps-protect/"
+            }
+          ]
+        },
+        "T1070.004": {
+          "name": "Indicator Removal: File Deletion",
+          "tactics": [
+            "stealth"
+          ],
+          "procedure": "During the SolarWinds Compromise, APT29 routinely removed their tools, including custom backdoors, once remote access was achieved.",
+          "references": [
+            {
+              "source": "FireEye SUNBURST Backdoor December 2020",
+              "url": "https://www.fireeye.com/blog/threat-research/2020/12/evasive-attacker-leverages-solarwinds-supply-chain-compromises-with-sunburst-backdoor.html"
+            }
+          ]
+        },
+        "T1539": {
+          "name": "Steal Web Session Cookie",
+          "tactics": [
+            "credential-access"
+          ],
+          "procedure": "During the SolarWinds Compromise, APT29 stole Chrome browser cookies by copying the Chrome profile directories of targeted users.",
+          "references": [
+            {
+              "source": "CrowdStrike StellarParticle January 2022",
+              "url": "https://www.crowdstrike.com/blog/observations-from-the-stellarparticle-campaign/"
+            }
+          ]
+        },
+        "T1606.001": {
+          "name": "Forge Web Credentials: Web Cookies",
+          "tactics": [
+            "credential-access"
+          ],
+          "procedure": "During the SolarWinds Compromise, APT29 bypassed MFA set on OWA accounts by generating a cookie value from a previously stolen secret key.",
+          "references": [
+            {
+              "source": "Volexity SolarWinds",
+              "url": "https://www.volexity.com/blog/2020/12/14/dark-halo-leverages-solarwinds-compromise-to-breach-organizations/"
+            }
+          ]
+        },
+        "T1550.004": {
+          "name": "Use Alternate Authentication Material: Web Session Cookie",
+          "tactics": [
+            "lateral-movement"
+          ],
+          "procedure": "During the SolarWinds Compromise, APT29 used stolen cookies to access cloud resources and a forged `duo-sid` cookie to bypass MFA set on an email account.",
+          "references": [
+            {
+              "source": "Volexity SolarWinds",
+              "url": "https://www.volexity.com/blog/2020/12/14/dark-halo-leverages-solarwinds-compromise-to-breach-organizations/"
+            },
+            {
+              "source": "CrowdStrike StellarParticle January 2022",
+              "url": "https://www.crowdstrike.com/blog/observations-from-the-stellarparticle-campaign/"
+            }
+          ]
+        },
+        "T1074.002": {
+          "name": "Data Staged: Remote Data Staging",
+          "tactics": [
+            "collection"
+          ],
+          "procedure": "During the SolarWinds Compromise, APT29 staged data and files in password-protected archives on a victim's OWA server.",
+          "references": [
+            {
+              "source": "Volexity SolarWinds",
+              "url": "https://www.volexity.com/blog/2020/12/14/dark-halo-leverages-solarwinds-compromise-to-breach-organizations/"
+            }
+          ]
+        },
+        "T1098.005": {
+          "name": "Account Manipulation: Device Registration",
+          "tactics": [
+            "persistence",
+            "privilege-escalation"
+          ],
+          "procedure": "During the SolarWinds Compromise, APT29 registered devices in order to enable mailbox syncing via the `Set-CASMailbox` command.",
+          "references": [
+            {
+              "source": "Volexity SolarWinds",
+              "url": "https://www.volexity.com/blog/2020/12/14/dark-halo-leverages-solarwinds-compromise-to-breach-organizations/"
+            }
+          ]
+        },
+        "T1133": {
+          "name": "External Remote Services",
+          "tactics": [
+            "persistence",
+            "initial-access"
+          ],
+          "procedure": "For the SolarWinds Compromise, APT29 used compromised identities to access networks via SSH, VPNs, and other remote access tools.",
+          "references": [
+            {
+              "source": "CrowdStrike StellarParticle January 2022",
+              "url": "https://www.crowdstrike.com/blog/observations-from-the-stellarparticle-campaign/"
+            },
+            {
+              "source": "MSTIC NOBELIUM Mar 2021",
+              "url": "https://www.microsoft.com/security/blog/2021/03/04/goldmax-goldfinder-sibot-analyzing-nobelium-malware/"
+            }
+          ]
+        },
+        "T1199": {
+          "name": "Trusted Relationship",
+          "tactics": [
+            "initial-access"
+          ],
+          "procedure": "During the SolarWinds Compromise, APT29 gained access through compromised accounts at cloud solution partners, and used compromised certificates issued by Mimecast to authenticate to Mimecast customer systems.",
+          "references": [
+            {
+              "source": "CrowdStrike StellarParticle January 2022",
+              "url": "https://www.crowdstrike.com/blog/observations-from-the-stellarparticle-campaign/"
+            },
+            {
+              "source": "Cybersecurity Advisory SVR TTP May 2021",
+              "url": "https://www.ncsc.gov.uk/files/Advisory-further-TTPs-associated-with-SVR-cyber-actors.pdf"
+            }
+          ]
+        },
+        "T1059.003": {
+          "name": "Command and Scripting Interpreter: Windows Command Shell",
+          "tactics": [
+            "execution"
+          ],
+          "procedure": "During the SolarWinds Compromise, APT29 used `cmd.exe` to execute commands on remote machines.",
+          "references": [
+            {
+              "source": "Volexity SolarWinds",
+              "url": "https://www.volexity.com/blog/2020/12/14/dark-halo-leverages-solarwinds-compromise-to-breach-organizations/"
+            },
+            {
+              "source": "Microsoft Analyzing Solorigate Dec 2020",
+              "url": "https://www.microsoft.com/security/blog/2020/12/18/analyzing-solorigate-the-compromised-dll-file-that-started-a-sophisticated-cyberattack-and-how-microsoft-defender-helps-protect/"
+            }
+          ]
+        },
+        "T1070.006": {
+          "name": "Indicator Removal: Timestomp",
+          "tactics": [
+            "stealth"
+          ],
+          "procedure": "During the SolarWinds Compromise, APT29 modified timestamps of backdoors to match legitimate Windows files.",
+          "references": [
+            {
+              "source": "Microsoft Deep Dive Solorigate January 2021",
+              "url": "https://www.microsoft.com/security/blog/2021/01/20/deep-dive-into-the-solorigate-second-stage-activation-from-sunburst-to-teardrop-and-raindrop/"
+            }
+          ]
+        },
+        "T1558.003": {
+          "name": "Steal or Forge Kerberos Tickets: Kerberoasting",
+          "tactics": [
+            "credential-access"
+          ],
+          "procedure": "During the SolarWinds Compromise, APT29 obtained Ticket Granting Service (TGS) tickets for Active Directory Service Principle Names to crack offline.",
+          "references": [
+            {
+              "source": "Microsoft Deep Dive Solorigate January 2021",
+              "url": "https://www.microsoft.com/security/blog/2021/01/20/deep-dive-into-the-solorigate-second-stage-activation-from-sunburst-to-teardrop-and-raindrop/"
+            }
+          ]
+        },
+        "T1680": {
+          "name": "Local Storage Discovery",
+          "tactics": [
+            "discovery"
+          ],
+          "procedure": "During the SolarWinds Compromise, APT29 used `fsutil` to check available free space before executing actions that might create large files on disk.",
+          "references": [
+            {
+              "source": "Microsoft Deep Dive Solorigate January 2021",
+              "url": "https://www.microsoft.com/security/blog/2021/01/20/deep-dive-into-the-solorigate-second-stage-activation-from-sunburst-to-teardrop-and-raindrop/"
+            }
+          ]
+        },
+        "T1685": {
+          "name": "Disable or Modify Tools",
+          "tactics": [
+            "defense-impairment"
+          ],
+          "procedure": "During the SolarWinds Compromise, APT29 used the service control manager on a remote system to disable services associated with security monitoring products.",
+          "references": [
+            {
+              "source": "Microsoft Deep Dive Solorigate January 2021",
+              "url": "https://www.microsoft.com/security/blog/2021/01/20/deep-dive-into-the-solorigate-second-stage-activation-from-sunburst-to-teardrop-and-raindrop/"
+            }
+          ]
+        },
+        "T1105": {
+          "name": "Ingress Tool Transfer",
+          "tactics": [
+            "command-and-control"
+          ],
+          "procedure": "During the SolarWinds Compromise, APT29 downloaded additional malware, such as TEARDROP and Cobalt Strike, onto a compromised host following initial access.",
+          "references": [
+            {
+              "source": "FireEye SUNBURST Backdoor December 2020",
+              "url": "https://www.fireeye.com/blog/threat-research/2020/12/evasive-attacker-leverages-solarwinds-supply-chain-compromises-with-sunburst-backdoor.html"
+            }
+          ]
+        },
+        "T1078.003": {
+          "name": "Valid Accounts: Local Accounts",
+          "tactics": [
+            "stealth",
+            "persistence",
+            "privilege-escalation",
+            "initial-access"
+          ],
+          "procedure": "During the SolarWinds Compromise, APT29 used compromised local accounts to access victims' networks.",
+          "references": [
+            {
+              "source": "CrowdStrike StellarParticle January 2022",
+              "url": "https://www.crowdstrike.com/blog/observations-from-the-stellarparticle-campaign/"
+            }
+          ]
+        },
+        "T1070": {
+          "name": "Indicator Removal",
+          "tactics": [
+            "stealth"
+          ],
+          "procedure": "During the SolarWinds Compromise, APT29 temporarily replaced legitimate utilities with their own, executed their payload, and then restored the original file.",
+          "references": [
+            {
+              "source": "FireEye SUNBURST Backdoor December 2020",
+              "url": "https://www.fireeye.com/blog/threat-research/2020/12/evasive-attacker-leverages-solarwinds-supply-chain-compromises-with-sunburst-backdoor.html"
+            }
+          ]
+        },
+        "T1003.006": {
+          "name": "OS Credential Dumping: DCSync",
+          "tactics": [
+            "credential-access"
+          ],
+          "procedure": "During the SolarWinds Compromise, APT29 used privileged accounts to replicate directory service data with domain controllers.",
+          "references": [
+            {
+              "source": "CrowdStrike StellarParticle January 2022",
+              "url": "https://www.crowdstrike.com/blog/observations-from-the-stellarparticle-campaign/"
+            },
+            {
+              "source": "Microsoft 365 Defender Solorigate",
+              "url": "https://www.microsoft.com/security/blog/2020/12/28/using-microsoft-365-defender-to-coordinate-protection-against-solorigate/"
+            },
+            {
+              "source": "Microsoft Deep Dive Solorigate January 2021",
+              "url": "https://www.microsoft.com/security/blog/2021/01/20/deep-dive-into-the-solorigate-second-stage-activation-from-sunburst-to-teardrop-and-raindrop/"
+            }
+          ]
+        },
+        "T1036.004": {
+          "name": "Masquerading: Masquerade Task or Service",
+          "tactics": [
+            "stealth"
+          ],
+          "procedure": "During the SolarWinds Compromise, APT29 named tasks `\\Microsoft\\Windows\\SoftwareProtectionPlatform\\EventCacheManager` in order to appear legitimate.",
+          "references": [
+            {
+              "source": "Volexity SolarWinds",
+              "url": "https://www.volexity.com/blog/2020/12/14/dark-halo-leverages-solarwinds-compromise-to-breach-organizations/"
+            }
+          ]
+        },
+        "T1098.001": {
+          "name": "Account Manipulation: Additional Cloud Credentials",
+          "tactics": [
+            "persistence",
+            "privilege-escalation"
+          ],
+          "procedure": "During the SolarWinds Compromise, APT29 added credentials to OAuth Applications and Service Principals.",
+          "references": [
+            {
+              "source": "CrowdStrike StellarParticle January 2022",
+              "url": "https://www.crowdstrike.com/blog/observations-from-the-stellarparticle-campaign/"
+            },
+            {
+              "source": "Microsoft - Customer Guidance on Recent Nation-State Cyber Attacks",
+              "url": "https://msrc-blog.microsoft.com/2020/12/13/customer-guidance-on-recent-nation-state-cyber-attacks/"
+            }
+          ]
+        },
+        "T1482": {
+          "name": "Domain Trust Discovery",
+          "tactics": [
+            "discovery"
+          ],
+          "procedure": "During the SolarWinds Compromise, APT29 used the `Get-AcceptedDomain` PowerShell cmdlet to enumerate accepted domains through an Exchange Management Shell. They also used AdFind to enumerate domains and to discover trust between federated domains.",
+          "references": [
+            {
+              "source": "Volexity SolarWinds",
+              "url": "https://www.volexity.com/blog/2020/12/14/dark-halo-leverages-solarwinds-compromise-to-breach-organizations/"
+            },
+            {
+              "source": "CrowdStrike StellarParticle January 2022",
+              "url": "https://www.crowdstrike.com/blog/observations-from-the-stellarparticle-campaign/"
+            },
+            {
+              "source": "Microsoft Deep Dive Solorigate January 2021",
+              "url": "https://www.microsoft.com/security/blog/2021/01/20/deep-dive-into-the-solorigate-second-stage-activation-from-sunburst-to-teardrop-and-raindrop/"
+            }
+          ]
+        },
+        "T1555": {
+          "name": "Credentials from Password Stores",
+          "tactics": [
+            "credential-access"
+          ],
+          "procedure": "During the SolarWinds Compromise, APT29 used account credentials they obtained to attempt access to Group Managed Service Account (gMSA) passwords.",
+          "references": [
+            {
+              "source": "Microsoft Deep Dive Solorigate January 2021",
+              "url": "https://www.microsoft.com/security/blog/2021/01/20/deep-dive-into-the-solorigate-second-stage-activation-from-sunburst-to-teardrop-and-raindrop/"
+            }
+          ]
+        },
+        "T1047": {
+          "name": "Windows Management Instrumentation",
+          "tactics": [
+            "execution"
+          ],
+          "procedure": "During the SolarWinds Compromise, APT29 used WMI for the remote execution of files for lateral movement.",
+          "references": [
+            {
+              "source": "Microsoft 365 Defender Solorigate",
+              "url": "https://www.microsoft.com/security/blog/2020/12/28/using-microsoft-365-defender-to-coordinate-protection-against-solorigate/"
+            },
+            {
+              "source": "Microsoft Deep Dive Solorigate January 2021",
+              "url": "https://www.microsoft.com/security/blog/2021/01/20/deep-dive-into-the-solorigate-second-stage-activation-from-sunburst-to-teardrop-and-raindrop/"
+            }
+          ]
+        },
+        "T1195.002": {
+          "name": "Supply Chain Compromise: Compromise Software Supply Chain",
+          "tactics": [
+            "initial-access"
+          ],
+          "procedure": "During the SolarWinds Compromise, APT29 gained initial network access to some victims via a trojanized update of SolarWinds Orion software.",
+          "references": [
+            {
+              "source": "FireEye SUNBURST Backdoor December 2020",
+              "url": "https://www.fireeye.com/blog/threat-research/2020/12/evasive-attacker-leverages-solarwinds-supply-chain-compromises-with-sunburst-backdoor.html"
+            },
+            {
+              "source": "Microsoft Deep Dive Solorigate January 2021",
+              "url": "https://www.microsoft.com/security/blog/2021/01/20/deep-dive-into-the-solorigate-second-stage-activation-from-sunburst-to-teardrop-and-raindrop/"
+            },
+            {
+              "source": "Cybersecurity Advisory SVR TTP May 2021",
+              "url": "https://www.ncsc.gov.uk/files/Advisory-further-TTPs-associated-with-SVR-cyber-actors.pdf"
+            },
+            {
+              "source": "SolarWinds Sunburst Sunspot Update January 2021",
+              "url": "https://orangematter.solarwinds.com/2021/01/11/new-findings-from-our-investigation-of-sunburst/"
+            }
+          ]
+        },
+        "T1070.008": {
+          "name": "Indicator Removal: Clear Mailbox Data",
+          "tactics": [
+            "stealth"
+          ],
+          "procedure": "During the SolarWinds Compromise, APT29 removed evidence of email export requests using `Remove-MailboxExportRequest`.",
+          "references": [
+            {
+              "source": "Volexity SolarWinds",
+              "url": "https://www.volexity.com/blog/2020/12/14/dark-halo-leverages-solarwinds-compromise-to-breach-organizations/"
+            }
+          ]
+        },
+        "T1484.002": {
+          "name": "Domain or Tenant Policy Modification: Trust Modification",
+          "tactics": [
+            "defense-impairment",
+            "privilege-escalation"
+          ],
+          "procedure": "During the SolarWinds Compromise, APT29 changed domain federation trust settings using Azure AD administrative permissions to configure the domain to accept authorization tokens signed by their own SAML signing certificate.",
+          "references": [
+            {
+              "source": "Microsoft 365 Defender Solorigate",
+              "url": "https://www.microsoft.com/security/blog/2020/12/28/using-microsoft-365-defender-to-coordinate-protection-against-solorigate/"
+            },
+            {
+              "source": "Secureworks IRON RITUAL Profile",
+              "url": "https://www.sophos.com/en-us/threat-profiles/iron-ritual"
+            }
+          ]
+        },
+        "T1583.001": {
+          "name": "Acquire Infrastructure: Domains",
+          "tactics": [
+            "resource-development"
+          ],
+          "procedure": "For the SolarWinds Compromise, APT29 acquired C2 domains, sometimes through resellers.",
+          "references": [
+            {
+              "source": "MSTIC NOBELIUM Mar 2021",
+              "url": "https://www.microsoft.com/security/blog/2021/03/04/goldmax-goldfinder-sibot-analyzing-nobelium-malware/"
+            },
+            {
+              "source": "FireEye SUNSHUTTLE Mar 2021",
+              "url": "https://www.fireeye.com/blog/threat-research/2021/03/sunshuttle-second-stage-backdoor-targeting-us-based-entity.html"
+            }
+          ]
+        },
+        "T1087": {
+          "name": "Account Discovery",
+          "tactics": [
+            "discovery"
+          ],
+          "procedure": "During the SolarWinds Compromise, APT29 obtained a list of users and their roles from an Exchange server using `Get-ManagementRoleAssignment`.",
+          "references": [
+            {
+              "source": "Volexity SolarWinds",
+              "url": "https://www.volexity.com/blog/2020/12/14/dark-halo-leverages-solarwinds-compromise-to-breach-organizations/"
+            }
+          ]
+        },
+        "T1078": {
+          "name": "Valid Accounts",
+          "tactics": [
+            "stealth",
+            "persistence",
+            "privilege-escalation",
+            "initial-access"
+          ],
+          "procedure": "During the SolarWinds Compromise, APT29 used different compromised credentials for remote access and to move laterally.",
+          "references": [
+            {
+              "source": "FireEye SUNBURST Backdoor December 2020",
+              "url": "https://www.fireeye.com/blog/threat-research/2020/12/evasive-attacker-leverages-solarwinds-supply-chain-compromises-with-sunburst-backdoor.html"
+            },
+            {
+              "source": "MSTIC NOBELIUM Mar 2021",
+              "url": "https://www.microsoft.com/security/blog/2021/03/04/goldmax-goldfinder-sibot-analyzing-nobelium-malware/"
+            },
+            {
+              "source": "Cybersecurity Advisory SVR TTP May 2021",
+              "url": "https://www.ncsc.gov.uk/files/Advisory-further-TTPs-associated-with-SVR-cyber-actors.pdf"
+            }
+          ]
+        },
+        "T1560.001": {
+          "name": "Archive Collected Data: Archive via Utility",
+          "tactics": [
+            "collection"
+          ],
+          "procedure": "During the SolarWinds Compromise, APT29 used 7-Zip to compress stolen emails into password-protected archives prior to exfltration; APT29 also compressed text files into zipped archives.",
+          "references": [
+            {
+              "source": "Volexity SolarWinds",
+              "url": "https://www.volexity.com/blog/2020/12/14/dark-halo-leverages-solarwinds-compromise-to-breach-organizations/"
+            },
+            {
+              "source": "CrowdStrike StellarParticle January 2022",
+              "url": "https://www.crowdstrike.com/blog/observations-from-the-stellarparticle-campaign/"
+            },
+            {
+              "source": "Microsoft Deep Dive Solorigate January 2021",
+              "url": "https://www.microsoft.com/security/blog/2021/01/20/deep-dive-into-the-solorigate-second-stage-activation-from-sunburst-to-teardrop-and-raindrop/"
+            }
+          ]
+        },
+        "T1048.002": {
+          "name": "Exfiltration Over Alternative Protocol: Exfiltration Over Asymmetric Encrypted Non-C2 Protocol",
+          "tactics": [
+            "exfiltration"
+          ],
+          "procedure": "During the SolarWinds Compromise, APT29 exfiltrated collected data over a simple HTTPS request to a password-protected archive staged on a victim's OWA servers.",
+          "references": [
+            {
+              "source": "Volexity SolarWinds",
+              "url": "https://www.volexity.com/blog/2020/12/14/dark-halo-leverages-solarwinds-compromise-to-breach-organizations/"
+            }
+          ]
+        },
+        "T1071.001": {
+          "name": "Application Layer Protocol: Web Protocols",
+          "tactics": [
+            "command-and-control"
+          ],
+          "procedure": "During the SolarWinds Compromise, APT29 used HTTP for C2 and data exfiltration.",
+          "references": [
+            {
+              "source": "Volexity SolarWinds",
+              "url": "https://www.volexity.com/blog/2020/12/14/dark-halo-leverages-solarwinds-compromise-to-breach-organizations/"
+            }
+          ]
+        }
+      },
+      "software": [
+        "S0002 Mimikatz",
+        "S0154 Cobalt Strike",
+        "S0552 AdFind",
+        "S0559 SUNBURST",
+        "S0560 TEARDROP",
+        "S0562 SUNSPOT",
+        "S0565 Raindrop",
+        "S0588 GoldMax",
+        "S0589 Sibot",
+        "S0597 GoldFinder",
+        "S0682 TrailBlazer"
+      ]
+    }
+  ]
+}

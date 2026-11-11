@@ -1,0 +1,142 @@
+{
+  "tool": "pySigma",
+  "versions": {
+    "pySigma": "2.1.0",
+    "pysigma-backend-splunk": "3.0.0",
+    "pySigma-backend-sqlite": "2.1.1",
+    "pysigma-pipeline-sysmon": "3.0.0"
+  },
+  "pipeline": "sysmon (both backends)",
+  "rules": {
+    "w7_car_2013_02_003_cmd_parent": {
+      "title": "Command Shell Spawned by Office or Mail Application (CAR-2013-02-003 tuned)",
+      "level": "high",
+      "tags": [
+        "attack.execution",
+        "attack.t1059.003",
+        "attack.t1204.002",
+        "car.2013-02-003"
+      ],
+      "spl": "EventID=1 Image=\"*\\\\cmd.exe\" (ParentImage IN (\"*\\\\WINWORD.EXE\", \"*\\\\EXCEL.EXE\", \"*\\\\POWERPNT.EXE\", \"*\\\\OUTLOOK.EXE\", \"*\\\\Acrobat.exe\", \"*\\\\AcroRd32.exe\"))",
+      "sqlite": "SELECT * FROM logs WHERE EventID=1 AND (EventID=1 AND (Image LIKE '%\\\\cmd.exe' ESCAPE '\\' AND (ParentImage LIKE '%\\\\WINWORD.EXE' ESCAPE '\\' OR ParentImage LIKE '%\\\\EXCEL.EXE' ESCAPE '\\' OR ParentImage LIKE '%\\\\POWERPNT.EXE' ESCAPE '\\' OR ParentImage LIKE '%\\\\OUTLOOK.EXE' ESCAPE '\\' OR ParentImage LIKE '%\\\\Acrobat.exe' ESCAPE '\\' OR ParentImage LIKE '%\\\\AcroRd32.exe' ESCAPE '\\')))"
+    },
+    "w7_car_2014_04_003_powershell": {
+      "title": "Non-Interactive PowerShell Execution (CAR-2014-04-003)",
+      "level": "low",
+      "tags": [
+        "attack.execution",
+        "attack.t1059.001",
+        "car.2014-04-003"
+      ],
+      "spl": "EventID=1 Image=\"*\\\\powershell.exe\" NOT ParentImage=\"*\\\\explorer.exe\"",
+      "sqlite": "SELECT * FROM logs WHERE EventID=1 AND (EventID=1 AND (Image LIKE '%\\\\powershell.exe' ESCAPE '\\' AND (NOT COALESCE((ParentImage LIKE '%\\\\explorer.exe' ESCAPE '\\'), 0))))"
+    },
+    "w7_car_2014_04_003_powershell_tuned": {
+      "title": "Office-Spawned Encoded PowerShell (CAR-2014-04-003 tuned)",
+      "level": "high",
+      "tags": [
+        "attack.execution",
+        "attack.t1059.001",
+        "attack.t1027.010",
+        "attack.t1204.002",
+        "car.2014-04-003"
+      ],
+      "spl": "EventID=1 Image=\"*\\\\powershell.exe\" (ParentImage IN (\"*\\\\WINWORD.EXE\", \"*\\\\EXCEL.EXE\", \"*\\\\POWERPNT.EXE\")) (CommandLine IN (\"* -enc *\", \"* -enc*\", \"*-EncodedCommand*\"))",
+      "sqlite": "SELECT * FROM logs WHERE EventID=1 AND (EventID=1 AND (Image LIKE '%\\\\powershell.exe' ESCAPE '\\' AND (ParentImage LIKE '%\\\\WINWORD.EXE' ESCAPE '\\' OR ParentImage LIKE '%\\\\EXCEL.EXE' ESCAPE '\\' OR ParentImage LIKE '%\\\\POWERPNT.EXE' ESCAPE '\\') AND (CommandLine LIKE '% -enc %' ESCAPE '\\' OR CommandLine LIKE '% -enc%' ESCAPE '\\' OR CommandLine LIKE '%-EncodedCommand%' ESCAPE '\\')))"
+    },
+    "w9_archive_with_password": {
+      "title": "Archiver Creates Password-Protected Archive",
+      "level": "medium",
+      "tags": [
+        "attack.collection",
+        "attack.t1560.001"
+      ],
+      "spl": "EventID=1 (Image IN (\"*\\\\7z.exe\", \"*\\\\7za.exe\", \"*\\\\rar.exe\", \"*\\\\WinRAR.exe\")) CommandLine=\"* -p*\"",
+      "sqlite": "SELECT * FROM logs WHERE EventID=1 AND (EventID=1 AND ((Image LIKE '%\\\\7z.exe' ESCAPE '\\' OR Image LIKE '%\\\\7za.exe' ESCAPE '\\' OR Image LIKE '%\\\\rar.exe' ESCAPE '\\' OR Image LIKE '%\\\\WinRAR.exe' ESCAPE '\\') AND CommandLine LIKE '% -p%' ESCAPE '\\'))"
+    },
+    "w9_certutil_download": {
+      "title": "Certutil Used to Download a File",
+      "level": "high",
+      "tags": [
+        "attack.command_and_control",
+        "attack.t1105"
+      ],
+      "spl": "EventID=1 Image=\"*\\\\certutil.exe\" (CommandLine IN (\"*urlcache*\", \"*verifyctl*\"))",
+      "sqlite": "SELECT * FROM logs WHERE EventID=1 AND (EventID=1 AND (Image LIKE '%\\\\certutil.exe' ESCAPE '\\' AND (CommandLine LIKE '%urlcache%' ESCAPE '\\' OR CommandLine LIKE '%verifyctl%' ESCAPE '\\')))"
+    },
+    "w9_lsass_dump_comsvcs": {
+      "title": "LSASS Dump via comsvcs.dll MiniDump",
+      "level": "critical",
+      "tags": [
+        "attack.credential_access",
+        "attack.t1003.001"
+      ],
+      "spl": "EventID=1 Image=\"*\\\\rundll32.exe\" CommandLine=\"*comsvcs*\" (CommandLine IN (\"*MiniDump*\", \"*#24*\"))",
+      "sqlite": "SELECT * FROM logs WHERE EventID=1 AND (EventID=1 AND ((Image LIKE '%\\\\rundll32.exe' ESCAPE '\\' AND CommandLine LIKE '%comsvcs%' ESCAPE '\\') AND (CommandLine LIKE '%MiniDump%' ESCAPE '\\' OR CommandLine LIKE '%#24%' ESCAPE '\\')))"
+    },
+    "w9_macro_doc_written_by_non_office": {
+      "title": "Macro-Enabled Office Document Written by a Non-Office Process",
+      "level": "medium",
+      "tags": [
+        "attack.initial_access",
+        "attack.t1566.001"
+      ],
+      "spl": "EventID=11 (TargetFilename IN (\"*.docm\", \"*.xlsm\", \"*.pptm\", \"*.dotm\")) NOT (Image IN (\"*\\\\WINWORD.EXE\", \"*\\\\EXCEL.EXE\", \"*\\\\POWERPNT.EXE\"))",
+      "sqlite": "SELECT * FROM logs WHERE EventID=11 AND (EventID=11 AND ((TargetFilename LIKE '%.docm' ESCAPE '\\' OR TargetFilename LIKE '%.xlsm' ESCAPE '\\' OR TargetFilename LIKE '%.pptm' ESCAPE '\\' OR TargetFilename LIKE '%.dotm' ESCAPE '\\') AND (NOT COALESCE((Image LIKE '%\\\\WINWORD.EXE' ESCAPE '\\' OR Image LIKE '%\\\\EXCEL.EXE' ESCAPE '\\' OR Image LIKE '%\\\\POWERPNT.EXE' ESCAPE '\\'), 0))))"
+    },
+    "w9_office_suspicious_child": {
+      "title": "Office Application Spawns a Shell, Script Host or LOLBin",
+      "level": "high",
+      "tags": [
+        "attack.execution",
+        "attack.t1204.002",
+        "attack.t1059"
+      ],
+      "spl": "EventID=1 (ParentImage IN (\"*\\\\WINWORD.EXE\", \"*\\\\EXCEL.EXE\", \"*\\\\POWERPNT.EXE\", \"*\\\\OUTLOOK.EXE\")) (Image IN (\"*\\\\cmd.exe\", \"*\\\\powershell.exe\", \"*\\\\pwsh.exe\", \"*\\\\wscript.exe\", \"*\\\\cscript.exe\", \"*\\\\mshta.exe\", \"*\\\\rundll32.exe\", \"*\\\\regsvr32.exe\", \"*\\\\certutil.exe\", \"*\\\\bitsadmin.exe\", \"*\\\\schtasks.exe\", \"*\\\\PING.EXE\")) NOT CommandLine=\"*\\\\fs01.corp.local\\\\reports\\\\*\"",
+      "sqlite": "SELECT * FROM logs WHERE EventID=1 AND (EventID=1 AND ((ParentImage LIKE '%\\\\WINWORD.EXE' ESCAPE '\\' OR ParentImage LIKE '%\\\\EXCEL.EXE' ESCAPE '\\' OR ParentImage LIKE '%\\\\POWERPNT.EXE' ESCAPE '\\' OR ParentImage LIKE '%\\\\OUTLOOK.EXE' ESCAPE '\\') AND (Image LIKE '%\\\\cmd.exe' ESCAPE '\\' OR Image LIKE '%\\\\powershell.exe' ESCAPE '\\' OR Image LIKE '%\\\\pwsh.exe' ESCAPE '\\' OR Image LIKE '%\\\\wscript.exe' ESCAPE '\\' OR Image LIKE '%\\\\cscript.exe' ESCAPE '\\' OR Image LIKE '%\\\\mshta.exe' ESCAPE '\\' OR Image LIKE '%\\\\rundll32.exe' ESCAPE '\\' OR Image LIKE '%\\\\regsvr32.exe' ESCAPE '\\' OR Image LIKE '%\\\\certutil.exe' ESCAPE '\\' OR Image LIKE '%\\\\bitsadmin.exe' ESCAPE '\\' OR Image LIKE '%\\\\schtasks.exe' ESCAPE '\\' OR Image LIKE '%\\\\PING.EXE' ESCAPE '\\') AND (NOT COALESCE((CommandLine LIKE '%\\\\fs01.corp.local\\\\reports\\\\%' ESCAPE '\\'), 0))))"
+    },
+    "w9_powershell_encoded_any_parent": {
+      "title": "PowerShell With Encoded Command (Any Parent, All Abbreviations)",
+      "level": "high",
+      "tags": [
+        "attack.execution",
+        "attack.t1059.001",
+        "attack.t1027.010"
+      ],
+      "spl": "EventID=1 (Image IN (\"*\\\\powershell.exe\", \"*\\\\pwsh.exe\")) (CommandLine IN (\"* -e *\", \"* -ec *\", \"* -en *\", \"* -enc *\", \"* -enco*\", \"* -encodedcommand *\"))",
+      "sqlite": "SELECT * FROM logs WHERE EventID=1 AND (EventID=1 AND ((Image LIKE '%\\\\powershell.exe' ESCAPE '\\' OR Image LIKE '%\\\\pwsh.exe' ESCAPE '\\') AND (CommandLine LIKE '% -e %' ESCAPE '\\' OR CommandLine LIKE '% -ec %' ESCAPE '\\' OR CommandLine LIKE '% -en %' ESCAPE '\\' OR CommandLine LIKE '% -enc %' ESCAPE '\\' OR CommandLine LIKE '% -enco%' ESCAPE '\\' OR CommandLine LIKE '% -encodedcommand %' ESCAPE '\\')))"
+    },
+    "w9_powershell_external_connection": {
+      "title": "PowerShell Opens an Outbound Connection to a Non-Internal Address",
+      "level": "low",
+      "tags": [
+        "attack.exfiltration",
+        "attack.t1041",
+        "attack.command_and_control",
+        "attack.t1071.001"
+      ],
+      "spl": "EventID=3 (Image IN (\"*\\\\powershell.exe\", \"*\\\\pwsh.exe\")) Initiated=\"true\" NOT (DestinationIp IN (\"10.*\", \"192.168.*\", \"172.16.*\", \"172.17.*\", \"172.18.*\", \"172.19.*\", \"172.20.*\", \"172.21.*\", \"172.22.*\", \"172.23.*\", \"172.24.*\", \"172.25.*\", \"172.26.*\", \"172.27.*\", \"172.28.*\", \"172.29.*\", \"172.30.*\", \"172.31.*\", \"127.*\"))",
+      "sqlite": "SELECT * FROM logs WHERE EventID=3 AND (EventID=3 AND (((Image LIKE '%\\\\powershell.exe' ESCAPE '\\' OR Image LIKE '%\\\\pwsh.exe' ESCAPE '\\') AND Initiated='true') AND (NOT COALESCE((DestinationIp LIKE '10.%' ESCAPE '\\' OR DestinationIp LIKE '192.168.%' ESCAPE '\\' OR DestinationIp LIKE '172.16.%' ESCAPE '\\' OR DestinationIp LIKE '172.17.%' ESCAPE '\\' OR DestinationIp LIKE '172.18.%' ESCAPE '\\' OR DestinationIp LIKE '172.19.%' ESCAPE '\\' OR DestinationIp LIKE '172.20.%' ESCAPE '\\' OR DestinationIp LIKE '172.21.%' ESCAPE '\\' OR DestinationIp LIKE '172.22.%' ESCAPE '\\' OR DestinationIp LIKE '172.23.%' ESCAPE '\\' OR DestinationIp LIKE '172.24.%' ESCAPE '\\' OR DestinationIp LIKE '172.25.%' ESCAPE '\\' OR DestinationIp LIKE '172.26.%' ESCAPE '\\' OR DestinationIp LIKE '172.27.%' ESCAPE '\\' OR DestinationIp LIKE '172.28.%' ESCAPE '\\' OR DestinationIp LIKE '172.29.%' ESCAPE '\\' OR DestinationIp LIKE '172.30.%' ESCAPE '\\' OR DestinationIp LIKE '172.31.%' ESCAPE '\\' OR DestinationIp LIKE '127.%' ESCAPE '\\'), 0))))"
+    },
+    "w9_run_key_set": {
+      "title": "Value Written Under a Registry Run Key",
+      "level": "medium",
+      "tags": [
+        "attack.persistence",
+        "attack.t1547.001"
+      ],
+      "spl": "EventID=13 (TargetObject IN (\"*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run\\\\*\", \"*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\RunOnce\\\\*\"))",
+      "sqlite": "SELECT * FROM logs WHERE EventID=13 AND (EventID=13 AND (TargetObject LIKE '%\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run\\\\%' ESCAPE '\\' OR TargetObject LIKE '%\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\RunOnce\\\\%' ESCAPE '\\'))"
+    },
+    "w9_schtasks_create_from_shell": {
+      "title": "Scheduled Task Created With schtasks From a Shell",
+      "level": "medium",
+      "tags": [
+        "attack.persistence",
+        "attack.t1053.005"
+      ],
+      "spl": "EventID=1 Image=\"*\\\\schtasks.exe\" CommandLine=\"*/create*\" (ParentImage IN (\"*\\\\cmd.exe\", \"*\\\\powershell.exe\", \"*\\\\pwsh.exe\", \"*\\\\wscript.exe\", \"*\\\\cscript.exe\", \"*\\\\mshta.exe\"))",
+      "sqlite": "SELECT * FROM logs WHERE EventID=1 AND (EventID=1 AND ((Image LIKE '%\\\\schtasks.exe' ESCAPE '\\' AND CommandLine LIKE '%/create%' ESCAPE '\\') AND (ParentImage LIKE '%\\\\cmd.exe' ESCAPE '\\' OR ParentImage LIKE '%\\\\powershell.exe' ESCAPE '\\' OR ParentImage LIKE '%\\\\pwsh.exe' ESCAPE '\\' OR ParentImage LIKE '%\\\\wscript.exe' ESCAPE '\\' OR ParentImage LIKE '%\\\\cscript.exe' ESCAPE '\\' OR ParentImage LIKE '%\\\\mshta.exe' ESCAPE '\\')))"
+    }
+  }
+}

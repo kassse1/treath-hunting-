@@ -1,0 +1,50 @@
+title: PowerShell Opens an Outbound Connection to a Non-Internal Address
+id: 4f6c1f8e-0d1b-4c2a-9b1e-6a1b2c3d9009
+status: experimental
+description: >
+  powershell.exe initiating a network connection outside RFC1918 space - the
+  network half of the Week 6 same-process egress correlation (Atomic T1041 #1).
+references:
+  - https://attack.mitre.org/techniques/T1041/
+  - https://attack.mitre.org/techniques/T1071/001/
+author: Danial Rahman (CS-2421)
+date: 2026/11/09
+logsource:
+  product: windows
+  category: network_connection
+detection:
+  selection:
+    Image|endswith:
+      - '\powershell.exe'
+      - '\pwsh.exe'
+    Initiated: 'true'
+  filter_internal:
+    DestinationIp|startswith:
+      - '10.'
+      - '192.168.'
+      - '172.16.'
+      - '172.17.'
+      - '172.18.'
+      - '172.19.'
+      - '172.20.'
+      - '172.21.'
+      - '172.22.'
+      - '172.23.'
+      - '172.24.'
+      - '172.25.'
+      - '172.26.'
+      - '172.27.'
+      - '172.28.'
+      - '172.29.'
+      - '172.30.'
+      - '172.31.'
+      - '127.'
+  condition: selection and not filter_internal
+falsepositives:
+  - Update-Help, PowerShell Gallery, admin scripts calling cloud APIs
+level: low
+tags:
+  - attack.exfiltration
+  - attack.t1041
+  - attack.command_and_control
+  - attack.t1071.001

@@ -1,0 +1,180 @@
+# Week 8 - Adversary emulation plan
+# Project: Detecting Spearphishing Attacks in Corporate Networks (CS-2421)
+#
+# Machine-readable plan. scripts/validate_plan.py checks every technique and
+# tactic against MITRE ATT&CK v20 (data/attack_v20_subset.json), checks the
+# phases run in kill-chain order, and renders the flow figure, the expected
+# detection matrix and the ATT&CK Navigator layer.
+#
+# Atomic test GUIDs refer to redcanaryco/atomic-red-team at commit
+# a0e3f9bc69fed2fd711bd1f1aa87a40c33482fe6 (the same tests Week 9 executes).
+
+plan:
+  id: EP-2026-01
+  name: "Operation INVOICE STORM"
+  version: "1.0"
+  date: "2026-11-01"
+  author: "Danial Rahman, CS-2421"
+  objective: >
+    Emulate a spearphishing intrusion against the Finance department end to end
+    (initial access -> persistence -> data exfiltration) so the blue team can
+    test whether the Week 5-7 hunts and CAR analytics detect each stage, and
+    record which stages are not detected.
+  threat_profile:
+    inspired_by: "APT29 (G0016) spearphishing tradecraft, reduced to commodity tooling"
+    rationale: >
+      In ATT&CK v20, APT29 is mapped to 7 of the 11 plan techniques
+      (T1566.001, T1204.002, T1059.001, T1105, T1547.001, T1053.005, T1005).
+      LSASS dumping, archiving and exfiltration over C2 are added to complete
+      the initial access -> persistence -> exfiltration chain the syllabus asks
+      for (Week 10 checks them against APT29's campaigns). We emulate
+      behaviours, not APT29 malware: every step uses an Atomic Red Team test
+      or a built-in Windows binary.
+  scope:
+    in_scope:
+      - "LAB-WIN10-01 (isolated Windows 10 22H2 VM, Sysmon 15 + Splunk UF)"
+      - "Test mailbox fin.tester@lab.local"
+      - "Lab C2 / sink: 198.51.100.25 (Kali VM on the lab simulated-internet segment, HTTP listener on 8080)"
+    out_of_scope:
+      - "Any production host, mailbox or network"
+      - "Real credentials (lab account CORP\\art.tester only)"
+      - "Internet egress other than raw.githubusercontent.com for Atomic prerequisites"
+  rules_of_engagement:
+    - "Run only inside the isolated lab VLAN; snapshot the VM before the run."
+    - "White cell (practice teacher) is informed of the window; red and blue are different students."
+    - "Every step has a cleanup command; the VM is reverted to the snapshot afterwards."
+    - "Abort if any traffic is observed leaving the lab VLAN to an unknown host."
+    - "No real malware. LSASS dump (step 6) only on the lab VM and the dump file is deleted immediately."
+  roles:
+    red: "executes steps with Invoke-AtomicRedTeam, logs UTC start/stop per step"
+    blue: "hunts in Splunk without knowing the step order; records detect / miss per step"
+    white: "practice teacher: approves the window, arbitrates results"
+  data_sources:
+    - "Sysmon EventID 1 (process create), 3 (network), 11 (file create), 13 (registry set)"
+    - "Windows Security 4698 (scheduled task created)"
+    - "PowerShell Operational 4104 (script block)"
+    - "Mail gateway log (lab)"
+  schedule:
+    window_utc: "2026-11-09T09:00Z / 2026-11-09T11:00Z"
+    pacing: "~5 minutes between steps so each one is separable in the SIEM timeline"
+
+phases:
+  - id: 1
+    phase: "Initial Access"
+    tactic: initial-access
+    technique: T1566.001
+    procedure: >
+      Deliver a macro-enabled attachment (Invoice_Nov2026.xlsm) to the lab
+      finance mailbox. The Atomic test downloads the same benign PhishingAttachment.xlsm.
+    atomic: {technique: T1566.001, test: 1, guid: 114ccff9-ae6d-4547-9ead-4cd69f687306,
+             name: "Download Macro-Enabled Phishing Attachment"}
+    expected_telemetry: ["Mail gateway: attachment .xlsm", "Sysmon 11: *.xlsm written to %TEMP%"]
+    expected_detection: "Week 6 mail filter (macro attachment + SPF/DMARC fail)"
+    success: "Attachment present on disk of LAB-WIN10-01"
+    cleanup: "Remove-Item $env:TEMP\\PhishingAttachment.xlsm"
+
+  - id: 2
+    phase: "Execution"
+    tactic: execution
+    technique: T1204.002
+    procedure: >
+      The user opens the document and enables macros; the macro writes a .jse
+      file and launches a child process from Word with an IP address in its command line.
+    atomic: {technique: T1566.001, test: 2, guid: cbb6799a-425c-4f83-9194-5447a909d67f,
+             name: "Word spawned a command shell and used an IP address in the command line"}
+    expected_telemetry: ["Sysmon 11: C:\\Users\\Public\\art.jse written by WINWORD.EXE",
+                         "Sysmon 1: child process with ParentImage WINWORD.EXE"]
+    expected_detection: "CAR-2013-02-003 (Week 7) - Office spawning a shell"
+    success: "Child of WINWORD.EXE observed"
+    cleanup: "Remove-Item C:\\Users\\Public\\art.jse"
+
+  - id: 3
+    phase: "Execution"
+    tactic: execution
+    technique: T1059.001
+    also: [T1027.010]
+    procedure: "Run a base64-encoded PowerShell command (the stager in a real intrusion)."
+    atomic: {technique: T1059.001, test: 17, guid: a538de64-1c74-46ed-aa60-b995ed302598,
+             name: "PowerShell Command Execution"}
+    expected_telemetry: ["Sysmon 1: powershell.exe with an encoded argument", "PowerShell 4104: decoded script block"]
+    expected_detection: "CAR-2014-04-003 raw and tuned (Week 7)"
+    success: "Encoded command executes and prints 'Hello, from PowerShell!'"
+    cleanup: "none required"
+
+  - id: 4
+    phase: "Command and Control"
+    tactic: command-and-control
+    technique: T1105
+    procedure: "Pull a second-stage file with a living-off-the-land binary (certutil)."
+    atomic: {technique: T1105, test: 7, guid: dd3b61dd-7bbc-48cd-ab51-49ad1a776df0,
+             name: "certutil download (urlcache)"}
+    expected_telemetry: ["Sysmon 1: certutil.exe -urlcache -split -f", "Sysmon 3: certutil outbound 443", "Sysmon 11: downloaded file"]
+    expected_detection: "New Week 9 rule (certutil download)"
+    success: "File Atomic-license.txt created"
+    cleanup: "del Atomic-license.txt"
+
+  - id: 5
+    phase: "Persistence"
+    tactic: persistence
+    technique: T1547.001
+    procedure: "Add an HKCU Run value pointing at the implant."
+    atomic: {technique: T1547.001, test: 1, guid: e55be3fd-3521-4610-9d1a-e210e42dcf05,
+             name: "Reg Key Run"}
+    expected_telemetry: ["Sysmon 1: reg.exe ADD ...\\CurrentVersion\\Run", "Sysmon 13: registry value set under \\Run\\"]
+    expected_detection: "New Week 9 rule (Run key written by a script host / reg.exe)"
+    success: "Value 'Atomic Red Team' exists under HKCU\\...\\Run"
+    cleanup: "REG DELETE HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run /V \"Atomic Red Team\" /f"
+
+  - id: 6
+    phase: "Persistence"
+    tactic: persistence
+    technique: T1053.005
+    procedure: "Create a one-shot scheduled task as a second persistence mechanism."
+    atomic: {technique: T1053.005, test: 2, guid: 42f53695-ad4a-4546-abb6-7d837f644a71,
+             name: "Scheduled task Local"}
+    expected_telemetry: ["Sysmon 1: schtasks.exe /Create", "Security 4698: task 'spawn' created"]
+    expected_detection: "New Week 9 rule (schtasks /create from a shell)"
+    success: "Task 'spawn' registered"
+    cleanup: "SCHTASKS /Delete /TN spawn /F"
+
+  - id: 7
+    phase: "Credential Access"
+    tactic: credential-access
+    technique: T1003.001
+    optional: true
+    procedure: "Dump LSASS memory with the built-in comsvcs.dll MiniDump export (syllabus Week 9 example T1003)."
+    atomic: {technique: T1003.001, test: 2, guid: 2536dee2-12fb-459a-8c37-971844fa73be,
+             name: "Dump LSASS.exe Memory using comsvcs.dll"}
+    expected_telemetry: ["Sysmon 1: rundll32.exe comsvcs.dll, MiniDump", "Sysmon 10: access to lsass.exe", "Sysmon 11: lsass-comsvcs.dmp"]
+    expected_detection: "New Week 9 rule (comsvcs MiniDump)"
+    success: "Dump file written (then deleted)"
+    cleanup: "Remove-Item $env:TEMP\\lsass-comsvcs.dmp"
+
+  - id: 8
+    phase: "Collection"
+    tactic: collection
+    technique: T1560.001
+    also: [T1005]
+    procedure: "Stage local files and compress them into a password-protected 7z archive."
+    atomic: {technique: T1560.001, test: 4, guid: d1334303-59cb-4a03-8313-b3e24d02c198,
+             name: "Compress Data and lock with password for Exfiltration with 7zip"}
+    expected_telemetry: ["Sysmon 1: 7z.exe u archive.7z -p...", "Sysmon 11: archive.7z"]
+    expected_detection: "New Week 9 rule (archiver with password switch)"
+    success: "archive.7z created"
+    cleanup: "rmdir /s /Q victim-files"
+
+  - id: 9
+    phase: "Exfiltration"
+    tactic: exfiltration
+    technique: T1041
+    procedure: "POST the staged data to the lab C2 listener over HTTP."
+    atomic: {technique: T1041, test: 1, guid: d1253f6e-c29b-49dc-b466-2147a6191932,
+             name: "C2 Data Exfiltration", destination_url: "http://198.51.100.25:8080/upload"}
+    expected_telemetry: ["Sysmon 3: powershell.exe -> 198.51.100.25:8080", "Proxy/firewall: outbound POST"]
+    expected_detection: "Week 6 same-process egress correlation; new Week 9 network rule"
+    success: "Listener receives LineNumbers.txt content"
+    cleanup: "Remove-Item $env:TEMP\\LineNumbers.txt"
+
+reporting:
+  per_step_record: ["UTC start", "UTC end", "executed (yes/no)", "telemetry seen", "detected by", "time to detect", "notes"]
+  outputs: ["Week 9 detection matrix", "gap list -> new or tuned analytics", "Week 10 APT29 coverage comparison"]

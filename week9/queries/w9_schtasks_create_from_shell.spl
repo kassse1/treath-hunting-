@@ -1,0 +1,2 @@
+index=win_sysmon source="WinEventLog:Microsoft-Windows-Sysmon/Operational"
+| search EventID=1 Image="*\\schtasks.exe" CommandLine="*/create*" (ParentImage IN ("*\\cmd.exe", "*\\powershell.exe", "*\\pwsh.exe", "*\\wscript.exe", "*\\cscript.exe", "*\\mshta.exe"))

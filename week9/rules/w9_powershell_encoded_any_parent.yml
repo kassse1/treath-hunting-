@@ -1,0 +1,37 @@
+title: PowerShell With Encoded Command (Any Parent, All Abbreviations)
+id: 4f6c1f8e-0d1b-4c2a-9b1e-6a1b2c3d9002
+status: experimental
+description: >
+  Week 9 fix for the Week 7 tuned CAR-2014-04-003 rule. Atomic T1059.001 #17
+  runs "powershell.exe -e <base64>" from cmd.exe: the tuned rule missed it twice
+  (parent is not Office, and "-e" does not contain "-enc"). PowerShell accepts
+  any unambiguous prefix of -EncodedCommand, so match the short forms too.
+references:
+  - https://car.mitre.org/analytics/CAR-2014-04-003/
+  - https://attack.mitre.org/techniques/T1027/010/
+author: Danial Rahman (CS-2421)
+date: 2026/11/09
+logsource:
+  product: windows
+  category: process_creation
+detection:
+  selection_img:
+    Image|endswith:
+      - '\powershell.exe'
+      - '\pwsh.exe'
+  selection_flag:
+    CommandLine|contains:
+      - ' -e '
+      - ' -ec '
+      - ' -en '
+      - ' -enc '
+      - ' -enco'
+      - ' -encodedcommand '
+  condition: selection_img and selection_flag
+falsepositives:
+  - Management agents (SCCM, Intune) that pass encoded commands; allowlist by parent and user
+level: high
+tags:
+  - attack.execution
+  - attack.t1059.001
+  - attack.t1027.010

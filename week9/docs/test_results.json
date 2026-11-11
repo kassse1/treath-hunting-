@@ -1,0 +1,367 @@
+{
+  "summary": {
+    "week7": {
+      "DETECTED": 1,
+      "PARTIAL": 0,
+      "MISSED": 8,
+      "false_positives": 1,
+      "rules": 3
+    },
+    "week9": {
+      "DETECTED": 8,
+      "PARTIAL": 1,
+      "MISSED": 0,
+      "false_positives": 4,
+      "rules": 12
+    }
+  },
+  "tests": [
+    {
+      "step": 1,
+      "technique": "T1566.001",
+      "atomic": "T1566.001 #1",
+      "guid": "114ccff9-ae6d-4547-9ead-4cd69f687306",
+      "name": "Download Macro-Enabled Phishing Attachment",
+      "week7": {
+        "status": "MISSED",
+        "rules": [],
+        "harness_only": true
+      },
+      "week9": {
+        "status": "PARTIAL",
+        "rules": [
+          "w9_macro_doc_written_by_non_office",
+          "w9_powershell_external_connection"
+        ],
+        "harness_only": false
+      }
+    },
+    {
+      "step": 2,
+      "technique": "T1204.002",
+      "atomic": "T1566.001 #2",
+      "guid": "cbb6799a-425c-4f83-9194-5447a909d67f",
+      "name": "Word spawned a command shell and used an IP address in the command line",
+      "week7": {
+        "status": "MISSED",
+        "rules": [],
+        "harness_only": true
+      },
+      "week9": {
+        "status": "DETECTED",
+        "rules": [
+          "w9_office_suspicious_child"
+        ],
+        "harness_only": false
+      }
+    },
+    {
+      "step": 3,
+      "technique": "T1059.001",
+      "atomic": "T1059.001 #17",
+      "guid": "a538de64-1c74-46ed-aa60-b995ed302598",
+      "name": "PowerShell Command Execution",
+      "week7": {
+        "status": "DETECTED",
+        "rules": [
+          "w7_car_2014_04_003_powershell"
+        ],
+        "harness_only": false
+      },
+      "week9": {
+        "status": "DETECTED",
+        "rules": [
+          "w7_car_2014_04_003_powershell",
+          "w9_powershell_encoded_any_parent"
+        ],
+        "harness_only": false
+      }
+    },
+    {
+      "step": 4,
+      "technique": "T1105",
+      "atomic": "T1105 #7",
+      "guid": "dd3b61dd-7bbc-48cd-ab51-49ad1a776df0",
+      "name": "certutil download (urlcache)",
+      "week7": {
+        "status": "MISSED",
+        "rules": [],
+        "harness_only": false
+      },
+      "week9": {
+        "status": "DETECTED",
+        "rules": [
+          "w9_certutil_download"
+        ],
+        "harness_only": false
+      }
+    },
+    {
+      "step": 5,
+      "technique": "T1547.001",
+      "atomic": "T1547.001 #1",
+      "guid": "e55be3fd-3521-4610-9d1a-e210e42dcf05",
+      "name": "Reg Key Run",
+      "week7": {
+        "status": "MISSED",
+        "rules": [],
+        "harness_only": false
+      },
+      "week9": {
+        "status": "DETECTED",
+        "rules": [
+          "w9_run_key_set"
+        ],
+        "harness_only": false
+      }
+    },
+    {
+      "step": 6,
+      "technique": "T1053.005",
+      "atomic": "T1053.005 #2",
+      "guid": "42f53695-ad4a-4546-abb6-7d837f644a71",
+      "name": "Scheduled task Local",
+      "week7": {
+        "status": "MISSED",
+        "rules": [],
+        "harness_only": false
+      },
+      "week9": {
+        "status": "DETECTED",
+        "rules": [
+          "w9_schtasks_create_from_shell"
+        ],
+        "harness_only": false
+      }
+    },
+    {
+      "step": 7,
+      "technique": "T1003.001",
+      "atomic": "T1003.001 #2",
+      "guid": "2536dee2-12fb-459a-8c37-971844fa73be",
+      "name": "Dump LSASS.exe Memory using comsvcs.dll",
+      "week7": {
+        "status": "MISSED",
+        "rules": [],
+        "harness_only": true
+      },
+      "week9": {
+        "status": "DETECTED",
+        "rules": [
+          "w9_lsass_dump_comsvcs"
+        ],
+        "harness_only": false
+      }
+    },
+    {
+      "step": 8,
+      "technique": "T1560.001",
+      "atomic": "T1560.001 #4",
+      "guid": "d1334303-59cb-4a03-8313-b3e24d02c198",
+      "name": "Compress Data and lock with password for Exfiltration with 7zip",
+      "week7": {
+        "status": "MISSED",
+        "rules": [],
+        "harness_only": false
+      },
+      "week9": {
+        "status": "DETECTED",
+        "rules": [
+          "w9_archive_with_password"
+        ],
+        "harness_only": false
+      }
+    },
+    {
+      "step": 9,
+      "technique": "T1041",
+      "atomic": "T1041 #1",
+      "guid": "d1253f6e-c29b-49dc-b466-2147a6191932",
+      "name": "C2 Data Exfiltration",
+      "week7": {
+        "status": "MISSED",
+        "rules": [],
+        "harness_only": true
+      },
+      "week9": {
+        "status": "DETECTED",
+        "rules": [
+          "w9_powershell_external_connection"
+        ],
+        "harness_only": false
+      }
+    }
+  ],
+  "rules": {
+    "w7_car_2013_02_003_cmd_parent": {
+      "rows": 0,
+      "by_step": {},
+      "false_positives": [],
+      "harness_hits": 0
+    },
+    "w7_car_2014_04_003_powershell": {
+      "rows": 6,
+      "by_step": {
+        "1": {
+          "technique": 0,
+          "proxy": 0,
+          "harness": 1
+        },
+        "2": {
+          "technique": 0,
+          "proxy": 0,
+          "harness": 1
+        },
+        "3": {
+          "technique": 1,
+          "proxy": 0,
+          "harness": 0
+        },
+        "7": {
+          "technique": 0,
+          "proxy": 0,
+          "harness": 1
+        },
+        "9": {
+          "technique": 0,
+          "proxy": 0,
+          "harness": 1
+        }
+      },
+      "false_positives": [
+        "FIN-WS03 2026-11-09T11:05:00Z C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"
+      ],
+      "harness_hits": 4
+    },
+    "w7_car_2014_04_003_powershell_tuned": {
+      "rows": 0,
+      "by_step": {},
+      "false_positives": [],
+      "harness_hits": 0
+    },
+    "w9_archive_with_password": {
+      "rows": 1,
+      "by_step": {
+        "8": {
+          "technique": 1,
+          "proxy": 0,
+          "harness": 0
+        }
+      },
+      "false_positives": [],
+      "harness_hits": 0
+    },
+    "w9_certutil_download": {
+      "rows": 1,
+      "by_step": {
+        "4": {
+          "technique": 1,
+          "proxy": 0,
+          "harness": 0
+        }
+      },
+      "false_positives": [],
+      "harness_hits": 0
+    },
+    "w9_lsass_dump_comsvcs": {
+      "rows": 1,
+      "by_step": {
+        "7": {
+          "technique": 1,
+          "proxy": 0,
+          "harness": 0
+        }
+      },
+      "false_positives": [],
+      "harness_hits": 0
+    },
+    "w9_macro_doc_written_by_non_office": {
+      "rows": 1,
+      "by_step": {
+        "1": {
+          "technique": 0,
+          "proxy": 1,
+          "harness": 0
+        }
+      },
+      "false_positives": [],
+      "harness_hits": 0
+    },
+    "w9_office_suspicious_child": {
+      "rows": 1,
+      "by_step": {
+        "2": {
+          "technique": 1,
+          "proxy": 0,
+          "harness": 0
+        }
+      },
+      "false_positives": [],
+      "harness_hits": 0
+    },
+    "w9_powershell_encoded_any_parent": {
+      "rows": 1,
+      "by_step": {
+        "3": {
+          "technique": 1,
+          "proxy": 0,
+          "harness": 0
+        }
+      },
+      "false_positives": [],
+      "harness_hits": 0
+    },
+    "w9_powershell_external_connection": {
+      "rows": 5,
+      "by_step": {
+        "1": {
+          "technique": 0,
+          "proxy": 2,
+          "harness": 0
+        },
+        "2": {
+          "technique": 0,
+          "proxy": 0,
+          "harness": 1
+        },
+        "9": {
+          "technique": 1,
+          "proxy": 0,
+          "harness": 0
+        }
+      },
+      "false_positives": [
+        "LAB-WIN10-01 2026-11-09T08:13:00Z C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"
+      ],
+      "harness_hits": 1
+    },
+    "w9_run_key_set": {
+      "rows": 2,
+      "by_step": {
+        "5": {
+          "technique": 1,
+          "proxy": 0,
+          "harness": 0
+        }
+      },
+      "false_positives": [
+        "LAB-WIN10-01 2026-11-09T08:31:00Z C:\\Users\\art.tester\\AppData\\Local\\Microsoft\\Teams\\Update.exe"
+      ],
+      "harness_hits": 0
+    },
+    "w9_schtasks_create_from_shell": {
+      "rows": 2,
+      "by_step": {
+        "6": {
+          "technique": 1,
+          "proxy": 0,
+          "harness": 0
+        }
+      },
+      "false_positives": [
+        "LAB-WIN10-01 2026-11-09T08:40:00Z C:\\Windows\\System32\\schtasks.exe"
+      ],
+      "harness_hits": 0
+    }
+  }
+}
